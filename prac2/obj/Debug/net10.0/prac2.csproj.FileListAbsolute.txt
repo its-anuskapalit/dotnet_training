@@ -1,0 +1,15 @@
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\prac2\obj\Debug\net10.0\prac2.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\prac2\obj\Debug\net10.0\prac2.AssemblyInfoInputs.cache
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\prac2\obj\Debug\net10.0\prac2.AssemblyInfo.cs
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\prac2\obj\Debug\net10.0\prac2.csproj.CoreCompileInputs.cache
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\prac2\obj\Debug\net10.0\prac2.sourcelink.json
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\prac2\bin\Debug\net10.0\prac2.exe
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\prac2\bin\Debug\net10.0\prac2.deps.json
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\prac2\bin\Debug\net10.0\prac2.runtimeconfig.json
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\prac2\bin\Debug\net10.0\prac2.dll
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\prac2\bin\Debug\net10.0\prac2.pdb
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\prac2\obj\Debug\net10.0\prac2.dll
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\prac2\obj\Debug\net10.0\refint\prac2.dll
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\prac2\obj\Debug\net10.0\prac2.pdb
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\prac2\obj\Debug\net10.0\prac2.genruntimeconfig.cache
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\prac2\obj\Debug\net10.0\ref\prac2.dll

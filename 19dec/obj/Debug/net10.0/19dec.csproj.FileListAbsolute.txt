@@ -1,0 +1,15 @@
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\19dec\bin\Debug\net10.0\19dec.exe
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\19dec\bin\Debug\net10.0\19dec.deps.json
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\19dec\bin\Debug\net10.0\19dec.runtimeconfig.json
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\19dec\bin\Debug\net10.0\19dec.dll
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\19dec\bin\Debug\net10.0\19dec.pdb
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\19dec\obj\Debug\net10.0\19dec.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\19dec\obj\Debug\net10.0\19dec.AssemblyInfoInputs.cache
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\19dec\obj\Debug\net10.0\19dec.AssemblyInfo.cs
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\19dec\obj\Debug\net10.0\19dec.csproj.CoreCompileInputs.cache
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\19dec\obj\Debug\net10.0\19dec.sourcelink.json
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\19dec\obj\Debug\net10.0\19dec.dll
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\19dec\obj\Debug\net10.0\refint\19dec.dll
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\19dec\obj\Debug\net10.0\19dec.pdb
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\19dec\obj\Debug\net10.0\19dec.genruntimeconfig.cache
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\19dec\obj\Debug\net10.0\ref\19dec.dll

@@ -1,0 +1,15 @@
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\inheritance\bin\Debug\net10.0\inheritance.exe
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\inheritance\bin\Debug\net10.0\inheritance.deps.json
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\inheritance\bin\Debug\net10.0\inheritance.runtimeconfig.json
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\inheritance\bin\Debug\net10.0\inheritance.dll
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\inheritance\bin\Debug\net10.0\inheritance.pdb
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\inheritance\obj\Debug\net10.0\inheritance.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\inheritance\obj\Debug\net10.0\inheritance.AssemblyInfoInputs.cache
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\inheritance\obj\Debug\net10.0\inheritance.AssemblyInfo.cs
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\inheritance\obj\Debug\net10.0\inheritance.csproj.CoreCompileInputs.cache
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\inheritance\obj\Debug\net10.0\inheritance.sourcelink.json
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\inheritance\obj\Debug\net10.0\inheritance.dll
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\inheritance\obj\Debug\net10.0\refint\inheritance.dll
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\inheritance\obj\Debug\net10.0\inheritance.pdb
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\inheritance\obj\Debug\net10.0\inheritance.genruntimeconfig.cache
+C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\inheritance\obj\Debug\net10.0\ref\inheritance.dll
