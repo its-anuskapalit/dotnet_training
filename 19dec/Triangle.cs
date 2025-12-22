@@ -1,9 +1,10 @@
 using System;
-
+//  TRIANGLE TYPE PROGRAM
 class TriangleType
 {
     public static void Run()
     {
+        //input parsing
         try
         {
             Console.Write("Side A: ");
@@ -22,6 +23,7 @@ class TriangleType
             else
                 Console.WriteLine("Scalene Triangle");
         }
+        //error catching
         catch (Exception Ex)
         {
             Console.WriteLine("Error: " + Ex.Message);

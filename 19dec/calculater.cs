@@ -1,9 +1,11 @@
 using System;
+// SIMPLE CALCULATOR PROGRAM
 
 class Calculator
 {
     public static void Run()
     {
+        //input parsing
         try
         {
             Console.Write("Enter First Number: ");
@@ -14,7 +16,7 @@ class Calculator
 
             Console.Write("Enter Second Number: ");
             double Second = double.Parse(Console.ReadLine());
-
+            //operation based on operator
             switch (Operator)
             {
                 case '+': Console.WriteLine(First + Second); break;
@@ -24,6 +26,7 @@ class Calculator
                 default: Console.WriteLine("Invalid Operator"); break;
             }
         }
+        //error catching
         catch (Exception Ex)
         {
             Console.WriteLine("Error: " + Ex.Message);

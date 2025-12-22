@@ -1,8 +1,10 @@
 using System;
+// EVEN OR ODD PROGRAM
 class Cal
 {
     public static void isEven()
     {
+        //input parsing
         Console.WriteLine("Enter a 1 if you want to know a number is even or not");
         int a=int.Parse(Console.ReadLine());
         while (a == 1)
@@ -13,11 +15,13 @@ class Cal
         {
             Console.WriteLine("Even");
         }
-        else
-        {
+            //odd case
+            else
+            {
             Console.WriteLine("Odd");
         }
-        Console.WriteLine("want to continue type 1");
+            //continue prompt
+            Console.WriteLine("want to continue type 1");
         int b=int.Parse(Console.ReadLine());
         a=b;
         }

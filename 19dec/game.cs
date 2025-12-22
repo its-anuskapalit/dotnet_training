@@ -1,9 +1,10 @@
 using System;
-
+// ROCK PAPER SCISSORS GAME
 class RockPaperScissors
 {
     public static void Run()
     {
+        //input parsing
         try
         {
             Console.Write("Player 1 Choice: ");
@@ -11,7 +12,7 @@ class RockPaperScissors
 
             Console.Write("Player 2 Choice: ");
             string Player2 = Console.ReadLine().ToLower();
-
+            //game logic
             if (Player1 == Player2)
                 Console.WriteLine("Draw");
             else if ((Player1 == "rock" && Player2 == "scissors") ||
@@ -21,6 +22,7 @@ class RockPaperScissors
             else
                 Console.WriteLine("Player 2 Wins");
         }
+        //error catching
         catch (Exception Ex)
         {
             Console.WriteLine("Error: " + Ex.Message);

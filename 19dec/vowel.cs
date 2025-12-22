@@ -4,8 +4,10 @@ class vowel
 {
     public static void check()
     {
+        // Input from user
         Console.WriteLine("Enter the character");
         String? input=Console.ReadLine();
+        //  Validate input
         switch (input)
         {
             case "a":

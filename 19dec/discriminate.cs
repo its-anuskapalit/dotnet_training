@@ -18,11 +18,13 @@ class discriminate
             double root2 = (-b - Math.Sqrt(discriminant)) / (2 * a);
             Console.WriteLine($"Two distinct real roots: Root 1 = {root1}, Root 2 = {root2}");
         }
+        // single root case
         else if (discriminant == 0)
         {
             double root = -b / (2 * a);
             Console.WriteLine($"One real root: Root = {root}");
         }
+        // complex roots case
         else
         {
             double realPart = -b / (2 * a);

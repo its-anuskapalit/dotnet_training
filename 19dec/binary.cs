@@ -1,5 +1,5 @@
 using System;
-
+// BINARY TO DECIMAL CONVERSION PROGRAM
 class BinaryToDecimal
 {
     public static void Run()
@@ -12,7 +12,7 @@ class BinaryToDecimal
 
             int Decimal = 0;
             int Power = 1;
-
+            //conversion logic
             for (int i = Binary.Length - 1; i >= 0; i--)
             {
                 if (Binary[i] == '1')

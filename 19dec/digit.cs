@@ -1,9 +1,10 @@
 using System;
-
+// DIGITAL ROOT PROGRAM
 class DigitalRoot
 {
     public static void Run()
     {
+        //input parsing
         try
         {
             Console.Write("Enter Number: ");
@@ -19,6 +20,7 @@ class DigitalRoot
                 }
                 Number = Sum;
             }
+            //output result
 
             Console.WriteLine("Digital Root: " + Number);
         }

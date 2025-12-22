@@ -10,7 +10,8 @@ class bill
         Console.WriteLine("Enter the unit bills");
         int units=Convert.ToInt32(Console.ReadLine());
         double amt;
-        if(units < 200)
+        // bill calculation based on units consumed
+        if (units < 200)
         {
             amt=units*1.20;
         }
@@ -32,6 +33,7 @@ class bill
         {
             Console.WriteLine("bill amt: "+ (amt+(amt*0.15)));
         }
+        // final bill amount display
         else
         {
             Console.WriteLine("bill amt: "+ (amt));

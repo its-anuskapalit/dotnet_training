@@ -1,9 +1,11 @@
 using System;
-    class conti
+// CONTINUE STATEMENT PROGRAM
+class continueprogram
 {
     public static void Usage()
     {
-        for(int i = 1; i <= 50; i++)
+        //print numbers from 1 to 50 except multiples of 3
+        for (int i = 1; i <= 50; i++)
         {
             if (i % 3 == 0)
             {

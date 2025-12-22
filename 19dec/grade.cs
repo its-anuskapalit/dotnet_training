@@ -1,14 +1,15 @@
 using System;
-
+// GRADE DESCRIPTION PROGRAM
 class GradeDescription
 {
     public static void Run()
     {
         try
         {
+            //input parsing
             Console.Write("Enter Grade: ");
             char Grade = char.ToUpper(Console.ReadLine()[0]);
-
+            //  description based on grade
             switch (Grade)
             {
                 case 'E': Console.WriteLine("Excellent"); break;
@@ -19,6 +20,7 @@ class GradeDescription
                 default: Console.WriteLine("Invalid Grade"); break;
             }
         }
+        //error catching
         catch (Exception Ex)
         {
             Console.WriteLine("Error: " + Ex.Message);

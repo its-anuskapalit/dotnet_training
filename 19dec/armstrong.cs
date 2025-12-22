@@ -1,10 +1,10 @@
 using System;
-
+// ARMSTRONG NUMBER PROGRAM
 class ArmstrongNumber
 {
     public static void Run()
     {
-        //input parse
+        //input parsing
         try
         {
             Console.Write("Enter Number: ");
@@ -13,7 +13,7 @@ class ArmstrongNumber
             int Temp = Number;
             int Digits = Number.ToString().Length;
             int Sum = 0;
-
+            //calculate sum of digits raised to the power of number of digits
             while (Temp > 0)
             {
                 int Digit = Temp % 10;

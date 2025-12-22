@@ -1,9 +1,10 @@
 using System;
-
+// PROFIT AND LOSS CALCULATION PROGRAM
 class ProfitLoss
 {
     public static void Run()
     {
+        //input parsing
         try
         {
             Console.Write("Cost Price: ");
@@ -11,7 +12,7 @@ class ProfitLoss
 
             Console.Write("Selling Price: ");
             double SellingPrice = double.Parse(Console.ReadLine());
-
+            //calculate profit or loss
             if (SellingPrice > CostPrice)
             {
                 double Profit = ((SellingPrice - CostPrice) / CostPrice) * 100;
@@ -23,6 +24,7 @@ class ProfitLoss
                 Console.WriteLine("Loss %: " + Loss);
             }
         }
+        //error catching
         catch (Exception Ex)
         {
             Console.WriteLine("Error: " + Ex.Message);

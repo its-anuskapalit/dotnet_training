@@ -1,12 +1,14 @@
 using System;
-
+// MENU SYSTEM PROGRAM
 class MenuSystem
 {
     public static void Run()
     {
         try
+        //menu loop
         {
             int Choice;
+            //display menu and get choice
             do
             {
                 Console.WriteLine("\n1. Say Hello\n2. Show Date\n3. Exit");
@@ -20,8 +22,10 @@ class MenuSystem
                     default: Console.WriteLine("Invalid Choice"); break;
                 }
             }
+            //continue until exit chosen
             while (Choice != 3);
         }
+        //  error catching
         catch (Exception Ex)
         {
             Console.WriteLine("Error: " + Ex.Message);

@@ -15,7 +15,8 @@ class prime
                 prime=false;
             }
         }
-        Console.WriteLine(prime? "Prime": "Not Prime");
+            //output
+            Console.WriteLine(prime? "Prime": "Not Prime");
         }
         catch (NullReferenceException)
         {Console.WriteLine("Null value value");

@@ -8,7 +8,8 @@ class Height
         try{
         Console.WriteLine("Enter the hight as cm: ");
         string? heightInput=Console.ReadLine();
-        if(int.TryParse(heightInput, out int heightI))
+            //category check
+            if (int.TryParse(heightInput, out int heightI))
         {
             if(heightI < 150)
             {
@@ -27,12 +28,14 @@ class Height
                 Console.WriteLine("Adnormal");
             }
         }
-        else
-        {
+            // invalid input handling
+            else
+            {
             Console.WriteLine("Enter a valid interger input for height");
         }
         }
-        catch(Exception Ex)
+        //error catching
+        catch (Exception Ex)
         {
             Console.WriteLine("Invalid input" +Ex.Message);
         }

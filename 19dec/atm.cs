@@ -1,5 +1,5 @@
 using System;
-
+// ATM SIMULATION PROGRAM
 class ATM
 {
     public static void Run()
@@ -15,12 +15,12 @@ class ATM
             {
                 Console.Write("Enter PIN: ");
                 int Pin = int.Parse(Console.ReadLine());
-
+                //check pin
                 if (Pin == 1234)
                 {
                     Console.Write("Enter Balance: ");
                     int Balance = int.Parse(Console.ReadLine());
-
+                    //check balance
                     if (Balance >= 1000)
                         Console.WriteLine("Withdrawal Successful");
                     else
@@ -32,7 +32,7 @@ class ATM
             else
                 Console.WriteLine("Insert Card");
         }
-
+        //error catching
         catch (Exception Ex)
         {
             Console.WriteLine("Error: " + Ex.Message);
