@@ -13,3 +13,18 @@ C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\19dec\obj\Debug\net10.0\refint\19d
 C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\19dec\obj\Debug\net10.0\19dec.pdb
 C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\19dec\obj\Debug\net10.0\19dec.genruntimeconfig.cache
 C:\Users\Anuska Palit\OneDrive\Desktop\dotnet\19dec\obj\Debug\net10.0\ref\19dec.dll
+D:\Dotnet\19dec\obj\Debug\net10.0\19dec.GeneratedMSBuildEditorConfig.editorconfig
+D:\Dotnet\19dec\obj\Debug\net10.0\19dec.AssemblyInfoInputs.cache
+D:\Dotnet\19dec\obj\Debug\net10.0\19dec.AssemblyInfo.cs
+D:\Dotnet\19dec\obj\Debug\net10.0\19dec.csproj.CoreCompileInputs.cache
+D:\Dotnet\19dec\obj\Debug\net10.0\19dec.sourcelink.json
+D:\Dotnet\19dec\obj\Debug\net10.0\19dec.dll
+D:\Dotnet\19dec\obj\Debug\net10.0\refint\19dec.dll
+D:\Dotnet\19dec\obj\Debug\net10.0\19dec.pdb
+D:\Dotnet\19dec\bin\Debug\net10.0\19dec.exe
+D:\Dotnet\19dec\bin\Debug\net10.0\19dec.deps.json
+D:\Dotnet\19dec\bin\Debug\net10.0\19dec.runtimeconfig.json
+D:\Dotnet\19dec\bin\Debug\net10.0\19dec.dll
+D:\Dotnet\19dec\bin\Debug\net10.0\19dec.pdb
+D:\Dotnet\19dec\obj\Debug\net10.0\19dec.genruntimeconfig.cache
+D:\Dotnet\19dec\obj\Debug\net10.0\ref\19dec.dll

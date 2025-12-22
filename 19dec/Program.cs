@@ -29,6 +29,12 @@ class Program
         //Vowel or Consonant: Use a switch statement to check if a character is a vowel.
         //Triangle.Type();
         //quadrant.find();
+        //GradeDescription.Run();
+        //RockPaperScissors.Run();
+        //ProfitLoss.Run();
+        //ATM.Run();
+        //Valid.date();
+        //Calculator.Run();
 
 
         //LOOP
@@ -37,8 +43,18 @@ class Program
         //reverse.num();
         //conti.Usage();
         //pascal.Display();
-        //armstrong.check(); do
+        //ArmstrongNumber.Run();
+        //GcdLcm.Run();
+        //BinaryToDecimal.Run();
         //fibonacci.display();
+        //DiamondPattern.Run();
+        //FactorialLarge.Run();
+        //GuessingGame.Run();
+        //DigitalRoot.Run();
+        //StrongNumber.Run();
+        //MenuSystem.Run();
+        //GotoSearch.Run();
+
 
     }   
     }

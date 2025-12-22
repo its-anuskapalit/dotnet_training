@@ -13,19 +13,21 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Anuska Palit\\OneDrive\\Desktop\\dotnet\\19dec\\19dec.csproj",
+      "projectUniqueName": "D:\\Dotnet\\19dec\\19dec.csproj",
       "projectName": "19dec",
-      "projectPath": "C:\\Users\\Anuska Palit\\OneDrive\\Desktop\\dotnet\\19dec\\19dec.csproj",
+      "projectPath": "D:\\Dotnet\\19dec\\19dec.csproj",
       "packagesPath": "C:\\Users\\Anuska Palit\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Anuska Palit\\OneDrive\\Desktop\\dotnet\\19dec\\obj\\",
+      "outputPath": "D:\\Dotnet\\19dec\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Anuska Palit\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Anuska Palit\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
