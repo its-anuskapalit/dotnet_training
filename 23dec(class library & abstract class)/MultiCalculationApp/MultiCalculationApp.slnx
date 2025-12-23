@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="../CommanLib/CommanLib.csproj" Id="fd48482d-74ea-46a8-89e3-edbbee3193cf" />
+  <Project Path="../MathsLib/MathsLib.csproj" />
+  <Project Path="../ScienceLib/ScienceLib.csproj" />
+  <Project Path="MultiCalculationApp.csproj" />
+</Solution>
