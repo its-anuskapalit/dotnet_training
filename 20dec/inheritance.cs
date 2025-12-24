@@ -33,6 +33,7 @@ namespace MyProject1
             Console.WriteLine(i.GetDetails(p));
             i.GetDetails(m);
             i.GetDetails(w);
+            
         }
         // Method to get details of Person
         public string GetDetails(Person p)
