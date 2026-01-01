@@ -1,79 +1,50 @@
 # .NET Training Repository 🚀
 
 This repository contains my **hands-on learning, practice code, and notes** created while learning **C# and .NET fundamentals**, with a strong focus on **OOP concepts** and console-based applications.
-
 It is structured **day-wise and topic-wise** to track progress and revisions easily.
 
 ---
-
 ## 🧠 Topics Covered
 
-🔹 C# Fundamentals
+## 🔹 C# Fundamentals
+- Variables & Data Types
+- Console Input / Output
+- If-Else & Switch
+- Loops (for, while, do-while, foreach)
+- Methods & Parameter Passing
+- Value Types vs Reference Types
+- Nullable Types, var & dynamic
+- Boxing & Unboxing
 
-Variables & Data Types
+## 🔹 Object Oriented Programming (OOP)
+- Classes & Objects
+- Constructors & Constructor Chaining
+- Encapsulation
+- Inheritance & Polymorphism
+-  Abstract Classes & Interfaces
+- Indexers
+- Method Overloading & Overriding
 
-Console Input / Output
+## 🔹 Exception Handling
+- try-catch-finally
+- Custom Exception Messages
+- Input Validation
 
-If-Else & Switch
+## 🔹 Memory & Performance Concepts
+- Stack vs Heap
+- Garbage Collection
+- Memory Allocation Testing
 
-Loops (for, while, do-while, foreach)
-
-Methods & Parameter Passing
-
-Value Types vs Reference Types
-
-Nullable Types, var & dynamic
-
-Boxing & Unboxing
-
-🔹 Object Oriented Programming (OOP)
-
-Classes & Objects
-
-Constructors & Constructor Chaining
-
-Encapsulation
-
-Inheritance & Polymorphism
-
-Abstract Classes & Interfaces
-
-Indexers
-
-Method Overloading & Overriding
-
-🔹 Exception Handling
-
-try-catch-finally
-
-Custom Exception Messages
-
-Input Validation
-
-🔹 Memory & Performance Concepts
-
-Stack vs Heap
-
-Garbage Collection
-
-Memory Allocation Testing
-
-🔹 Mini Projects & Case Studies
-
-Clinic Billing System
-
-Examination Scheduling System
-
-Profit Calculator
-
-Robot Hazard Analyzer
-
-Interview-Based Logical Programs
+## 🔹 Mini Projects & Case Studies
+- Clinic Billing System
+- Examination Scheduling System
+- Profit Calculator
+- Robot Hazard Analyzer
+- Interview-Based Logical Programs
 
 ---
 
 ## 🛠️ Tech Stack
-
 - **Language:** C#
 - **Framework:** .NET
 - **IDE:** Visual Studio / VS Code
