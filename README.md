@@ -8,20 +8,67 @@ It is structured **day-wise and topic-wise** to track progress and revisions eas
 
 ## 🧠 Topics Covered
 
-- C# Basics
-  - Variables, Data Types
-  - Input / Output
-  - Conditional Statements
-  - Loops
-- Object-Oriented Programming (OOP)
-  - Classes & Objects
-  - Constructors
-  - Constructor Chaining
-  - Encapsulation
-  - Inheritance
-- Exception Handling
-- Logging inside constructors
-- Console Applications in .NET
+🔹 C# Fundamentals
+
+Variables & Data Types
+
+Console Input / Output
+
+If-Else & Switch
+
+Loops (for, while, do-while, foreach)
+
+Methods & Parameter Passing
+
+Value Types vs Reference Types
+
+Nullable Types, var & dynamic
+
+Boxing & Unboxing
+
+🔹 Object Oriented Programming (OOP)
+
+Classes & Objects
+
+Constructors & Constructor Chaining
+
+Encapsulation
+
+Inheritance & Polymorphism
+
+Abstract Classes & Interfaces
+
+Indexers
+
+Method Overloading & Overriding
+
+🔹 Exception Handling
+
+try-catch-finally
+
+Custom Exception Messages
+
+Input Validation
+
+🔹 Memory & Performance Concepts
+
+Stack vs Heap
+
+Garbage Collection
+
+Memory Allocation Testing
+
+🔹 Mini Projects & Case Studies
+
+Clinic Billing System
+
+Examination Scheduling System
+
+Profit Calculator
+
+Robot Hazard Analyzer
+
+Interview-Based Logical Programs
 
 ---
 
