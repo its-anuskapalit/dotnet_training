@@ -6,7 +6,7 @@
     <RootNamespace>_6Jan</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <StartUpObject>LearningCSharp.Pro</StartUpObject>
+    <StartUpObject>LibrarySystem.Program</StartUpObject>
   </PropertyGroup>
 
 </Project>
