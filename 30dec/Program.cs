@@ -139,18 +139,14 @@ class Program
     static void Main()
     {
         MyCollection c = new MyCollection();
-
         c.Add("Anuska");
         c.Add("Rahul");
         c.Add("Sneha");
 
         Console.WriteLine(c.Contains("Rahul"));
         Console.WriteLine(c.Count);
-
         c.Clear();
-
         Console.WriteLine(c.Count);
     }
 }
-//======================================================================================================================
 
