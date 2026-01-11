@@ -1,7 +1,7 @@
 ﻿    using Delagate;
     public class Program
     {
-        public static void Main()
+        static void Main()
         {
             AlertService service=new AlertService();
             Notify ob;
