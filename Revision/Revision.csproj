@@ -5,7 +5,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <StartUpObject>Generic2.Program</StartUpObject>
+    <StartUpObject>PayrollSystem.Program</StartUpObject>
   </PropertyGroup>
 
 </Project>
