@@ -1,7 +1,4 @@
-﻿// Summary: Utilities for time calculations used by the conference agenda scheduler.
-
-namespace ConferenceAgendaPlanner.Utils;
-
+﻿namespace ConferenceAgendaPlanner.Utils;
 /// <summary>
 /// Provides helper methods for time interval operations.
 /// </summary>
