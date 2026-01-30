@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="a1d92934-70d2-45dd-9073-ea0c07e44721" name="Anuska Palit@POLLY 2026-01-29 14:17:08" runUser="POLLY\Anuska Palit" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-01-29T14:17:08.6466642+05:30" queuing="2026-01-29T14:17:08.6466645+05:30" start="2026-01-29T14:17:06.0552835+05:30" finish="2026-01-29T14:17:08.6631907+05:30" />
+  <TestSettings name="default" id="3e5d5677-5871-42f0-817b-40de02ef36d8">
+    <Deployment runDeploymentRoot="Anuska_Palit_POLLY_2026-01-29_14_17_08" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="7cbb2e1f-0c89-4698-ba2e-7da34cc0c37c" testId="acd6ed96-f7e9-202d-c65e-d564e44c9235" testName="SquareRoot_Negative_ShouldThrow" computerName="POLLY" duration="00:00:00.0008640" startTime="2026-01-29T14:17:08.2762202+05:30" endTime="2026-01-29T14:17:08.2770844+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7cbb2e1f-0c89-4698-ba2e-7da34cc0c37c" />
+    <UnitTestResult executionId="60e66f60-76c9-4ae7-adde-82d992af603a" testId="61cbcabc-306a-d3e9-c5f3-c26aaaf7cfd6" testName="Divide_ByZero_ShouldThrow" computerName="POLLY" duration="00:00:00.0087300" startTime="2026-01-29T14:17:08.2504815+05:30" endTime="2026-01-29T14:17:08.2592113+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="60e66f60-76c9-4ae7-adde-82d992af603a" />
+    <UnitTestResult executionId="46db98f8-1eb9-4007-ac0a-9dec2341c73c" testId="06eb8b52-0742-bebe-dcb2-c11dfd28d65b" testName="ParseAndAdd_ValidStrings(&quot;5&quot;,&quot;5&quot;,10)" computerName="POLLY" duration="00:00:00.0004890" startTime="2026-01-29T14:17:08.2668189+05:30" endTime="2026-01-29T14:17:08.2673074+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="46db98f8-1eb9-4007-ac0a-9dec2341c73c" />
+    <UnitTestResult executionId="a6ab7e63-ac0f-46a2-8156-d62b2f0e4edc" testId="ba334007-1ef5-4744-60cd-3330980b937f" testName="Add_Works" computerName="POLLY" duration="00:00:00.0038510" startTime="2026-01-29T14:17:08.2459910+05:30" endTime="2026-01-29T14:17:08.2498414+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a6ab7e63-ac0f-46a2-8156-d62b2f0e4edc" />
+    <UnitTestResult executionId="8b47b30b-e160-4fdf-8399-9e9daf3f99fb" testId="836dffea-3ca8-2798-701a-ed0c173746c1" testName="ParseAndAdd_InvalidString_ShouldThrow" computerName="POLLY" duration="00:00:00.0007240" startTime="2026-01-29T14:17:08.2634447+05:30" endTime="2026-01-29T14:17:08.2641690+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8b47b30b-e160-4fdf-8399-9e9daf3f99fb" />
+    <UnitTestResult executionId="9ec6e2bc-a593-4fa4-ab75-1554ca6493fe" testId="487b27e7-b61a-9acd-f4b9-24ca59c42c23" testName="ParseAndAdd_ValidStrings(&quot;10&quot;,&quot;20&quot;,30)" computerName="POLLY" duration="00:00:00.0003330" startTime="2026-01-29T14:17:08.2662761+05:30" endTime="2026-01-29T14:17:08.2666085+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9ec6e2bc-a593-4fa4-ab75-1554ca6493fe" />
+    <UnitTestResult executionId="037c2a01-27d7-4e6a-8f90-ef6914895fad" testId="dbfb4554-7bf3-1e01-82e9-cdac0baaf2e6" testName="Add_Overflow_ShouldThrow" computerName="POLLY" duration="00:00:00.0293600" startTime="2026-01-29T14:17:08.2114592+05:30" endTime="2026-01-29T14:17:08.2406248+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="037c2a01-27d7-4e6a-8f90-ef6914895fad" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ParseAndAdd_ValidStrings(&quot;10&quot;,&quot;20&quot;,30)" storage="d:\dotnet\smartcalculator\calculatorlib.tests\bin\debug\net10.0\calculatorlib.tests.dll" id="487b27e7-b61a-9acd-f4b9-24ca59c42c23">
+      <Execution id="9ec6e2bc-a593-4fa4-ab75-1554ca6493fe" />
+      <TestMethod codeBase="D:\Dotnet\SmartCalculator\CalculatorLib.Tests\bin\Debug\net10.0\CalculatorLib.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="CalculatorLib.Tests.CalculatorTests" name="ParseAndAdd_ValidStrings(&quot;10&quot;,&quot;20&quot;,30)" />
+    </UnitTest>
+    <UnitTest name="ParseAndAdd_ValidStrings(&quot;5&quot;,&quot;5&quot;,10)" storage="d:\dotnet\smartcalculator\calculatorlib.tests\bin\debug\net10.0\calculatorlib.tests.dll" id="06eb8b52-0742-bebe-dcb2-c11dfd28d65b">
+      <Execution id="46db98f8-1eb9-4007-ac0a-9dec2341c73c" />
+      <TestMethod codeBase="D:\Dotnet\SmartCalculator\CalculatorLib.Tests\bin\Debug\net10.0\CalculatorLib.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="CalculatorLib.Tests.CalculatorTests" name="ParseAndAdd_ValidStrings(&quot;5&quot;,&quot;5&quot;,10)" />
+    </UnitTest>
+    <UnitTest name="SquareRoot_Negative_ShouldThrow" storage="d:\dotnet\smartcalculator\calculatorlib.tests\bin\debug\net10.0\calculatorlib.tests.dll" id="acd6ed96-f7e9-202d-c65e-d564e44c9235">
+      <Execution id="7cbb2e1f-0c89-4698-ba2e-7da34cc0c37c" />
+      <TestMethod codeBase="D:\Dotnet\SmartCalculator\CalculatorLib.Tests\bin\Debug\net10.0\CalculatorLib.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="CalculatorLib.Tests.CalculatorTests" name="SquareRoot_Negative_ShouldThrow" />
+    </UnitTest>
+    <UnitTest name="Add_Works" storage="d:\dotnet\smartcalculator\calculatorlib.tests\bin\debug\net10.0\calculatorlib.tests.dll" id="ba334007-1ef5-4744-60cd-3330980b937f">
+      <Execution id="a6ab7e63-ac0f-46a2-8156-d62b2f0e4edc" />
+      <TestMethod codeBase="D:\Dotnet\SmartCalculator\CalculatorLib.Tests\bin\Debug\net10.0\CalculatorLib.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="CalculatorLib.Tests.CalculatorTests" name="Add_Works" />
+    </UnitTest>
+    <UnitTest name="Divide_ByZero_ShouldThrow" storage="d:\dotnet\smartcalculator\calculatorlib.tests\bin\debug\net10.0\calculatorlib.tests.dll" id="61cbcabc-306a-d3e9-c5f3-c26aaaf7cfd6">
+      <Execution id="60e66f60-76c9-4ae7-adde-82d992af603a" />
+      <TestMethod codeBase="D:\Dotnet\SmartCalculator\CalculatorLib.Tests\bin\Debug\net10.0\CalculatorLib.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="CalculatorLib.Tests.CalculatorTests" name="Divide_ByZero_ShouldThrow" />
+    </UnitTest>
+    <UnitTest name="Add_Overflow_ShouldThrow" storage="d:\dotnet\smartcalculator\calculatorlib.tests\bin\debug\net10.0\calculatorlib.tests.dll" id="dbfb4554-7bf3-1e01-82e9-cdac0baaf2e6">
+      <Execution id="037c2a01-27d7-4e6a-8f90-ef6914895fad" />
+      <TestMethod codeBase="D:\Dotnet\SmartCalculator\CalculatorLib.Tests\bin\Debug\net10.0\CalculatorLib.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="CalculatorLib.Tests.CalculatorTests" name="Add_Overflow_ShouldThrow" />
+    </UnitTest>
+    <UnitTest name="ParseAndAdd_InvalidString_ShouldThrow" storage="d:\dotnet\smartcalculator\calculatorlib.tests\bin\debug\net10.0\calculatorlib.tests.dll" id="836dffea-3ca8-2798-701a-ed0c173746c1">
+      <Execution id="8b47b30b-e160-4fdf-8399-9e9daf3f99fb" />
+      <TestMethod codeBase="D:\Dotnet\SmartCalculator\CalculatorLib.Tests\bin\Debug\net10.0\CalculatorLib.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="CalculatorLib.Tests.CalculatorTests" name="ParseAndAdd_InvalidString_ShouldThrow" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="acd6ed96-f7e9-202d-c65e-d564e44c9235" executionId="7cbb2e1f-0c89-4698-ba2e-7da34cc0c37c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="61cbcabc-306a-d3e9-c5f3-c26aaaf7cfd6" executionId="60e66f60-76c9-4ae7-adde-82d992af603a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="06eb8b52-0742-bebe-dcb2-c11dfd28d65b" executionId="46db98f8-1eb9-4007-ac0a-9dec2341c73c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ba334007-1ef5-4744-60cd-3330980b937f" executionId="a6ab7e63-ac0f-46a2-8156-d62b2f0e4edc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="836dffea-3ca8-2798-701a-ed0c173746c1" executionId="8b47b30b-e160-4fdf-8399-9e9daf3f99fb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="487b27e7-b61a-9acd-f4b9-24ca59c42c23" executionId="9ec6e2bc-a593-4fa4-ab75-1554ca6493fe" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dbfb4554-7bf3-1e01-82e9-cdac0baaf2e6" executionId="037c2a01-27d7-4e6a-8f90-ef6914895fad" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="7" executed="7" passed="7" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>NUnit Adapter 5.0.0.0: Test execution started&#xD;
+Running all tests in D:\Dotnet\SmartCalculator\CalculatorLib.Tests\bin\Debug\net10.0\CalculatorLib.Tests.dll&#xD;
+   NUnit3TestExecutor discovered 7 of 7 NUnit test cases using Current Discovery mode, Non-Explicit run&#xD;
+NUnit Adapter 5.0.0.0: Test execution complete&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
