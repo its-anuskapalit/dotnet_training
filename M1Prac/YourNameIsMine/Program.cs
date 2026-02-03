@@ -1,9 +1,9 @@
 ﻿using System;
 namespace YouNameIsMine
 {
-    class Program
+    public class Program
     {
-        static bool IsValidName(string name)
+        public static bool IsValidName(string name)
         {
             foreach (char c in name)
             {
@@ -14,6 +14,7 @@ namespace YouNameIsMine
         }
         static bool IsSubsequence(string a, string b)
         {
+            
             int i = 0, j = 0;
             while (i < a.Length && j < b.Length)
             {
@@ -84,13 +85,13 @@ namespace YouNameIsMine
 
             if (IsSubsequence(n1, n2) || IsSubsequence(n2, n1))
             {
-                Console.WriteLine("name1 and name2 are made for each other");
+                Console.WriteLine("name1 and name2 are made for each otherBoth name1 and name2 are not made for each other");
                 Console.WriteLine($"Compatibility Score: {CompatibilityScore(n1, n2)}");
             }
 
             else
             {
-                Console.WriteLine("Both name1 and name2 are not made for each other");
+                Console.WriteLine("name1 and name2 are made for each other");
             }
         }
     }
