@@ -1,11 +1,11 @@
-﻿ using Microsoft.Data.SqlClient;
- using System;
- using DotNetEnv;
+﻿using Microsoft.Data.SqlClient;
+using System;
+using DotNetEnv;
 class Program
 {
     static void Main()
     {
-         Env.Load(".env");
+        Env.Load(".env");
         string? cs = Environment.GetEnvironmentVariable("DB_CONNECTION");
         //string cs = "Server=POLLY\\SQLEXPRESS;Database=TrainingDB;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;";
         using SqlConnection con = new SqlConnection(cs);
@@ -16,9 +16,9 @@ class Program
         IGetEmployees getService = new GetEmployees();
         IDeleteEmployee deleteService = new DeleteEmployee();
 
-        bool running = true;
+        bool service = true;
 
-        while (running)
+        while (service)
         {
             Console.WriteLine("\n====== EMPLOYEE MENU ======");
             Console.WriteLine("1. Insert Employee");
@@ -29,7 +29,7 @@ class Program
             Console.WriteLine("0. Exit");
             Console.Write("Select Option: ");
 
-            string choice = Console.ReadLine() ?? "";
+            string choice = Console.ReadLine();
 
             switch (choice)
             {
@@ -46,10 +46,8 @@ class Program
                     {
                         Console.Write("Invalid salary. Enter again: ");
                     }
-
                     insertService.Insert(con, name, dept, salary);
                     break;
-
                 case "2":
                     Console.Write("Enter EmployeeId: ");
                     int updateId;
@@ -57,17 +55,14 @@ class Program
                     {
                         Console.Write("Invalid ID. Enter again: ");
                     }
-
                     Console.Write("Enter New Salary: ");
                     decimal newSalary;
                     while (!decimal.TryParse(Console.ReadLine(), out newSalary))
                     {
                         Console.Write("Invalid salary. Enter again: ");
                     }
-
                     updateService.UpdateSalary(con, updateId, newSalary);
                     break;
-
                 case "3":
                     int total = countService.Count(con);
                     Console.WriteLine($"Total Employees: {total}");
@@ -76,7 +71,6 @@ class Program
                 case "4":
                     getService.GetAll(con);
                     break;
-
                 case "5":
                     Console.Write("Enter EmployeeId to Delete: ");
                     int deleteId;
@@ -84,15 +78,12 @@ class Program
                     {
                         Console.Write("Invalid ID. Enter again: ");
                     }
-
                     deleteService.Delete(con, deleteId);
                     break;
-
                 case "0":
-                    running = false;
+                    service = false;
                     Console.WriteLine("Exiting Application...");
                     break;
-
                 default:
                     Console.WriteLine("Invalid Option. Try Again.");
                     break;

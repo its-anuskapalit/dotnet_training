@@ -1,10 +1,8 @@
 using Microsoft.Data.SqlClient;
-
 public interface ICountEmployees
 {
     int Count(SqlConnection con);
 }
-
 public class CountEmployees : ICountEmployees
 {
     public int Count(SqlConnection con)
