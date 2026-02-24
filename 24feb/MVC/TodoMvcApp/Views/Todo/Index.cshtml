@@ -1,0 +1,80 @@
+﻿@model List<TodoMvcApp.Models.TodoItem>
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>📝 Todo List</h2>
+        <a class="btn btn-primary" asp-action="Create">+ Add Todo</a>
+    </div>
+
+    <input id="searchBox" class="form-control mb-3" placeholder="🔍 Search todos..." />
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            No todos yet. Create your first one 🚀
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered" id="todoTable">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th width="220">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="todo-title">@item.Title</td>
+                            <td>
+                                @if (item.IsDone)
+                                {
+                                    <span class="badge bg-success">Done</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                }
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-success"
+                                   asp-action="Toggle"
+                                   asp-route-id="@item.Id">
+                                    ✓
+                                </a>
+
+                                <a class="btn btn-sm btn-info"
+                                   asp-action="Edit"
+                                   asp-route-id="@item.Id">
+                                    Edit
+                                </a>
+
+                                <a class="btn btn-sm btn-danger"
+                                   asp-action="Delete"
+                                   asp-route-id="@item.Id"
+                                   onclick="return confirm('Delete this todo?')">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+<script>
+document.getElementById("searchBox").addEventListener("keyup", function () {
+    let value = this.value.toLowerCase();
+    document.querySelectorAll("#todoTable tbody tr").forEach(row => {
+        let text = row.querySelector(".todo-title").innerText.toLowerCase();
+        row.style.display = text.includes(value) ? "" : "none";
+    });
+});
+</script>

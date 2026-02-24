@@ -1,0 +1,21 @@
+﻿@model TodoMvcApp.Models.TodoItem
+
+<h2>Edit Todo</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div>
+        Title:
+        <input asp-for="Title" />
+    </div>
+
+    <div>
+        Done:
+        <input asp-for="IsDone" type="checkbox" />
+    </div>
+
+    <button type="submit">Update</button>
+</form>
+
+<a asp-action="Index">Back</a>

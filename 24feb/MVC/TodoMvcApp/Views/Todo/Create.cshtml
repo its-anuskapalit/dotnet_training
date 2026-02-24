@@ -1,0 +1,20 @@
+﻿@model TodoMvcApp.Models.TodoItem
+
+<div class="container mt-4">
+    <h2>Create Todo</h2>
+
+    <form asp-action="Create" method="post" class="card p-4 shadow-sm">
+        <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input asp-for="Title" class="form-control" required />
+        </div>
+
+        <div class="form-check mb-3">
+            <input asp-for="IsDone" class="form-check-input" />
+            <label class="form-check-label">Mark as done</label>
+        </div>
+
+        <button class="btn btn-success">Save</button>
+        <a asp-action="Index" class="btn btn-secondary">Back</a>
+    </form>
+</div>
