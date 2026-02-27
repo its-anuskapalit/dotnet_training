@@ -1,0 +1,30 @@
+@model DbFirstDemo.Models.Project
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white">
+            <h4>Add Project</h4>
+        </div>
+        <div class="mb-3">
+            <label asp-for="EmployeeId" class="form-label"></label>
+            <select asp-for="EmployeeId" asp-items="ViewBag.EmployeeId" class="form-control"></select>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Create">
+                <div class="mb-3">
+                    <label asp-for="RollNumber" class="form-label"></label>
+                    <input asp-for="RollNumber" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                </div>
+
+                <button type="submit" class="btn btn-success">Save</button>
+                <a asp-action="Index" class="btn btn-secondary">Back</a>
+            </form>
+        </div>
+    </div>
+</div>

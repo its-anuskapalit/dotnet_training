@@ -1,0 +1,11 @@
+@model DbFirstDemo.Models.Employees
+
+<h2>Employee Details</h2>
+
+<div>
+    <p><strong>Name:</strong> @Model.FullName</p>
+    <p><strong>Department:</strong> @Model.Department</p>
+    <p><strong>Salary:</strong> @Model.Salary</p>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary">Back</a>

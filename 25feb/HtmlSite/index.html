@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Directory</title>
+
+<style>
+:root{
+  --primary:#1e40af;
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --border:#e5e7eb;
+  --text:#111827;
+  --muted:#6b7280;
+  --success:#16a34a;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+header{
+  background:linear-gradient(135deg,#1e40af,#2563eb);
+  color:#fff;
+  padding:1.2rem;
+  text-align:center;
+}
+
+main{
+  max-width:1200px;
+  margin:auto;
+  padding:1rem;
+}
+
+.topbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.6rem;
+  margin-bottom:1rem;
+}
+
+input,select,button{
+  padding:.55rem .7rem;
+  border-radius:6px;
+  border:1px solid var(--border);
+  font-size:.95rem;
+}
+
+button{
+  background:var(--primary);
+  color:#fff;
+  border:none;
+  cursor:pointer;
+}
+
+button:hover{opacity:.9}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 2fr;
+  gap:1rem;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:1rem;
+}
+
+.card h2{
+  margin-top:0;
+  font-size:1.1rem;
+}
+
+.stats{
+  font-size:.9rem;
+  color:var(--muted);
+  margin-bottom:.5rem;
+}
+
+ul{list-style:none;padding:0;margin:0}
+
+li{
+  padding:.6rem;
+  border-bottom:1px solid var(--border);
+}
+
+li:last-child{border-bottom:none}
+
+.badge{
+  background:var(--primary);
+  color:#fff;
+  border-radius:999px;
+  padding:.1rem .45rem;
+  font-size:.75rem;
+  margin-left:.4rem;
+}
+
+.emp-name{font-weight:600}
+.emp-dept{font-size:.85rem;color:var(--muted)}
+
+.empty{
+  color:var(--muted);
+  font-style:italic;
+}
+
+.form-row{
+  display:flex;
+  gap:.5rem;
+  flex-wrap:wrap;
+  margin-bottom:.8rem;
+}
+
+footer{
+  text-align:center;
+  padding:.8rem;
+  color:var(--muted);
+  font-size:.85rem;
+}
+
+@media(max-width:768px){
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<header role="banner">
+  <h1>Employee Directory</h1>
+</header>
+
+<main role="main">
+
+  <section class="topbar" aria-label="Controls">
+    <input id="searchInput" type="search" placeholder="Search employee..." aria-label="Search employee">
+    <select id="deptFilter" aria-label="Filter by department">
+      <option value="all">All Departments</option>
+    </select>
+    <select id="sortSelect" aria-label="Sort employees">
+      <option value="name">Sort: Name</option>
+      <option value="department">Sort: Department</option>
+    </select>
+  </section>
+
+  <div class="grid">
+
+    <section class="card" aria-labelledby="deptHeading">
+      <h2 id="deptHeading">Departments</h2>
+      <div class="stats" id="deptStats"></div>
+      <ul id="deptList"></ul>
+    </section>
+
+    <section class="card" aria-labelledby="empHeading">
+      <h2 id="empHeading">Employees</h2>
+
+      <form id="addForm" aria-label="Add employee">
+        <div class="form-row">
+          <input id="newName" required placeholder="Employee name">
+          <input id="newDept" required placeholder="Department">
+          <button type="submit">Add</button>
+        </div>
+      </form>
+
+      <div class="stats" id="empStats"></div>
+      <ul id="empList"></ul>
+    </section>
+
+  </div>
+
+</main>
+
+<footer role="contentinfo">
+  Professional Employee Directory Demo
+</footer>
+
+<script>
+let employees = [
+  { id:1, name:"Amit Sharma", department:"Engineering" },
+  { id:2, name:"Priya Singh", department:"Marketing" },
+  { id:3, name:"Rahul Verma", department:"Engineering" },
+  { id:4, name:"Neha Gupta", department:"HR" },
+  { id:5, name:"Karan Mehta", department:"Marketing" },
+  { id:6, name:"Sneha Das", department:"Finance" }
+];
+
+const deptListEl = document.getElementById("deptList");
+const empListEl = document.getElementById("empList");
+const searchInput = document.getElementById("searchInput");
+const deptFilter = document.getElementById("deptFilter");
+const sortSelect = document.getElementById("sortSelect");
+const deptStats = document.getElementById("deptStats");
+const empStats = document.getElementById("empStats");
+const addForm = document.getElementById("addForm");
+
+function getDepartments(){
+  const map={};
+  employees.forEach(e=>{
+    map[e.department]=(map[e.department]||0)+1;
+  });
+  return map;
+}
+
+function refreshFilter(){
+  const current=deptFilter.value;
+  deptFilter.innerHTML='<option value="all">All Departments</option>';
+  Object.keys(getDepartments()).forEach(d=>{
+    const opt=document.createElement("option");
+    opt.value=d;
+    opt.textContent=d;
+    deptFilter.appendChild(opt);
+  });
+  deptFilter.value=current;
+}
+
+function renderDepartments(){
+  const depts=getDepartments();
+  deptListEl.innerHTML="";
+  deptStats.textContent=`${Object.keys(depts).length} departments`;
+
+  Object.entries(depts).forEach(([dept,count])=>{
+    const li=document.createElement("li");
+    li.innerHTML=`<button data-dept="${dept}">${dept} <span class="badge">${count}</span></button>`;
+    deptListEl.appendChild(li);
+  });
+
+  deptListEl.querySelectorAll("button").forEach(btn=>{
+    btn.onclick=()=>{
+      deptFilter.value=btn.dataset.dept;
+      renderEmployees();
+    };
+  });
+}
+
+function renderEmployees(){
+  const search=searchInput.value.toLowerCase();
+  const filter=deptFilter.value;
+  const sortBy=sortSelect.value;
+
+  let list=employees.filter(e=>{
+    const m1=filter==="all"||e.department===filter;
+    const m2=e.name.toLowerCase().includes(search);
+    return m1&&m2;
+  });
+
+  list.sort((a,b)=>a[sortBy].localeCompare(b[sortBy]));
+
+  empListEl.innerHTML="";
+  empStats.textContent=`${list.length} employees shown`;
+
+  if(!list.length){
+    empListEl.innerHTML='<li class="empty">No employees found</li>';
+    return;
+  }
+
+  list.forEach(e=>{
+    const li=document.createElement("li");
+    li.innerHTML=`<div class="emp-name">${e.name}</div>
+                  <div class="emp-dept">${e.department}</div>`;
+    empListEl.appendChild(li);
+  });
+}
+
+addForm.onsubmit=e=>{
+  e.preventDefault();
+  const name=document.getElementById("newName").value.trim();
+  const dept=document.getElementById("newDept").value.trim();
+  if(!name||!dept) return;
+
+  employees.push({
+    id:Date.now(),
+    name,
+    department:dept
+  });
+
+  addForm.reset();
+  refreshFilter();
+  renderDepartments();
+  renderEmployees();
+};
+
+searchInput.oninput=renderEmployees;
+deptFilter.onchange=renderEmployees;
+sortSelect.onchange=renderEmployees;
+
+refreshFilter();
+renderDepartments();
+renderEmployees();
+</script>
+
+</body>
+</html>visua

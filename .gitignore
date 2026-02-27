@@ -1,19 +1,49 @@
-# Visual Studio
-.vs/
-*.user
-*.suo
-*.cache
-*.log
-
 # Build results
 bin/
 obj/
+out/
 
-# Rider / VSCode
-.idea/
+# Visual Studio / VS Code
+.vs/
 .vscode/
 
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# Logs
+*.log
+Logs/
+
 # OS files
-Thumbs.db
 .DS_Store
-EmployeeApp.zip
+Thumbs.db
+
+# NuGet
+*.nupkg
+packages/
+.nuget/
+
+# Test results
+TestResults/
+
+# Coverage
+coverage/
+*.coverage
+*.coveragexml
+
+# Environment files
+.env
+.env.*
+
+# Publish output
+publish/
+
+# Temporary files
+*.tmp
+*.temp

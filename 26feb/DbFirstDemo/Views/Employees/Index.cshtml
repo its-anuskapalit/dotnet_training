@@ -1,0 +1,35 @@
+@model IEnumerable<DbFirstDemo.Models.Employees>
+
+<h2>Employees</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add Employee</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>EmployeeId</th>
+            <th>FullName</th>
+            <th>Department</th>
+            <th>Salary</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+        <tr>
+            <td>@item.EmployeeId</td>
+            <td>@item.FullName</td>
+            <td>@item.Department</td>
+            <td>@item.Salary</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.EmployeeId" class="btn btn-warning btn-sm">Edit</a>
+                <a asp-action="Details" asp-route-id="@item.EmployeeId" class="btn btn-info btn-sm">Details</a>
+                <a asp-action="Delete" asp-route-id="@item.EmployeeId" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
