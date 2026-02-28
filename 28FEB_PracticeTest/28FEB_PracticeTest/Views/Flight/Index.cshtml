@@ -1,0 +1,26 @@
+@model SearchViewModel
+
+<form asp-action="SearchFlights" method="post">
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="All"></div>
+
+    <label>Source</label>
+    <select asp-for="Source" asp-items="Model.SourceList"></select>
+
+    <label>Destination</label>
+    <select asp-for="Destination" asp-items="Model.DestinationList"></select>
+
+    <label>Number Of Persons</label>
+    <input asp-for="NumberOfPersons" type="number" />
+
+    <button type="submit" formaction="/Flight/SearchFlights">Search Flights Only</button>
+
+    <button type="submit" formaction="/Flight/SearchFlightsWithHotels">
+        Search Flight + Hotel
+    </button>
+</form>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

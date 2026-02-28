@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>XHR Dropdown</title>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 40px;
+            background: #f4f6f9;
+        }
+
+        .box {
+            background: white;
+            padding: 25px;
+            width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Todo Dropdown</h2>
+
+    <select id="todoDropdown">
+        <option>Loading todos...</option>
+    </select>
+</div>
+
+<script>
+const xhr = new XMLHttpRequest();
+const url = 'https://jsonplaceholder.typicode.com/todos';
+
+xhr.onload = function () {
+    if (xhr.status >= 200 && xhr.status < 300) {
+        const data = JSON.parse(xhr.responseText);
+        const dropdown = document.getElementById("todoDropdown");
+
+        dropdown.innerHTML = '<option value="">Select a todo</option>';
+
+        data.slice(0, 20).forEach(todo => {
+            const option = document.createElement("option");
+            option.value = todo.id;
+            option.textContent = todo.title;
+            dropdown.appendChild(option);
+        });
+    } else {
+        console.error('Error:', xhr.status, xhr.statusText);
+    }
+};
+xhr.onerror = function () {
+    console.error('Network Error');
+};
+
+xhr.open('GET', url, true);
+xhr.send();
+</script>
+
+</body>
+</html>

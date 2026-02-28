@@ -1,0 +1,36 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Page 2</title>
+
+<h2>Page 2</h2>
+<p id="result"></p>
+<script>
+    var p=new URLSearchParams(window.location.search);
+    var name=p.get("name");
+    var city=p.get("city");
+    document.getElementById("result").innerHTML =
+        "Name: " + name + "<br>City: " + city;
+
+</script></head>
+<body> -->
+
+<!DOCTYPE html>
+<html>
+<body>
+<h2>Page 2</h2>
+
+<form action="page3.html">
+<input type="hidden" id="studentName" name="studentName">
+<input type="hidden" id="studentLocation" name="studentLocation">
+<input type="submit" value="Next">
+</form>
+<script>
+var params = new URLSearchParams(window.location.search);
+// carry values forward silently
+document.getElementById("studentName").value = params.get("name");
+document.getElementById("studentLocation").value = params.get("city");
+</script>
+
+</body>
+</html>

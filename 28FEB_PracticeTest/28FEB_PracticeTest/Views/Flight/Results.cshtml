@@ -1,0 +1,32 @@
+@model IEnumerable<dynamic>
+
+@if (Model == null || !Model.Any())
+{
+    <h3>No Results Found</h3>
+}
+else
+{
+    <table border="1">
+        <thead>
+        <tr>
+            @foreach (var prop in Model.First().GetType().GetProperties())
+            {
+                <th>@prop.Name</th>
+            }
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+            @foreach (var prop in item.GetType().GetProperties())
+            {
+                <td>@prop.GetValue(item)</td>
+            }
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+<a asp-action="Index">Back To Search</a>

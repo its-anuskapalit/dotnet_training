@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "AJAX Demo";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AJAX Demo</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial;
+            padding: 40px;
+            background: #f4f6f9;
+        }
+
+        .box {
+            background: white;
+            padding: 25px;
+            width: 350px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        input, button {
+            padding: 10px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        #result {
+            margin-top: 15px;
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h2>ASP.NET AJAX Example</h2>
+
+        <input type="text" id="nameInput" placeholder="Enter your name" />
+
+        <button onclick="sendData()">Send</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function sendData() {
+            var name = $("#nameInput").val();
+
+            $.ajax({
+                url: '/Home/GetGreeting',
+                type: 'POST',
+                data: { name: name },
+                success: function (response) {
+                    $("#result").text(response);
+                },
+                error: function () {
+                    $("#result").text("Error occurred");
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
