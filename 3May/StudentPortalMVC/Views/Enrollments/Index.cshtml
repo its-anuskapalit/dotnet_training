@@ -1,0 +1,51 @@
+@model IEnumerable<StudentPortalMVC.Models.Enrollment>
+
+<div class="container mt-4">
+
+    <div class="section-card">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="page-header">📚 Enrollments</div>
+            <a asp-action="Create" class="btn btn-outline-light">
+                + New Enrollment
+            </a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-modern align-middle">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Course</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th class="text-end">Paid</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var e in Model)
+                {
+                    <tr>
+                        <td class="fw-medium">@e.Student.FullName</td>
+                        <td>@e.Course.Title</td>
+                        <td>@e.EnrollDate.ToShortDateString()</td>
+                        <td>
+                            <span class="badge-status @(e.PaymentStatus=="Paid" ? "status-paid" : "status-pending")">
+                                @e.PaymentStatus
+                            </span>
+                        </td>
+                        <td class="text-end fw-semibold">₹ @e.PaidAmount</td>
+                        <td>
+                            <a asp-action="Delete" asp-route-id="@e.EnrollmentId"
+                               class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>

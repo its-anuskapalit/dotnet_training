@@ -1,0 +1,29 @@
+@model IEnumerable<StudentPortalMvc.Models.Enrollment>
+
+<div class="container mt-4">
+    <h2 class="text-primary">Enrollments</h2>
+
+    <table class="table table-striped shadow">
+        <thead class="table-dark">
+            <tr>
+                <th>Student</th>
+                <th>Course</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Paid</th>
+            </tr>
+        </thead>
+        <tbody>
+@foreach (var item in Model)
+{
+            <tr>
+                <td>@item.Student?.FullName</td>
+                <td>@item.Course?.Title</td>
+                <td>@item.EnrollDate</td>
+                <td>@item.PaymentStatus</td>
+                <td>₹@item.PaidAmount</td>
+            </tr>
+}
+        </tbody>
+    </table>
+</div>

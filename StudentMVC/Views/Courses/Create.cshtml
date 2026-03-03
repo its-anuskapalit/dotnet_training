@@ -1,0 +1,38 @@
+@model StudentPortalMvc.Models.Course
+<div class="container mt-4">
+    <h2 class="text-success">Add Course</h2>
+
+    <form asp-action="Create" class="card p-4 shadow">
+        <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input asp-for="Title" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Duration (Days)</label>
+            <input asp-for="DurationDays" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Fee</label>
+            <input asp-for="Fee" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Level</label>
+            <select asp-for="Level" class="form-select">
+                <option>Beginner</option>
+                <option>Intermediate</option>
+                <option>Advanced</option>
+            </select>
+        </div>
+
+        <div class="mb-3 form-check">
+            <input asp-for="IsActive" class="form-check-input" />
+            <label class="form-check-label">Is Active</label>
+        </div>
+
+        <button type="submit" class="btn btn-success">Save</button>
+        <a asp-action="Index" class="btn btn-secondary">Back</a>
+    </form>
+</div>

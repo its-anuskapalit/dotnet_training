@@ -1,0 +1,25 @@
+@model StudentPortalMvc.Models.Enrollment
+
+<div class="container mt-4">
+    <h2 class="text-success">New Enrollment</h2>
+
+    <form asp-action="Create" class="card p-4 shadow">
+        <div class="mb-3">
+            <label>Student</label>
+            <select asp-for="StudentId" asp-items="ViewBag.StudentId" class="form-select"></select>
+        </div>
+
+        <div class="mb-3">
+            <label>Course</label>
+            <select asp-for="CourseId" asp-items="ViewBag.CourseId" class="form-select"></select>
+        </div>
+
+        <div class="mb-3">
+            <label>Enroll Date</label>
+            <input asp-for="EnrollDate" type="date" class="form-control" />
+        </div>
+
+        <button class="btn btn-success">Save</button>
+        <a asp-action="Index" class="btn btn-secondary">Back</a>
+    </form>
+</div>
