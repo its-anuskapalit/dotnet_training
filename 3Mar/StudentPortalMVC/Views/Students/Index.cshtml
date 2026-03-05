@@ -1,0 +1,154 @@
+@model IEnumerable<StudentPortalMVC.Models.Student>
+
+<div class="container mt-4">
+
+    <div class="glass-card">
+
+        <!-- HEADER -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="page-title">👥 Students</div>
+            <a asp-action="Create" class="btn btn-gradient">
+                + Add Student
+            </a>
+        </div>
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">@TempData["Error"]</div>
+        }
+
+        <!-- FILTER CARD -->
+        <div class="sub-card p-3 mb-4">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" id="searchBox"
+                           class="form-control"
+                           placeholder="🔍 Search students..." />
+                </div>
+
+                <div class="col-md-3">
+                    <select id="statusFilter" class="form-select">
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-responsive">
+            <table class="table table-modern align-middle">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Status</th>
+                        <th width="220">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var statusText = (item.Status ?? "").ToLower();
+                        <tr>
+                            <td class="fw-medium">@item.FullName</td>
+                            <td>@item.Email</td>
+                            <td>@item.Phone</td>
+
+                            <td>
+                                <span class="student-status d-none">@statusText</span>
+
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input status-toggle"
+                                           type="checkbox"
+                                           data-id="@item.StudentId"
+                                           @(statusText == "active" ? "checked" : "")>
+                                </div>
+                            </td>
+
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.StudentId"
+                                   class="btn btn-sm btn-info">View</a>
+
+                                <a asp-action="Edit" asp-route-id="@item.StudentId"
+                                   class="btn btn-sm btn-warning">Edit</a>
+
+                                <a href="#" class="btn btn-sm btn-danger delete-btn"
+                                   data-id="@item.StudentId">
+                                   Delete
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+<script>
+function filterRows() {
+    const search = $("#searchBox").val().toLowerCase();
+    const status = $("#statusFilter").val().toLowerCase();
+
+    $("tbody tr").each(function () {
+        const name  = $(this).find("td:eq(0)").text().toLowerCase();
+        const email = $(this).find("td:eq(1)").text().toLowerCase();
+        const phone = $(this).find("td:eq(2)").text().toLowerCase();
+        const rowStatus = $(this).find(".student-status").text().trim().toLowerCase();
+
+        const matchesSearch = !search || name.includes(search) || email.includes(search) || phone.includes(search);
+        const matchesStatus = !status || rowStatus === status;
+
+        $(this).toggle(matchesSearch && matchesStatus);
+    });
+}
+
+$("#searchBox").on("keyup", filterRows);
+$("#statusFilter").on("change", filterRows);
+
+$(document).on("change", ".status-toggle", function () {
+    const checkbox = $(this);
+    const id = checkbox.data("id");
+    const isActive = checkbox.is(":checked");
+
+    $.ajax({
+        url: '/Students/ToggleStatus',
+        type: 'POST',
+        data: { id: id, isActive: isActive },
+        success: function (res) {
+            if (!res.success) {
+                Swal.fire("Error", res.message || "Failed to update status", "error");
+                checkbox.prop("checked", !isActive);
+            }
+        },
+        error: function () {
+            Swal.fire("Error", "Server error", "error");
+            checkbox.prop("checked", !isActive);
+        }
+    });
+});
+
+$(document).on("click", ".delete-btn", function (e) {
+    e.preventDefault();
+    const id = $(this).data("id");
+
+    Swal.fire({
+        title: "Delete Student?",
+        text: "This action cannot be undone.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete"
+    }).then(result => {
+        if (result.isConfirmed) {
+            window.location.href = '/Students/Delete/' + id;
+        }
+    });
+});
+</script>
+}

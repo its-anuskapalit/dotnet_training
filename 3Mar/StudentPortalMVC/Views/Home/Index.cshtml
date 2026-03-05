@@ -1,0 +1,87 @@
+﻿@model StudentPortalMVC.ViewModels.DashboardVM
+
+<div class="container mt-4">
+
+    <div class="section-card">
+
+        <div class="page-header">📊 Dashboard</div>
+
+        <!-- KPI ROW -->
+        <div class="row g-4 mb-4">
+
+            <div class="col-md-3">
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Students</div>
+                    <div class="kpi-value">@Model.TotalStudents</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="kpi-card">
+                    <div class="kpi-label">Active Courses</div>
+                    <div class="kpi-value">@Model.ActiveCourses</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Enrollments</div>
+                    <div class="kpi-value">@Model.TotalEnrollments</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Revenue</div>
+                    <div class="kpi-value">₹ @Model.TotalRevenue</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RECENT ENROLLMENTS -->
+        <div class="section-card mt-3">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-semibold mb-0">Recent Enrollments</h5>
+                <a asp-controller="Enrollments" asp-action="Index"
+                   class="btn btn-sm btn-outline-light">
+                    View All
+                </a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-modern align-middle">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Course</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th class="text-end">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var e in Model.RecentEnrollments)
+                        {
+                            <tr>
+                                <td class="fw-medium">@e.StudentName</td>
+                                <td>@e.CourseTitle</td>
+                                <td>@e.EnrollDate.ToShortDateString()</td>
+                                <td>
+                                    <span class="badge-status @(e.PaymentStatus == "Paid" ? "status-paid" : "status-pending")">
+                                        @e.PaymentStatus
+                                    </span>
+                                </td>
+                                <td class="text-end fw-semibold">₹ @e.PaidAmount</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

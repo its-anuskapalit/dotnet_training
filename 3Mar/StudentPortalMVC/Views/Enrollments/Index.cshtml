@@ -1,0 +1,110 @@
+@model IEnumerable<StudentPortalMVC.Models.Enrollment>
+
+<div class="container mt-4">
+
+    <div class="section-card">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="page-header">📚 Enrollments</div>
+            <a asp-action="Create" class="btn btn-outline-light">
+                + New Enrollment
+            </a>
+        </div>
+
+        <!-- FILTER -->
+        <div class="section-card mb-4">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" id="searchBox"
+                           class="form-control"
+                           placeholder="🔍 Search by student or course..." />
+                </div>
+                <div class="col-md-3">
+                    <select id="paymentFilter" class="form-select">
+                        <option value="">All Payments</option>
+                        <option value="paid">Paid</option>
+                        <option value="pending">Pending</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-modern align-middle">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Course</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th class="text-end">Paid</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var e in Model)
+                {
+                    <tr>
+                        <td class="fw-medium">@e.Student.FullName</td>
+                        <td>@e.Course.Title</td>
+                        <td>@e.EnrollDate.ToShortDateString()</td>
+                        <td>
+                            <span class="payment-status d-none">@e.PaymentStatus.ToLower()</span>
+                            <span class="badge-status @(e.PaymentStatus=="Paid" ? "status-paid" : "status-pending")">
+                                @e.PaymentStatus
+                            </span>
+                        </td>
+                        <td class="text-end fw-semibold">₹ @e.PaidAmount</td>
+                        <td>
+                            <a href="#" class="btn btn-sm btn-danger delete-btn"
+                               data-id="@e.EnrollmentId">Delete</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+<script>
+function filterRows() {
+    const search  = $("#searchBox").val().toLowerCase();
+    const payment = $("#paymentFilter").val().toLowerCase();
+
+    $("tbody tr").each(function () {
+        const student   = $(this).find("td:eq(0)").text().toLowerCase();
+        const course    = $(this).find("td:eq(1)").text().toLowerCase();
+        const rowPayment = $(this).find(".payment-status").text().trim().toLowerCase();
+
+        const matchesSearch  = !search  || student.includes(search) || course.includes(search);
+        const matchesPayment = !payment || rowPayment === payment;
+
+        $(this).toggle(matchesSearch && matchesPayment);
+    });
+}
+
+$("#searchBox").on("keyup", filterRows);
+$("#paymentFilter").on("change", filterRows);
+
+$(document).on("click", ".delete-btn", function (e) {
+    e.preventDefault();
+    const id = $(this).data("id");
+
+    Swal.fire({
+        title: "Delete Enrollment?",
+        text: "This action cannot be undone.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete"
+    }).then(result => {
+        if (result.isConfirmed) {
+            window.location.href = '/Enrollments/Delete/' + id;
+        }
+    });
+});
+</script>
+}

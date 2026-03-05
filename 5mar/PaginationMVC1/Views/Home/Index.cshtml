@@ -1,0 +1,53 @@
+﻿@model List<PaginationMVC1.Models.Person>
+
+<form method="get" action="/Home/Index" class="mb-3">
+    <input type="text" name="search" value="@ViewBag.Search" 
+           placeholder="Search by name..." 
+           class="form-control" />
+</form>
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Person Type</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.BusinessEntityId</td>
+                <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+                <td>@item.PersonType</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<div class="d-flex justify-content-between">
+
+@if(ViewBag.Page > 1)
+{
+    <a class="btn btn-primary"
+       href="/Home/Index?page=@(ViewBag.Page-1)&search=@ViewBag.Search">
+       Previous
+    </a>
+}
+else
+{
+    <span></span>
+}
+
+<a class="btn btn-primary"
+   href="/Home/Index?page=@(ViewBag.Page+1)&search=@ViewBag.Search">
+   Next
+</a>
+
+</div>

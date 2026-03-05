@@ -1,0 +1,51 @@
+USE AdventureWorks2025
+CREATE PROCEDURE GetPeoplePagination
+    @PageNumber INT
+AS
+BEGIN
+    DECLARE @PageSize INT = 15
+    SELECT 
+        BusinessEntityID,
+        PersonType,
+        NameStyle,
+        Title,
+        FirstName,
+        MiddleName,
+        LastName,
+        Suffix,
+        EmailPromotion,
+        AdditionalContactInfo,
+        Demographics,
+        rowguid,
+        ModifiedDate
+    FROM Person.Person
+    ORDER BY BusinessEntityID
+    OFFSET (@PageNumber - 1) * @PageSize ROWS
+    FETCH NEXT @PageSize ROWS ONLY
+END
+
+USE AdventureWorks2025
+EXEC dbo.GetPeoplePagination 2
+
+CREATE VIEW vwPersonDetails
+AS
+SELECT 
+    BusinessEntityID,
+    PersonType,
+    NameStyle,
+    Title,
+    FirstName,
+    MiddleName,
+    LastName,
+    Suffix,
+    EmailPromotion,
+    AdditionalContactInfo,
+    Demographics,
+    rowguid,
+    ModifiedDate
+FROM AdventureWorks2025.Person.Person
+SELECT *
+FROM vwPersonDetails
+ORDER BY BusinessEntityID
+OFFSET 0 ROWS
+FETCH NEXT 15 ROWS ONLY
