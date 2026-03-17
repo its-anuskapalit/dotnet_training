@@ -1,5 +1,6 @@
 @model IEnumerable<StudentPortalMVC.Models.Student>
-
+@using StudentPortalMVC.Services.Helpers
+@inject IPhoneMaskService PhoneMaskService
 <div class="container mt-4">
 
     <div class="glass-card">
@@ -55,7 +56,8 @@
                         <tr>
                             <td class="fw-medium">@item.FullName</td>
                             <td>@item.Email</td>
-                            <td>@item.Phone</td>
+                            @* <td>@item.Phone</td> *@
+                            <td>@item.GetMaskedPhone(PhoneMaskService)</td>
 
                             <td>
                                 <span class="student-status d-none">@statusText</span>

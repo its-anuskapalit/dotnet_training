@@ -1,0 +1,39 @@
+@model CRUDAppMVC.Models.Student
+
+<h2>Student Details</h2>
+
+<table class="table table-bordered">
+
+<tr>
+<th>Id</th>
+<td>@Model.Id</td>
+</tr>
+
+<tr>
+<th>Name</th>
+<td>@Model.StudentName</td>
+</tr>
+
+<tr>
+<th>Gender</th>
+<td>@Model.StudentGender</td>
+</tr>
+
+<tr>
+<th>Age</th>
+<td>@Model.Age</td>
+</tr>
+
+<tr>
+<th>Standard</th>
+<td>@Model.Standard</td>
+</tr>
+
+<tr>
+<th>Father Name</th>
+<td>@Model.FatherName</td>
+</tr>
+
+</table>
+
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

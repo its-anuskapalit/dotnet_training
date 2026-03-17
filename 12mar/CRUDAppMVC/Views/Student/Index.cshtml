@@ -1,0 +1,44 @@
+@model IEnumerable<CRUDAppMVC.Models.Student>
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+@if (TempData["insert_message"] != null)
+{
+    <p style="color:green">@TempData["insert_message"]</p>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Student Name</th>
+            <th>Gender</th>
+            <th>Age</th>
+            <th>Standard</th>
+            <th>Father Name</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+@foreach (var item in Model)
+{
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.StudentName</td>
+            <td>@item.StudentGender</td>
+            <td>@item.Age</td>
+            <td>@item.Standard</td>
+            <td>@item.FatherName</td>
+
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

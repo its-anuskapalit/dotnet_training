@@ -1,0 +1,27 @@
+@model StudentPortalMVC.Models.Student
+
+<h2>Add Student</h2>
+
+<form asp-action="Create">
+
+<div class="mb-3">
+<label>Name</label>
+<input asp-for="FullName" class="form-control" />
+</div>
+
+<div class="mb-3">
+<label>Email</label>
+<input asp-for="Email" class="form-control" />
+</div>
+
+<div class="mb-3">
+<label>Status</label>
+<select asp-for="Status" class="form-control">
+<option>Active</option>
+<option>Inactive</option>
+</select>
+</div>
+
+<button type="submit" class="btn btn-success">Save</button>
+
+</form>

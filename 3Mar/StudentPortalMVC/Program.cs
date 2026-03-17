@@ -4,6 +4,7 @@ using StudentPortalMVC.Repositories.Interfaces;
 using StudentPortalMVC.Repositories.Implementations;
 using StudentPortalMVC.Services.Interfaces;
 using StudentPortalMVC.Services.Implementations;
+using StudentPortalMVC.Services.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
 builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
+builder.Services.AddScoped<IPhoneMaskService, PhoneMaskService>();
 
 var app = builder.Build();
 
@@ -41,4 +43,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+
 app.Run();

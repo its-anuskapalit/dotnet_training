@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="AIAnomaly.API/AIAnomaly.API.csproj" />
+  <Project Path="AIAnomaly.Application/AIAnomaly.Application.csproj" />
+  <Project Path="AIAnomaly.Domain/AIAnomaly.Domain.csproj" />
+  <Project Path="AIAnomaly.Infrastructure/AIAnomaly.Infrastructure.csproj" />
+  <Project Path="AIAnomaly.Web/AIAnomaly.Web.csproj" />
+</Solution>

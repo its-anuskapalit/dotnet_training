@@ -1,0 +1,39 @@
+@model IEnumerable<AuthRBAC_MVC.Models.Module>
+
+<div class="page-header">
+    <div class="page-title">Dashboard</div>
+    <div class="page-subtitle">Select a module to get started</div>
+</div>
+
+<div class="card-grid">
+
+@foreach (var module in Model)
+{
+    <div class="card">
+
+        <div class="card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1"/>
+                <rect x="14" y="3" width="7" height="7" rx="1"/>
+                <rect x="3" y="14" width="7" height="7" rx="1"/>
+                <rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+        </div>
+
+        <h3>@module.ModuleName</h3>
+        <p>Manage and configure @module.ModuleName.ToLower() settings.</p>
+
+        <a asp-controller="@module.ControllerName"
+           asp-action="@module.ActionName"
+           class="btn-open">
+            Open module
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12,5 19,12 12,19"/>
+            </svg>
+        </a>
+
+    </div>
+}
+
+</div>

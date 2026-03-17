@@ -1,0 +1,17 @@
+AIAnomalyDetection
+
+├── API
+│     └── AIAnomaly.API
+│
+├── Web
+│     └── AIAnomaly.Web
+│
+├── Core
+│     ├── AIAnomaly.Domain
+│     └── AIAnomaly.Application
+│
+├── Infrastructure
+│     └── AIAnomaly.Infrastructure
+│
+└── Tests
+      └── AIAnomaly.Tests

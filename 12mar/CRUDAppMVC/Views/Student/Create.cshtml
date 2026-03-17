@@ -1,0 +1,38 @@
+@model CRUDAppMVC.Models.Student
+
+<h2>Create Student</h2>
+
+<form asp-action="Create" method="post">
+
+    <div class="form-group">
+        <label asp-for="StudentName"></label>
+        <input asp-for="StudentName" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="StudentGender"></label>
+        <input asp-for="StudentGender" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Age"></label>
+        <input asp-for="Age" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Standard"></label>
+        <input asp-for="Standard" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FatherName"></label>
+        <input asp-for="FatherName" class="form-control" />
+    </div>
+
+    <br>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+
+</form>

@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="StudentPortal.Data/StudentPortal.Data.csproj" />
+  <Project Path="StudentPortalAPI/StudentPortalAPI.csproj" />
+  <Project Path="StudentPortalMVC/StudentPortalMVC.csproj" />
+</Solution>
