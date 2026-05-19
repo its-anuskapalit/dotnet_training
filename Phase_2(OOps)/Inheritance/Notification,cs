@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+
+namespace RuntimeDispatch
+{
+    abstract class Notification
+    {
+        public void Process()
+        {
+            Validate();
+            Send();
+        }
+
+        protected virtual void Validate()
+        {
+            Console.WriteLine("Base validation");
+        }
+
+        protected abstract void Send();
+    }
+
+    class EmailNotification : Notification
+    {
+        protected override void Validate()
+        {
+            Console.WriteLine("Email validation");
+        }
+
+        protected override void Send()
+        {
+            Console.WriteLine("Sending Email");
+        }
+    }
+
+    class SmsNotification : Notification
+    {
+        protected override void Send()
+        {
+            Console.WriteLine("Sending SMS");
+        }
+    }
+
+    public class Program
+    {
+        public static void Main()
+        {
+            List<Notification> notifications = new()
+            {
+                new EmailNotification(),
+                new SmsNotification()
+            };
+
+            foreach (var n in notifications)
+            {
+                n.Process();
+            }
+        }
+    }
+}

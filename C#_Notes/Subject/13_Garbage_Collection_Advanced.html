@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ItTechGenie — Garbage Collection in C# (W3Schools Style)</title>
+  <style>
+    :root{
+      --green:#04AA6D;
+      --bg:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --sidebar:#f3f4f6;
+      --border:#e5e7eb;
+      --example:#f1f1f1;
+      --code:#1e1e1e;
+      --codeText:#e5e7eb;
+      --note:#e7f3fe;
+      --tip:#e8f5e9;
+      --warn:#ffebee;
+      --shadow:0 8px 18px rgba(0,0,0,.08);
+      --r:14px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:var(--bg);
+      line-height:1.55;
+    }
+    .topbar{
+      position:fixed; top:0; left:0; right:0;
+      height:56px;
+      background:var(--green);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      padding:0 16px;
+      z-index:10;
+      box-shadow: var(--shadow);
+    }
+    .brand{ font-weight:700; letter-spacing:.2px; margin-right:14px; white-space:nowrap; }
+    .topbar .pill{ background:rgba(255,255,255,.18); padding:6px 10px; border-radius:999px; font-size:12px; }
+
+    .sidebar{
+      position:fixed;
+      top:56px; left:0; bottom:0;
+      width:280px;
+      background:var(--sidebar);
+      border-right:1px solid var(--border);
+      overflow:auto;
+      padding:14px 12px 20px;
+    }
+    .sidebar h3{
+      margin:10px 10px 8px;
+      font-size:14px;
+      color:#0f172a;
+      text-transform:uppercase;
+      letter-spacing:.6px;
+    }
+    .nav a{
+      display:block;
+      padding:8px 10px;
+      margin:2px 6px;
+      border-radius:10px;
+      color:#111827;
+      text-decoration:none;
+      font-size:14px;
+    }
+    .nav a:hover{ background:#e5e7eb; }
+    .nav .section{ font-weight:700; }
+    .nav .indent{ padding-left:22px; font-size:13.5px; }
+    .nav .required{
+      font-weight:800;
+      border:1px dashed #9ca3af;
+      background:#fff;
+    }
+
+    .main{
+      margin-left:280px;
+      padding:86px 20px 50px;
+      max-width:1100px;
+    }
+    .hero{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      padding:18px 18px 12px;
+      box-shadow: var(--shadow);
+    }
+    .hero h1{ margin:0 0 8px; font-size:28px; }
+    .hero p{ margin:0 0 10px; color:var(--muted); }
+    .kpi{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+    .chip{
+      background:#f8fafc;
+      border:1px solid var(--border);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      color:#0f172a;
+    }
+
+    section{
+      margin-top:16px;
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      overflow:hidden;
+      background:#fff;
+      box-shadow: var(--shadow);
+    }
+    .secHead{ background:var(--green); color:#fff; padding:12px 14px; }
+    .secHead h2{ margin:0; font-size:18px; letter-spacing:.2px; }
+    .content{ padding:14px; }
+
+    .box{
+      border-left:5px solid #9ca3af;
+      background:var(--example);
+      padding:12px;
+      border-radius:12px;
+      margin:12px 0;
+    }
+    .note, .tip, .warn{
+      padding:12px;
+      border-radius:12px;
+      margin:12px 0;
+      border:1px solid var(--border);
+    }
+    .note{ background:var(--note); border-left:6px solid #2196F3; }
+    .tip{ background:var(--tip); border-left:6px solid #2e7d32; }
+    .warn{ background:var(--warn); border-left:6px solid #d32f2f; }
+
+    .ascii{
+      background:#0b1220;
+      color:#d1d5db;
+      padding:12px;
+      border-radius:12px;
+      overflow:auto;
+      border:1px solid #111827;
+      margin:12px 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size:13px;
+    }
+    pre.code{
+      background:var(--code);
+      color:var(--codeText);
+      padding:12px;
+      border-radius:12px;
+      overflow:auto;
+      border:1px solid #111827;
+      margin:12px 0;
+    }
+    code{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+
+    .btn{
+      display:inline-block;
+      background:var(--green);
+      color:#fff;
+      padding:10px 14px;
+      border-radius:999px;
+      text-decoration:none;
+      font-weight:700;
+      font-size:14px;
+    }
+    .btn:hover{ filter:brightness(.95); }
+    .navBtns{
+      display:flex;
+      gap:10px;
+      justify-content:space-between;
+      padding:12px 14px 16px;
+      border-top:1px solid var(--border);
+      background:#fff;
+    }
+
+    .toc{ margin:10px 0 0; padding-left:18px; }
+    .toc a{ color:#0b6a3c; text-decoration:none; }
+    .toc a:hover{ text-decoration:underline; }
+
+    /* Tooltip CSS-only */
+    .tt{
+      position:relative;
+      border-bottom:1px dotted #111827;
+      cursor:help;
+      font-weight:700;
+    }
+    .tt::after{
+      content: attr(data-tip);
+      position:absolute;
+      left:0;
+      top:calc(100% + 10px);
+      min-width:260px;
+      max-width:360px;
+      background:#0b1220;
+      color:#e5e7eb;
+      padding:10px;
+      border-radius:12px;
+      border:1px solid #111827;
+      box-shadow: var(--shadow);
+      opacity:0;
+      pointer-events:none;
+      transform: translateY(-6px);
+      transition: .15s ease;
+      font-weight:400;
+      white-space:normal;
+      z-index:5;
+    }
+    .tt::before{
+      content:"";
+      position:absolute;
+      left:16px;
+      top:calc(100% + 2px);
+      border:8px solid transparent;
+      border-bottom-color:#0b1220;
+      opacity:0;
+      transition:.15s ease;
+      z-index:6;
+    }
+    .tt:hover::after, .tt:hover::before{
+      opacity:1;
+      transform: translateY(0);
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin:12px 0;
+      border-radius:12px;
+      overflow:hidden;
+      border:1px solid var(--border);
+    }
+    th, td{
+      padding:10px;
+      border-bottom:1px solid var(--border);
+      text-align:left;
+      vertical-align:top;
+      font-size:14px;
+    }
+    th{ background:#f8fafc; }
+
+    .qbox{
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:12px;
+      margin:10px 0;
+      background:#fff;
+    }
+    .lvl{ font-weight:800; }
+    .lvl.easy{ color:#2e7d32; }
+    .lvl.med{ color:#b45309; }
+    .lvl.hard{ color:#b91c1c; }
+
+    @media (max-width: 920px){
+      .sidebar{ position:static; width:auto; height:auto; top:0; }
+      .main{ margin-left:0; padding-top:86px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="prev-subtopic"></div>
+
+  <div class="topbar">
+    <div class="brand">ItTechGenie</div>
+    <div class="pill">C# • Memory Management • Garbage Collection</div>
+  </div>
+
+  <aside class="sidebar" aria-label="Left Sidebar">
+    <h3>Contents</h3>
+    <nav class="nav">
+      <a class="section" href="#intro">Introduction</a>
+      <a class="section" href="#role-gc">Role of a Garbage Collector</a>
+      <a class="section" href="#heap-stack-roots">Heap, Stack & Roots</a>
+      <a class="section" href="#generations-loh">Generations & LOH</a>
+      <a class="section" href="#gc-algorithm">Garbage Collection Algorithm</a>
+      <a class="section" href="#when-gc-runs">When GC Runs + Forcing GC</a>
+      <a class="section" href="#finalize-vs-dispose">Finalize vs Dispose</a>
+      <a class="section" href="#dispose-pattern">Dispose Pattern + using</a>
+      <a class="section" href="#best-practices">Best Practices & Troubleshooting</a>
+      <a class="section" href="#mini-project">Mini Project</a>
+      <a class="section" href="#faqs">FAQs</a>
+      <a class="section" href="#interview">Interview Questions</a>
+      <a class="section" href="#mcq">MCQ Quiz</a>
+      <a class="section" href="#glossary">Glossary (Tooltips)</a>
+      <a class="section" href="#downloads">Downloadables</a>
+
+      <a class="required" href="#practice-coding-questions">To Become Best coder Practice this</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="hero">
+      <h1><span class="tt" data-tip="Automatic memory cleanup system in .NET.\nIt finds objects no longer reachable and frees their memory.\nIt reduces memory leaks but doesn't manage external resources like files.">Garbage Collection (GC)</span> in C#</h1>
+      <p>
+        C# is a managed language: memory for objects is allocated on the
+        <span class="tt" data-tip="Memory area managed by the .NET runtime where reference-type objects are allocated.\nGC reclaims this memory when objects become unreachable.\nThis is different from the stack where local variables live.">managed heap</span>
+        and reclaimed automatically by the GC inside the
+        <span class="tt" data-tip="The execution engine of .NET that runs IL code, JIT-compiles it, and provides services like GC, security, and exceptions.">CLR</span>.
+        But automatic memory cleanup is not the same as releasing OS resources—so you must still understand Dispose and finalizers.
+      </p>
+      <div class="kpi">
+        <div class="chip">Generations</div>
+        <div class="chip">Mark/Sweep/Compact</div>
+        <div class="chip">Finalize vs Dispose</div>
+        <div class="chip">Real-world mini project</div>
+      </div>
+
+      <div class="box">
+        <h4>Auto-generated Table of Contents</h4>
+        <ul class="toc">
+          <li><a href="#intro">Introduction</a></li>
+          <li><a href="#role-gc">Role of a Garbage Collector</a></li>
+          <li><a href="#heap-stack-roots">Heap, Stack & Roots</a></li>
+          <li><a href="#generations-loh">Generations & LOH</a></li>
+          <li><a href="#gc-algorithm">Garbage Collection Algorithm</a></li>
+          <li><a href="#when-gc-runs">When GC Runs + Forcing GC</a></li>
+          <li><a href="#finalize-vs-dispose">Finalize vs Dispose</a></li>
+          <li><a href="#dispose-pattern">Dispose Pattern + using</a></li>
+          <li><a href="#best-practices">Best Practices</a> • <a href="#mini-project">Mini Project</a></li>
+          <li><a href="#faqs">FAQs</a> • <a href="#interview">Interview</a> • <a href="#mcq">MCQ</a></li>
+          <li><a href="#glossary">Glossary</a> • <a href="#downloads">Downloads</a></li>
+          <li><a href="#practice-coding-questions">To Become Best coder Practice this</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Intro -->
+    <section id="intro">
+      <div class="secHead"><h2>1) Introduction: Managed Memory in C#</h2></div>
+      <div class="content">
+        <p>
+          In C#, most objects are allocated on the heap and referenced by variables.
+          When objects are no longer reachable, the GC reclaims memory automatically.
+          This helps prevent common memory leaks found in manual memory management languages.
+          However, GC is <span class="tt" data-tip="Non-deterministic means you cannot predict the exact moment GC will run.\nMemory is reclaimed when the runtime decides, not immediately after an object is unused.\nSo you must still dispose external resources manually.">non-deterministic</span>: you don’t control exactly when it runs.
+        </p>
+
+        <div class="ascii"><pre>
+High-level memory model
+
+Stack (fast, automatic)           Heap (GC-managed)
+- local variables                 - objects created with new
+- method frames                   - GC reclaims unreachable objects
+
+Reference points from stack ---> heap objects
+</pre></div>
+
+        <div class="box">
+          <h4>Example</h4>
+          <p>Show that objects may live beyond the scope where they were created:</p>
+          <pre class="code"><code>using System;
+
+class Demo
+{
+    class Person { public string Name = "Gopi"; }
+
+    static Person MakePerson() => new Person();
+
+    static void Main()
+    {
+        var p = MakePerson();  // heap allocation
+        Console.WriteLine(p.Name);
+        // Even if MakePerson() ended, object can still be alive because p references it.
+    }
+}</code></pre>
+        </div>
+
+        <p><b>Real-world use case:</b> Web APIs create many short-lived objects (DTOs, strings). GC keeps memory healthy without manual frees.</p>
+        <div class="tip"><b>Beginner Tip:</b> GC handles memory, but you handle “resources” (files, DB connections, sockets).</div>
+        <div class="note"><b>Advanced Note:</b> GC behavior impacts performance (pauses). Understanding generations helps optimize allocations.</div>
+      </div>
+      <div class="navBtns">
+        <a class="btn" href="#prev-subtopic">❮ Previous Page</a>
+        <a class="btn" href="#role-gc">Next Page ❯</a>
+      </div>
+    </section>
+
+    <!-- Role of GC -->
+    <section id="role-gc">
+      <div class="secHead"><h2>2) Role of a Garbage Collector</h2></div>
+      <div class="content">
+        <p>
+          The GC’s job is to find objects that are no longer reachable and reclaim their memory.
+          It also compacts memory to reduce fragmentation (so future allocations are faster).
+          GC tracks references starting from “roots” such as stack variables and static fields.
+          The key promise: you write business code, and the runtime maintains memory safety.
+        </p>
+
+        <div class="ascii"><pre>
+GC role (conceptual):
+1) Identify roots (stack refs, statics, CPU registers)
+2) Mark reachable objects
+3) Sweep unreachable objects
+4) Compact surviving objects (often)
+</pre></div>
+
+        <div class="box">
+          <h4>Example</h4>
+          <p>Check an object generation (illustrates GC tracking):</p>
+          <pre class="code"><code>using System;
+
+class Program
+{
+    static void Main()
+    {
+        object o = new object();
+        Console.WriteLine(GC.GetGeneration(o)); // usually 0 initially
+    }
+}</code></pre>
+        </div>
+
+        <p><b>Real-world use case:</b> Background services that process messages continuously need stable memory usage over days.</p>
+        <div class="tip"><b>Beginner Tip:</b> If your app slows down, don't instantly blame GC—profile allocations first.</div>
+        <div class="note"><b>Advanced Note:</b> GC helps memory safety but can cause pauses; reducing allocations reduces GC pressure.</div>
+      </div>
+      <div class="navBtns">
+        <a class="btn" href="#intro">❮ Previous Page</a>
+        <a class="btn" href="#heap-stack-roots">Next Page ❯</a>
+      </div>
+    </section>
+
+    <!-- Heap Stack Roots -->
+    <section id="heap-stack-roots">
+      <div class="secHead"><h2>3) Managed Heap, Stack & Roots</h2></div>
+      <div class="content">
+        <p>
+          The stack contains method call frames and local variables; it’s cleaned automatically when methods return.
+          The heap contains reference-type objects created with <b>new</b>.
+          GC begins from <span class="tt" data-tip="Roots are starting reference points used by GC.\nExamples: local variables on stack, static fields, active handles.\nIf an object is reachable from roots, it is considered alive.">roots</span> and follows references to find “alive” objects.
+          If no path from roots reaches an object, it becomes eligible for collection.
+        </p>
+
+        <div class="ascii"><pre>
+Roots -> references graph
+
+[Stack var a] ---> [Obj1] ---> [Obj2]
+[Static s]   ---> [Obj3]
+
+If Obj2 loses all incoming references from any root path,
+Obj2 becomes unreachable -> eligible for GC
+</pre></div>
+
+        <div class="box">
+          <h4>Example</h4>
+          <p>Make an object unreachable:</p>
+          <pre class="code"><code>using System;
+
+class Program
+{
+    class Node { public Node? Next; }
+
+    static void Main()
+    {
+        var n1 = new Node();
+        var n2 = new Node();
+        n1.Next = n2;
+
+        n2 = null;        // still reachable through n1.Next
+        n1.Next = null;   // now the second node has no root path
+        // At some later time, GC can reclaim that node's memory.
+        Console.WriteLine("Done");
+    }
+}</code></pre>
+        </div>
+
+        <p><b>Real-world use case:</b> Large in-memory graphs (caches, object models) must be referenced carefully to avoid accidental retention.</p>
+        <div class="tip"><b>Beginner Tip:</b> “Eligible for GC” does not mean “immediately collected”.</div>
+        <div class="note"><b>Advanced Note:</b> Event handlers can keep objects alive; unsubscribe to avoid unintended object retention.</div>
+      </div>
+      <div class="navBtns">
+        <a class="btn" href="#role-gc">❮ Previous Page</a>
+        <a class="btn" href="#generations-loh">Next Page ❯</a>
+      </div>
+    </section>
+
+    <!-- Generations -->
+    <section id="generations-loh">
+      <div class="secHead"><h2>4) Generations & LOH</h2></div>
+      <div class="content">
+        <p>
+          .NET GC uses <span class="tt" data-tip="Generations group objects by age.\nGen 0: new/short-lived, Gen 1: medium-lived, Gen 2: long-lived.\nMost objects die young, so GC collects Gen 0 frequently and cheaply.">generations</span> to optimize collection:
+          young objects are collected often because most die quickly.
+          Objects that survive are promoted to older generations.
+          Large objects often go to the <span class="tt" data-tip="Large Object Heap stores large allocations (typically large arrays/strings).\nLOH is handled differently and can fragment if not managed carefully.\nAvoid frequent large allocations when possible.">LOH</span>, which has different performance characteristics.
+        </p>
+
+        <div class="ascii"><pre>
+Generational model:
+
+Gen 0 (new)  -> collected often (cheap)
+Gen 1        -> buffer generation
+Gen 2 (old)  -> collected less often (expensive)
+
+Survive a GC? -> may get promoted to older gen
+</pre></div>
+
+        <div class="box">
+          <h4>Example</h4>
+          <p>Create objects and observe their generation after forced collections (demo only):</p>
+          <pre class="code"><code>using System;
+
+class Program
+{
+    static void Main()
+    {
+        var o = new object();
+        Console.WriteLine("Gen: " + GC.GetGeneration(o)); // likely 0
+
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+
+        Console.WriteLine("Gen after collections: " + GC.GetGeneration(o)); // may be promoted
+    }
+}</code></pre>
+        </div>
+
+        <p><b>Real-world use case:</b> High-throughput APIs: avoiding extra allocations reduces Gen 0 collections and improves latency.</p>
+        <div class="tip"><b>Beginner Tip:</b> Don’t force GC in normal apps. Let the runtime decide.</div>
+        <div class="note"><b>Advanced Note:</b> Reusing buffers (ArrayPool) can reduce LOH allocations and fragmentation.</div>
+      </div>
+      <div class="navBtns">
+        <a class="btn" href="#heap-stack-roots">❮ Previous Page</a>
+        <a class="btn" href="#gc-algorithm">Next Page ❯</a>
+      </div>
+    </section>
+
+    <!-- Algorithm -->
+    <section id="gc-algorithm">
+      <div class="secHead"><h2>5) Garbage Collection Algorithm (Mark, Sweep, Compact)</h2></div>
+      <div class="content">
+        <p>
+          The GC conceptually performs mark, sweep, and often compact steps.
+          Mark: traverse from roots and mark reachable objects.
+          Sweep: reclaim memory of unmarked (unreachable) objects.
+          Compact: move surviving objects to reduce fragmentation and update references.
+          This is why GC can cause pauses—moving objects takes time.
+        </p>
+
+        <div class="ascii"><pre>
+Mark-Sweep-Compact (simplified)
+
+Roots -> mark reachable objects
+Unmarked objects -> freed (sweep)
+Marked objects -> moved together (compact)
+References -> updated to new locations
+</pre></div>
+
+        <div class="box">
+          <h4>Example</h4>
+          <p>Allocate many small objects to create GC pressure (for learning):</p>
+          <pre class="code"><code>using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        var list = new List<byte[]>();
+
+        for (int i = 0; i &lt; 20000; i++)
+            list.Add(new byte[1024]); // many allocations
+
+        Console.WriteLine("Allocated");
+        Console.WriteLine("Total memory: " + GC.GetTotalMemory(forceFullCollection: false));
+    }
+}</code></pre>
+        </div>
+
+        <p><b>Real-world use case:</b> ETL or batch processing apps that allocate huge temporary objects can trigger frequent GC.</p>
+        <div class="tip"><b>Beginner Tip:</b> Reduce temporary allocations inside loops (strings, lists, LINQ) to reduce GC work.</div>
+        <div class="note"><b>Advanced Note:</b> Use profiling tools to identify allocation hotspots; optimize the top few first.</div>
+      </div>
+      <div class="navBtns">
+        <a class="btn" href="#generations-loh">❮ Previous Page</a>
+        <a class="btn" href="#when-gc-runs">Next Page ❯</a>
+      </div>
+    </section>
+
+    <!-- When GC runs -->
+    <section id="when-gc-runs">
+      <div class="secHead"><h2>6) When GC Runs + Forcing GC</h2></div>
+      <div class="content">
+        <p>
+          GC runs when the runtime decides it’s necessary—usually due to allocation pressure or memory thresholds.
+          It may also run during low-memory situations or when generation budgets are exceeded.
+          Forcing GC with GC.Collect is rarely recommended in production because it can hurt performance and latency.
+          Use it only in special cases (very controlled apps, benchmarking, or after massive one-time allocations).
+        </p>
+
+        <div class="ascii"><pre>
+Typical triggers:
+- Gen 0 budget exceeded (many new allocations)
+- System low memory notification
+- Explicit GC.Collect (manual)
+
+Rule of thumb:
+If you think you need GC.Collect,
+profile first.
+</pre></div>
+
+        <div class="box">
+          <h4>Example</h4>
+          <p>Safe demo of full collection (learning only):</p>
+          <pre class="code"><code>using System;
+
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine("Before: " + GC.GetTotalMemory(false));
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+        Console.WriteLine("After: " + GC.GetTotalMemory(false));
+    }
+}</code></pre>
+        </div>
+
+        <p><b>Real-world use case:</b> In services, you aim to reduce allocations rather than manually calling GC.</p>
+        <div class="tip"><b>Beginner Tip:</b> “Fix performance” usually means “reduce allocations,” not “force GC”.</div>
+        <div class="warn"><b>Warning:</b> Calling GC.Collect frequently can increase pauses and reduce throughput.</div>
+      </div>
+      <div class="navBtns">
+        <a class="btn" href="#gc-algorithm">❮ Previous Page</a>
+        <a class="btn" href="#finalize-vs-dispose">Next Page ❯</a>
+      </div>
+    </section>
+
+    <!-- Finalize vs Dispose -->
+    <section id="finalize-vs-dispose">
+      <div class="secHead"><h2>7) Finalize vs Dispose</h2></div>
+      <div class="content">
+        <p>
+          <span class="tt" data-tip="A finalizer (~ClassName) runs before the object memory is reclaimed.\nIt is non-deterministic and may run much later.\nUse only when you directly own unmanaged resources.">Finalize</span>
+          (finalizer) is a safety net, not a primary cleanup strategy.
+          <span class="tt" data-tip="Dispose is a method (usually via IDisposable) used to release unmanaged resources deterministically.\nIt is called by you (or using statement), not by the GC schedule.\nThis is critical for files, DB connections, and handles.">Dispose</span>
+          is deterministic: you call it to release external resources immediately.
+          GC manages memory; Dispose manages resources.
+          Confusing these causes real production bugs (file locks, connection exhaustion).
+        </p>
+
+        <div class="ascii"><pre>
+Memory vs Resource
+
+GC:
+- cleans managed memory (heap objects)
+
+Dispose:
+- releases external resources (files, sockets, DB connections)
+
+Finalize:
+- last-chance cleanup, runs later, not guaranteed quickly
+</pre></div>
+
+        <div class="box">
+          <h4>Example</h4>
+          <p>Using Dispose via using statement:</p>
+          <pre class="code"><code>using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        using (var fs = new FileStream("demo.txt", FileMode.Create))
+        {
+            byte[] data = System.Text.Encoding.UTF8.GetBytes("Hello");
+            fs.Write(data, 0, data.Length);
+        } // Dispose happens here automatically
+        Console.WriteLine("File closed safely.");
+    }
+}</code></pre>
+        </div>
+
+        <p><b>Real-world use case:</b> Payment systems and APIs must close DB connections quickly to avoid pool exhaustion.</p>
+        <div class="tip"><b>Beginner Tip:</b> If a type implements IDisposable, use <b>using</b>.</div>
+        <div class="note"><b>Advanced Note:</b> Finalizers add overhead and delay collection; avoid unless absolutely necessary.</div>
+      </div>
+      <div class="navBtns">
+        <a class="btn" href="#when-gc-runs">❮ Previous Page</a>
+        <a class="btn" href="#dispose-pattern">Next Page ❯</a>
+      </div>
+    </section>
+
+    <!-- Dispose Pattern -->
+    <section id="dispose-pattern">
+      <div class="secHead"><h2>8) Dispose Pattern + using</h2></div>
+      <div class="content">
+        <p>
+          The dispose pattern ensures resources are released exactly once, safely, even if exceptions occur.
+          Implement <span class="tt" data-tip="An interface that indicates a type holds unmanaged resources and needs deterministic cleanup.\nIt defines Dispose() which should free resources immediately.\nUsed with the using statement for automatic cleanup.">IDisposable</span> when your type owns disposable members (streams, timers, handles).
+          Use “using” to guarantee Dispose is called.
+          In more advanced cases, you may implement a finalizer + dispose pattern for unmanaged resources.
+        </p>
+
+        <div class="ascii"><pre>
+using statement:
+- creates scope
+- calls Dispose automatically at end
+
+Dispose pattern goal:
+- avoid leaks
+- avoid double-dispose
+- ensure cleanup even on exceptions
+</pre></div>
+
+        <div class="box">
+          <h4>Example</h4>
+          <p>Simple IDisposable wrapper:</p>
+          <pre class="code"><code>using System;
+using System.IO;
+
+class FileWriter : IDisposable
+{
+    private readonly StreamWriter _writer;
+    private bool _disposed;
+
+    public FileWriter(string path)
+    {
+        _writer = new StreamWriter(path);
+    }
+
+    public void WriteLine(string s)
+    {
+        if (_disposed) throw new ObjectDisposedException(nameof(FileWriter));
+        _writer.WriteLine(s);
+    }
+
+    public void Dispose()
+    {
+        if (_disposed) return;
+        _writer.Dispose();
+        _disposed = true;
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        using (var fw = new FileWriter("out.txt"))
+        {
+            fw.WriteLine("Hello GC + Dispose");
+        }
+    }
+}</code></pre>
+        </div>
+
+        <p><b>Real-world use case:</b> ETL connectors that open streams must always dispose them to avoid file handle leaks.</p>
+        <div class="tip"><b>Beginner Tip:</b> Prefer “using var x = ...;” for cleaner code in modern C#.</div>
+        <div class="note"><b>Advanced Note:</b> If you own unmanaged resources, implement the full dispose pattern with a protected Dispose(bool) method.</div>
+      </div>
+      <div class="navBtns">
+        <a class="btn" href="#finalize-vs-dispose">❮ Previous Page</a>
+        <a class="btn" href="#best-practices">Next Page ❯</a>
+      </div>
+    </section>
+
+    <!-- Best practices -->
+    <section id="best-practices">
+      <div class="secHead"><h2>9) Best Practices & Troubleshooting</h2></div>
+      <div class="content">
+        <p>
+          The best GC optimization is usually: allocate less, reuse more, and dispose resources properly.
+          Avoid creating many short-lived large arrays; prefer pooling.
+          Minimize allocations in tight loops, avoid unnecessary string concatenation, and be careful with event handlers.
+          When memory grows, identify what is retaining references and fix the root cause.
+        </p>
+
+        <div class="ascii"><pre>
+Common GC issues:
+- Too many allocations -> frequent Gen 0 collections
+- Large allocations -> LOH pressure
+- Unsubscribed events -> objects kept alive
+- Not disposing -> resource leak (not memory leak)
+
+Fix approach:
+Profile -> find hotspots -> reduce allocations -> retest
+</pre></div>
+
+        <div class="box">
+          <h4>Example</h4>
+          <p>Reduce string allocations in loops (simple approach):</p>
+          <pre class="code"><code>using System;
+using System.Text;
+
+class Program
+{
+    static void Main()
+    {
+        var sb = new StringBuilder();
+        for (int i = 0; i &lt; 10000; i++)
+            sb.Append(i).Append(',');
+
+        Console.WriteLine(sb.Length);
+    }
+}</code></pre>
+        </div>
+
+        <p><b>Real-world use case:</b> Reporting services generating huge strings benefit from StringBuilder to reduce GC pressure.</p>
+        <div class="tip"><b>Beginner Tip:</b> “Memory leak” in C# often means “object still referenced,” not missing free().</div>
+        <div class="note"><b>Advanced Note:</b> Use weak references for caches when you want GC to reclaim items under memory pressure.</div>
+      </div>
+      <div class="navBtns">
+        <a class="btn" href="#dispose-pattern">❮ Previous Page</a>
+        <a class="btn" href="#mini-project">Next Page ❯</a>
+      </div>
+    </section>
+
+    <!-- Mini project -->
+    <section id="mini-project">
+      <div class="secHead"><h2>10) Mini Project: Resource-safe File Processor</h2></div>
+      <div class="content">
+        <p>
+          Build a console app that reads a large text file, counts lines, and writes a summary output.
+          The learning goal: use “using” for deterministic cleanup, and avoid loading the entire file in memory.
+          This style is common in ETL and log processing pipelines.
+          You’ll practice safe resource handling without forcing GC.
+        </p>
+
+        <div class="ascii"><pre>
+Streaming processing model:
+
+Open input stream (using)
+Read line-by-line
+Update counters
+Write summary (using)
+Close streams deterministically
+</pre></div>
+
+        <div class="box">
+          <h4>Example</h4>
+          <pre class="code"><code>using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        string inputPath = "input.log";
+        string outputPath = "summary.txt";
+
+        int lines = 0;
+        using (var reader = new StreamReader(inputPath))
+        {
+            while (reader.ReadLine() != null)
+                lines++;
+        }
+
+        using (var writer = new StreamWriter(outputPath))
+        {
+            writer.WriteLine("Total lines: " + lines);
+            writer.WriteLine("Generated at: " + DateTime.Now);
+        }
+
+        Console.WriteLine("Done. Summary created.");
+    }
+}</code></pre>
+        </div>
+
+        <p><b>Real-world use case:</b> Batch jobs that handle GB-size logs must stream and dispose, not load everything into memory.</p>
+        <div class="tip"><b>Beginner Tip:</b> If you open a stream, close it in the same scope using “using”.</div>
+        <div class="note"><b>Advanced Note:</b> For very large throughput, consider buffered IO and async streams (but keep disposal correct).</div>
+      </div>
+      <div class="navBtns">
+        <a class="btn" href="#best-practices">❮ Previous Page</a>
+        <a class="btn" href="#faqs">Next Page ❯</a>
+      </div>
+    </section>
+
+    <!-- FAQs -->
+    <section id="faqs">
+      <div class="secHead"><h2>11) FAQs</h2></div>
+      <div class="content">
+        <p>
+          Most GC confusion comes from mixing “memory cleanup” with “resource cleanup”.
+          These FAQs clarify when objects are collected, why finalizers are risky, and how using/Dispose solves real problems.
+          If you remember one rule: GC is for memory, Dispose is for resources.
+          Use profiling and logging instead of guessing GC behavior.
+        </p>
+
+        <div class="ascii"><pre>
+FAQ decision chart:
+Need to free memory? -> GC handles it (usually)
+Need to close file/DB/socket? -> Dispose/using
+Need safety net for unmanaged handle? -> finalizer (rare)
+</pre></div>
+
+        <div class="box">
+          <h4>FAQ List</h4>
+          <ul>
+            <li><b>Q:</b> Does GC close files automatically? <b>A:</b> No. Use Dispose/using.</li>
+            <li><b>Q:</b> When will my object be collected? <b>A:</b> When unreachable and GC decides to run.</li>
+            <li><b>Q:</b> Is GC.Collect good for performance? <b>A:</b> Usually no, it often hurts.</li>
+            <li><b>Q:</b> Should I write finalizers often? <b>A:</b> Avoid unless owning unmanaged resources.</li>
+          </ul>
+        </div>
+
+        <p><b>Real-world use case:</b> Fixing “Too many open files” and connection pool issues in production systems.</p>
+        <div class="tip"><b>Beginner Tip:</b> If something implements IDisposable, treat it as mandatory cleanup.</div>
+        <div class="note"><b>Advanced Note:</b> Dispose pattern correctness matters in libraries used by many apps—write tests for disposal behavior.</div>
+      </div>
+      <div class="navBtns">
+        <a class="btn" href="#mini-project">❮ Previous Page</a>
+        <a class="btn" href="#interview">Next Page ❯</a>
+      </div>
+    </section>
+
+    <!-- Interview -->
+    <section id="interview">
+      <div class="secHead"><h2>12) Interview Questions</h2></div>
+      <div class="content">
+        <p>
+          Interviews test whether you understand the difference between managed memory and unmanaged resources.
+          They also test concepts like generations, why finalizers are non-deterministic, and why forcing GC is discouraged.
+          Strong answers connect theory to real problems: file locks, memory pressure, and performance pauses.
+          Use the sample scenarios below to practice.
+        </p>
+
+        <div class="ascii"><pre>
+Answer format:
+- Definition
+- Example
+- Why it matters in production
+- Best practice
+</pre></div>
+
+        <div class="box">
+          <h4>Questions</h4>
+          <ol>
+            <li>What is the managed heap and how does GC reclaim memory?</li>
+            <li>Explain Gen 0, Gen 1, Gen 2 and object promotion.</li>
+            <li>What are GC roots?</li>
+            <li>Why is finalization non-deterministic?</li>
+            <li>When should you implement IDisposable?</li>
+            <li>Why is GC.Collect usually a bad idea?</li>
+          </ol>
+        </div>
+
+        <p><b>Real-world use case:</b> Diagnosing memory growth and resource leaks in long-running services.</p>
+        <div class="tip"><b>Beginner Tip:</b> Always mention “using statement” when asked about releasing resources.</div>
+        <div class="note"><b>Advanced Note:</b> Talk about allocation patterns and how reducing allocations reduces GC pressure.</div>
+      </div>
+      <div class="navBtns">
+        <a class="btn" href="#faqs">❮ Previous Page</a>
+        <a class="btn" href="#mcq">Next Page ❯</a>
+      </div>
+    </section>
+
+    <!-- MCQ -->
+    <section id="mcq">
+      <div class="secHead"><h2>13) MCQ Quiz (5–10)</h2></div>
+      <div class="content">
+        <p>
+          This quiz verifies understanding of GC fundamentals, generations, and correct cleanup practices.
+          Many production bugs come from not disposing resources or misunderstanding finalizers.
+          Answer first, then validate by experimenting with small console demos.
+          Treat this as quick revision before interviews.
+        </p>
+
+        <div class="ascii"><pre>
+Quick rule:
+Dispose resources now
+GC frees memory later
+</pre></div>
+
+        <div class="box">
+          <h4>MCQs</h4>
+          <ol>
+            <li>GC primarily manages: a) files b) sockets c) managed memory d) SQL connections</li>
+            <li>Which is deterministic cleanup? a) Finalize b) Dispose c) GC.Collect d) Promotion</li>
+            <li>Most objects die in: a) Gen 2 b) Gen 1 c) Gen 0 d) LOH</li>
+            <li>Roots are: a) disk folders b) start references for GC c) threads only d) IL code</li>
+            <li>GC.Collect should be: a) used frequently b) avoided unless special case c) required after Dispose d) used per loop</li>
+            <li>Finalizers are: a) deterministic b) non-deterministic c) compile-time only d) same as Dispose</li>
+            <li>using statement ensures: a) GC runs b) Dispose is called c) no allocations d) no exceptions</li>
+            <li>LOH stores: a) local variables b) large objects c) only strings d) only value types</li>
+          </ol>
+          <p><b>Answer Key:</b> 1-c, 2-b, 3-c, 4-b, 5-b, 6-b, 7-b, 8-b</p>
+        </div>
+
+        <p><b>Real-world use case:</b> Screening candidates for backend roles where stability and resource handling matter.</p>
+        <div class="tip"><b>Beginner Tip:</b> Remember: not disposing can break production even when memory looks “fine”.</div>
+        <div class="note"><b>Advanced Note:</b> GC tuning is advanced—most wins come from fixing allocation patterns.</div>
+      </div>
+      <div class="navBtns">
+        <a class="btn" href="#interview">❮ Previous Page</a>
+        <a class="btn" href="#glossary">Next Page ❯</a>
+      </div>
+    </section>
+
+    <!-- Glossary -->
+    <section id="glossary">
+      <div class="secHead"><h2>14) Glossary (Tooltips)</h2></div>
+      <div class="content">
+        <p>
+          These are the tooltip terms used across the page.
+          Hover tooltips were designed for quick learning: short, clear, and interview-friendly.
+          A shared glossary helps teams communicate about memory, resources, and cleanup consistently.
+          Use this section for fast revision.
+        </p>
+
+        <div class="ascii"><pre>
+Core mapping:
+Managed heap -> memory
+Dispose -> resources
+Finalizer -> last chance (rare)
+Generations -> performance optimization
+</pre></div>
+
+        <table>
+          <thead><tr><th>Term</th><th>Tooltip Description</th></tr></thead>
+          <tbody>
+            <tr><td>Garbage Collection (GC)</td><td>Automatic memory cleanup that reclaims unreachable objects on the managed heap.</td></tr>
+            <tr><td>Managed heap</td><td>Heap memory region where objects are allocated; GC manages and reclaims it.</td></tr>
+            <tr><td>CLR</td><td>.NET execution engine providing GC, JIT, exceptions, and runtime services.</td></tr>
+            <tr><td>Non-deterministic</td><td>You can’t predict exactly when GC/finalizers run; timing is decided by runtime.</td></tr>
+            <tr><td>Roots</td><td>Starting reference points used by GC to find reachable objects (stack, statics, handles).</td></tr>
+            <tr><td>Generations</td><td>Age-based groups (Gen0/1/2) that optimize collection because most objects die young.</td></tr>
+            <tr><td>LOH</td><td>Large Object Heap for large allocations; handled differently and may fragment.</td></tr>
+            <tr><td>Finalize</td><td>Finalizer runs later as a safety net; avoid unless owning unmanaged resources.</td></tr>
+            <tr><td>Dispose</td><td>Deterministic cleanup method to release external resources immediately.</td></tr>
+            <tr><td>IDisposable</td><td>Interface indicating the type needs deterministic cleanup; used with using.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="tip"><b>Beginner Tip:</b> If you see IDisposable, use using—make it a habit.</div>
+        <div class="note"><b>Advanced Note:</b> Write unit tests to ensure Dispose releases resources and prevents double-dispose bugs.</div>
+      </div>
+      <div class="navBtns">
+        <a class="btn" href="#mcq">❮ Previous Page</a>
+        <a class="btn" href="#downloads">Next Page ❯</a>
+      </div>
+    </section>
+
+    <!-- Downloads -->
+    <section id="downloads">
+      <div class="secHead"><h2>15) Placeholder: Downloadables (ZIP / PPT / DOC)</h2></div>
+      <div class="content">
+        <p>
+          Place downloadable assets here for learners: a sample project ZIP, slides, and a Word cheat-sheet.
+          Keep a short “what’s included” list so students know how to use the downloads.
+          This improves completion rate and reduces repeated support questions.
+          Ensure your ZIP contains a README and runnable demo.
+        </p>
+
+        <div class="ascii"><pre>
+Suggested downloads:
+- GC_CheatSheet.docx
+- DisposePatternDemo.zip
+- GC_InterviewPrep.pptx
+</pre></div>
+
+        <div class="box">
+          <h4>Download Buttons (placeholders)</h4>
+          <p>
+            <a class="btn" href="#download-zip">Download ZIP</a>
+            <a class="btn" href="#download-ppt">Download PPT</a>
+            <a class="btn" href="#download-doc">Download DOC</a>
+          </p>
+        </div>
+
+        <p><b>Real-world use case:</b> Learners can run demos locally and observe resource cleanup behavior.</p>
+        <div class="tip"><b>Beginner Tip:</b> Include sample inputs and expected outputs in the README.</div>
+        <div class="note"><b>Advanced Note:</b> Provide a “profiling checklist” document for memory troubleshooting labs.</div>
+      </div>
+      <div class="navBtns">
+        <a class="btn" href="#glossary">❮ Previous Page</a>
+        <a class="btn" href="#practice-coding-questions">Next Page ❯</a>
+      </div>
+    </section>
+
+    <!-- PRACTICE SECTION -->
+    <section id="practice-coding-questions">
+      <div class="secHead"><h2>To Become Best coder Practice this</h2></div>
+      <div class="content">
+        <p>
+          These 15 problems focus on garbage collection concepts and correct cleanup using Dispose/using.
+          Mix them into console apps and write small tests where possible.
+          Remember: the goal is not to “force GC”, but to design code that allocates responsibly and releases resources deterministically.
+          Work through Easy → Medium → Hard in order.
+        </p>
+
+        <div class="ascii"><pre>
+Practice workflow:
+Build small demo -> verify behavior -> refactor -> add safety checks -> retest
+</pre></div>
+
+        <!-- Easy 5 -->
+        <div class="qbox">
+          <div class="lvl easy">Easy 1 — Get Object Generation</div>
+          <p><b>Problem:</b> Create an object and print its generation using GC.GetGeneration.</p>
+          <p><b>Input:</b> None</p>
+          <p><b>Output:</b> A number (0/1/2)</p>
+          <p><b>Example Output:</b> 0</p>
+          <p><b>Constraints:</b> Use one object instance</p>
+          <p><b>Hint:</b> Allocate with new and call GC.GetGeneration(obj).</p>
+        </div>
+
+        <div class="qbox">
+          <div class="lvl easy">Easy 2 — Dispose a Stream Correctly</div>
+          <p><b>Problem:</b> Write a file "a.txt" with "Hello" using using statement.</p>
+          <p><b>Input:</b> None</p>
+          <p><b>Output:</b> Print "Done"</p>
+          <p><b>Example Output:</b> Done</p>
+          <p><b>Constraints:</b> Must use using</p>
+          <p><b>Hint:</b> Use StreamWriter inside using.</p>
+        </div>
+
+        <div class="qbox">
+          <div class="lvl easy">Easy 3 — Make Object Unreachable</div>
+          <p><b>Problem:</b> Create two Node objects linked. Break the link so second node becomes unreachable.</p>
+          <p><b>Input:</b> None</p>
+          <p><b>Output:</b> Print "Link removed"</p>
+          <p><b>Example Output:</b> Link removed</p>
+          <p><b>Constraints:</b> Use reference types</p>
+          <p><b>Hint:</b> Set Next to null.</p>
+        </div>
+
+        <div class="qbox">
+          <div class="lvl easy">Easy 4 — Total Memory Snapshot</div>
+          <p><b>Problem:</b> Print GC.GetTotalMemory(false) before and after allocating 10,000 small arrays.</p>
+          <p><b>Input:</b> None</p>
+          <p><b>Output:</b> Two memory values</p>
+          <p><b>Example Output:</b> Before: ... After: ...</p>
+          <p><b>Constraints:</b> Arrays size 256 bytes</p>
+          <p><b>Hint:</b> Use a loop and store references in a list to prevent early collection.</p>
+        </div>
+
+        <div class="qbox">
+          <div class="lvl easy">Easy 5 — Identify IDisposable Types</div>
+          <p><b>Problem:</b> Given a list of types (StreamReader, StringBuilder, List&lt;int&gt;), print which should be disposed.</p>
+          <p><b>Input:</b> None (hardcode list)</p>
+          <p><b>Output:</b> Lines: TypeName -> Dispose/No</p>
+          <p><b>Example Output:</b> StreamReader -> Dispose</p>
+          <p><b>Constraints:</b> Use reflection typeof(IDisposable).IsAssignableFrom(type)</p>
+          <p><b>Hint:</b> Check if type implements IDisposable.</p>
+        </div>
+
+        <!-- Medium 5 -->
+        <div class="qbox">
+          <div class="lvl med">Medium 1 — Implement Simple IDisposable Wrapper</div>
+          <p><b>Problem:</b> Create a class SafeWriter that wraps StreamWriter and prevents writing after Dispose.</p>
+          <p><b>Input:</b> None (demo in Main)</p>
+          <p><b>Output:</b> "OK" then throw ObjectDisposedException on second write</p>
+          <p><b>Example Output:</b> OK</p>
+          <p><b>Constraints:</b> Must track disposed flag</p>
+          <p><b>Hint:</b> Throw new ObjectDisposedException(nameof(SafeWriter)).</p>
+        </div>
+
+        <div class="qbox">
+          <div class="lvl med">Medium 2 — Stream Large File Line Count (No Full Load)</div>
+          <p><b>Problem:</b> Count lines of a file without reading entire file into memory.</p>
+          <p><b>Input:</b> file path</p>
+          <p><b>Output:</b> line count</p>
+          <p><b>Example Input:</b> input.log</p>
+          <p><b>Example Output:</b> 1200</p>
+          <p><b>Constraints:</b> Must use StreamReader and while(ReadLine()!=null)</p>
+          <p><b>Hint:</b> Use using to ensure stream closes.</p>
+        </div>
+
+        <div class="qbox">
+          <div class="lvl med">Medium 3 — Detect Accidental Object Retention</div>
+          <p><b>Problem:</b> Simulate a cache list that keeps growing; add a limit to remove old items.</p>
+          <p><b>Input:</b> N items to add</p>
+          <p><b>Output:</b> final cache size</p>
+          <p><b>Example Input:</b> 10000</p>
+          <p><b>Example Output:</b> 1000</p>
+          <p><b>Constraints:</b> Keep only last 1000 items</p>
+          <p><b>Hint:</b> If list.Count &gt; 1000 remove at 0.</p>
+        </div>
+
+        <div class="qbox">
+          <div class="lvl med">Medium 4 — Compare String Concatenation vs StringBuilder</div>
+          <p><b>Problem:</b> Build a CSV of 50,000 integers using + and StringBuilder; print time for each.</p>
+          <p><b>Input:</b> None</p>
+          <p><b>Output:</b> Two timings</p>
+          <p><b>Example Output:</b> Plus: ...ms, SB: ...ms</p>
+          <p><b>Constraints:</b> Use Stopwatch</p>
+          <p><b>Hint:</b> Allocate StringBuilder once.</p>
+        </div>
+
+        <div class="qbox">
+          <div class="lvl med">Medium 5 — Force GC (Demo) and Observe Generations</div>
+          <p><b>Problem:</b> Allocate objects, call GC.Collect (demo), print generation before/after for one survivor object.</p>
+          <p><b>Input:</b> None</p>
+          <p><b>Output:</b> Gen before and after</p>
+          <p><b>Example Output:</b> 0 -> 1</p>
+          <p><b>Constraints:</b> Keep a reference alive</p>
+          <p><b>Hint:</b> Store object in a variable outside loops.</p>
+        </div>
+
+        <!-- Hard 5 -->
+        <div class="qbox">
+          <div class="lvl hard">Hard 1 — Implement Full Dispose Pattern Skeleton</div>
+          <p><b>Problem:</b> Create a class NativeHandleOwner with Dispose(bool) and a finalizer (~NativeHandleOwner).</p>
+          <p><b>Input:</b> None</p>
+          <p><b>Output:</b> Print logs when Dispose called (demo)</p>
+          <p><b>Example Output:</b> Disposed managed/unmanaged</p>
+          <p><b>Constraints:</b> Include disposed flag and GC.SuppressFinalize(this)</p>
+          <p><b>Hint:</b> Dispose() calls Dispose(true) and suppresses finalizer.</p>
+        </div>
+
+        <div class="qbox">
+          <div class="lvl hard">Hard 2 — Resource Leak Simulation (Without Dispose)</div>
+          <p><b>Problem:</b> Open many streams in a loop without disposing, then fix using using and show it works.</p>
+          <p><b>Input:</b> N (number of opens)</p>
+          <p><b>Output:</b> "Success" after fix</p>
+          <p><b>Example Input:</b> 5000</p>
+          <p><b>Example Output:</b> Success</p>
+          <p><b>Constraints:</b> Must show both bad and fixed version</p>
+          <p><b>Hint:</b> Put stream creation inside using block.</p>
+        </div>
+
+        <div class="qbox">
+          <div class="lvl hard">Hard 3 — Avoid LOH Pressure</div>
+          <p><b>Problem:</b> Simulate repeated large byte[] allocations; refactor to reuse a single buffer.</p>
+          <p><b>Input:</b> iterations</p>
+          <p><b>Output:</b> memory snapshots before/after</p>
+          <p><b>Example Input:</b> 2000</p>
+          <p><b>Example Output:</b> Lower memory growth after reuse</p>
+          <p><b>Constraints:</b> Use a large array size consistently</p>
+          <p><b>Hint:</b> Allocate once and reuse across loop.</p>
+        </div>
+
+        <div class="qbox">
+          <div class="lvl hard">Hard 4 — Event Handler Retention Bug</div>
+          <p><b>Problem:</b> Create Publisher/Subscriber; demonstrate subscriber stays alive due to event, then fix by unsubscribing.</p>
+          <p><b>Input:</b> None</p>
+          <p><b>Output:</b> Print "Unsubscribed" and show cleanup path</p>
+          <p><b>Example Output:</b> Unsubscribed</p>
+          <p><b>Constraints:</b> Must use event</p>
+          <p><b>Hint:</b> Unsubscribe in Dispose of subscriber.</p>
+        </div>
+
+        <div class="qbox">
+          <div class="lvl hard">Hard 5 — Build Allocation-friendly Data Processor</div>
+          <p><b>Problem:</b> Process 1,00,000 lines: count ERROR/WARN/INFO without storing all lines. Output counts.</p>
+          <p><b>Input:</b> file path</p>
+          <p><b>Output:</b> three counts</p>
+          <p><b>Example Input:</b> input.log</p>
+          <p><b>Example Output:</b> INFO=90000 WARN=9000 ERROR=1000</p>
+          <p><b>Constraints:</b> Must stream line-by-line, must dispose streams</p>
+          <p><b>Hint:</b> Use counters and ReadLine loop; avoid List&lt;string&gt;.</p>
+        </div>
+
+        <div class="tip"><b>Beginner Tip:</b> First learn “using” perfectly—most production leaks are resource leaks, not GC issues.</div>
+        <div class="note"><b>Advanced Note:</b> When optimizing, measure allocations and pauses; reduce allocations rather than calling GC manually.</div>
+      </div>
+      <div class="navBtns">
+        <a class="btn" href="#downloads">❮ Previous Page</a>
+        <a class="btn" href="#next-subtopic">Next Page ❯</a>
+      </div>
+    </section>
+
+    <div id="next-subtopic"></div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,206 @@
+/* ============================= */
+/* GLOBAL RESET */
+/* ============================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff;
+}
+
+/* ============================= */
+/* NAVBAR */
+/* ============================= */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.nav-links a {
+    margin-left: 25px;
+    text-decoration: none;
+    color: #fff;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: #38bdf8;
+}
+
+/* ============================= */
+/* MAIN CONTENT */
+/* ============================= */
+
+.main-content {
+    flex: 1;
+    padding: 60px 20px;
+}
+
+/* ============================= */
+/* SEARCH CARD */
+/* ============================= */
+
+.search-card {
+    width: 550px;
+    margin: 0 auto;
+    padding: 40px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+}
+
+.search-card h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 500;
+}
+
+/* ============================= */
+/* FORM */
+/* ============================= */
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+select, input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 18px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+}
+
+select:focus, input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #38bdf8;
+}
+
+/* ============================= */
+/* BUTTONS */
+/* ============================= */
+
+.button-group {
+    display: flex;
+    gap: 12px;
+}
+
+.btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-primary {
+    background: #38bdf8;
+    color: #000;
+}
+
+.btn-primary:hover {
+    background: #0ea5e9;
+}
+
+.btn-warning {
+    background: #facc15;
+    color: #000;
+}
+
+.btn-warning:hover {
+    background: #eab308;
+}
+
+/* ============================= */
+/* RESULTS TABLE */
+/* ============================= */
+
+.results-wrapper {
+    width: 90%;
+    margin: 40px auto;
+}
+
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.results-table th {
+    background: rgba(255,255,255,0.15);
+    padding: 12px;
+    font-weight: 500;
+}
+
+.results-table td {
+    padding: 12px;
+    text-align: center;
+}
+
+.results-table tr:hover {
+    background: rgba(255,255,255,0.12);
+}
+
+.no-results {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 18px;
+    opacity: 0.8;
+}
+
+/* ============================= */
+/* FOOTER */
+/* ============================= */
+
+.footer {
+    background: rgba(255,255,255,0.05);
+    text-align: center;
+    padding: 20px;
+    color: #aaa;
+}
+
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
+
+@media (max-width: 600px) {
+    .search-card {
+        width: 95%;
+    }
+
+    .navbar {
+        padding: 20px;
+    }
+}

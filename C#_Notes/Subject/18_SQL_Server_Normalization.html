@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>SQL Server Normalization (Spoon-Feeding Notes)</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel:#0f1733;
+      --card:#111c3d;
+      --muted:#9fb0ff;
+      --text:#eaf0ff;
+      --soft:#bcd0ff;
+      --brand:#6ee7ff;
+      --brand2:#a78bfa;
+      --good:#34d399;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+      --border:rgba(255,255,255,.10);
+      --shadow: 0 16px 40px rgba(0,0,0,.35);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background: radial-gradient(1200px 800px at 20% 0%, rgba(110,231,255,.18), transparent 55%),
+                  radial-gradient(900px 600px at 85% 10%, rgba(167,139,250,.16), transparent 55%),
+                  radial-gradient(900px 700px at 55% 110%, rgba(52,211,153,.10), transparent 50%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+    a{color:var(--brand); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .topbar{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(90deg, rgba(15,23,51,.86), rgba(17,28,61,.72));
+      border-bottom:1px solid var(--border);
+    }
+    .topbar-inner{
+      max-width:1100px; margin:0 auto; padding:14px 16px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:800; letter-spacing:.3px;
+    }
+    .badge{
+      font-size:12px;
+      padding:4px 10px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      color:var(--soft);
+      background: rgba(255,255,255,.04);
+    }
+    .btn{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      cursor:pointer;
+      transition:.15s transform, .15s background;
+      user-select:none;
+      font-weight:600;
+    }
+    .btn:hover{background: rgba(255,255,255,.07)}
+    .btn:active{transform: scale(.99)}
+    .wrap{
+      max-width:1100px;
+      margin:22px auto 70px;
+      padding:0 16px;
+      display:grid;
+      grid-template-columns: 310px 1fr;
+      gap:18px;
+    }
+    @media (max-width: 980px){
+      .wrap{grid-template-columns: 1fr}
+      .toc{position:relative; top:0}
+    }
+    .hero{
+      grid-column: 1 / -1;
+      padding:18px 18px 10px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+    }
+    .hero h1{
+      margin:0 0 10px;
+      font-size:32px;
+      line-height:1.15;
+    }
+    .hero p{margin:8px 0; color:var(--soft)}
+    .hero .callouts{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+    }
+    @media (max-width: 860px){ .hero .callouts{grid-template-columns:1fr} }
+    .chip{
+      padding:12px 12px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      border-radius:14px;
+    }
+    .chip b{color:var(--brand)}
+    .toc{
+      position: sticky;
+      top: 74px;
+      align-self:start;
+      padding:16px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      background: rgba(17,28,61,.62);
+      box-shadow: var(--shadow);
+    }
+    .toc h3{margin:0 0 10px; font-size:16px}
+    .toc a{
+      display:block;
+      padding:8px 10px;
+      border-radius:12px;
+      color:var(--soft);
+      border:1px solid transparent;
+      transition:.12s;
+      font-weight:600;
+    }
+    .toc a:hover{
+      border-color: var(--border);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      text-decoration:none;
+    }
+    .content{padding: 0;}
+    .card{
+      padding:18px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      background: rgba(17,28,61,.62);
+      box-shadow: var(--shadow);
+      margin-bottom:16px;
+    }
+    .card h2{margin:0 0 10px; font-size:22px}
+    .card h3{margin:18px 0 8px; font-size:18px}
+    .muted{color:var(--soft)}
+    .note, .warn, .tip{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px 12px;
+      margin:12px 0;
+      background: rgba(255,255,255,.03);
+    }
+    .note b{color:var(--brand)}
+    .tip b{color:var(--good)}
+    .warn b{color:var(--warn)}
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 820px){ .grid2{grid-template-columns:1fr} }
+    .tbl{
+      width:100%;
+      border-collapse: collapse;
+      overflow:hidden;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.02);
+    }
+    .tbl th, .tbl td{
+      padding:10px 10px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .tbl th{
+      text-align:left;
+      font-size:13px;
+      letter-spacing:.2px;
+      color: var(--muted);
+      background: rgba(255,255,255,.03);
+    }
+    .tbl tr:last-child td{border-bottom:none}
+    pre{
+      margin:12px 0 0;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background: rgba(0,0,0,.28);
+      padding:12px;
+      overflow:auto;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height:1.55;
+    }
+    code{font-family: var(--mono)}
+    .codebar{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-top:10px;
+    }
+    .codebar .label{
+      color: var(--muted);
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+    .copy{
+      border-radius:12px;
+      padding:8px 10px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color:var(--text);
+      cursor:pointer;
+      font-weight:700;
+      font-size:12px;
+    }
+    .copy:hover{background: rgba(255,255,255,.06)}
+    details{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px 12px;
+      background: rgba(255,255,255,.02);
+      margin:12px 0;
+    }
+    details summary{
+      cursor:pointer;
+      font-weight:800;
+      color: var(--brand2);
+      outline:none;
+    }
+    .pill{
+      display:inline-flex; align-items:center;
+      padding:2px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color: var(--soft);
+      font-size: 12px;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+    .hr{height:1px; background: var(--border); margin:14px 0;}
+    .kpi{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:12px;
+      margin-top:10px;
+    }
+    @media (max-width: 860px){ .kpi{grid-template-columns:1fr 1fr} }
+    @media (max-width: 520px){ .kpi{grid-template-columns:1fr} }
+    .kpi .box{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      background: rgba(255,255,255,.03);
+    }
+    .kpi .big{font-size:18px; font-weight:900}
+    .kpi .small{color:var(--soft); font-weight:700; font-size:12px}
+    .footer{
+      grid-column:1 / -1;
+      padding:18px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      background: rgba(17,28,61,.45);
+      color: var(--soft);
+    }
+    .diagram{
+      width:100%;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background: rgba(0,0,0,.22);
+      padding:12px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.5;
+      overflow:auto;
+      margin-top:10px;
+      white-space: pre;
+    }
+    .tag-good{color:var(--good); font-weight:800}
+    .tag-warn{color:var(--warn); font-weight:800}
+    .tag-bad{color:var(--bad); font-weight:800}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span style="display:inline-block;width:12px;height:12px;border-radius:4px;background:var(--brand);box-shadow:0 0 0 4px rgba(110,231,255,.15)"></span>
+        <span>ItTechGenie Notes</span>
+        <span class="badge">Current Project: Databricks &amp; SQL Assessment Banks</span>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+        <button class="btn" onclick="scrollToTop()">⬆️ Top</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section class="hero" id="top">
+      <h1>SQL Server Normalization (Super Beginner + Real Examples + Exercises)</h1>
+      <p class="muted">
+        This page teaches normalization in the simplest way: <b>why it exists</b>, <b>what each normal form means</b>,
+        and <b>how to fix tables using SQL Server queries</b>.
+      </p>
+
+      <div class="callouts">
+        <div class="chip"><b>Goal</b><br/>Store data without duplicates, confusion, or update problems.</div>
+        <div class="chip"><b>Method</b><br/>Break big messy tables into smaller correct tables + keys.</div>
+        <div class="chip"><b>Result</b><br/>Clean design, easier maintenance, better data accuracy.</div>
+      </div>
+
+      <div class="kpi">
+        <div class="box"><div class="big">1NF</div><div class="small">No multi-values in a column</div></div>
+        <div class="box"><div class="big">2NF</div><div class="small">No partial dependency</div></div>
+        <div class="box"><div class="big">3NF</div><div class="small">No transitive dependency</div></div>
+        <div class="box"><div class="big">BCNF</div><div class="small">Every determinant is a key</div></div>
+      </div>
+    </section>
+
+    <aside class="toc">
+      <h3>📌 Table of Contents</h3>
+      <a href="#what">1) What is Normalization?</a>
+      <a href="#anomalies">2) Problems Normalization Fixes (Anomalies)</a>
+      <a href="#setup">3) SQL Setup (Create DB + Sample Data)</a>
+      <a href="#un-normalized">4) Un-Normalized Example (Bad Table)</a>
+      <a href="#nf1">5) First Normal Form (1NF)</a>
+      <a href="#nf2">6) Second Normal Form (2NF)</a>
+      <a href="#nf3">7) Third Normal Form (3NF)</a>
+      <a href="#bcnf">8) BCNF (simple view)</a>
+      <a href="#realtime">9) Real-Time Mini Design (E-Commerce)</a>
+      <a href="#practice">10) Practice Exercises</a>
+      <a href="#quickref">11) Quick Revision Sheet</a>
+    </aside>
+
+    <main class="content">
+      <section class="card" id="what">
+        <h2>1) What is Normalization?</h2>
+        <p>
+          <b>Normalization</b> is a set of rules to design tables so that data is stored in a clean and correct way.
+        </p>
+        <div class="note">
+          <b>In one line:</b> Normalization means <b>split data into logical tables</b> and connect them using <b>keys</b> so you avoid duplicates and mistakes.
+        </div>
+
+        <h3>Think Like This (Real Life)</h3>
+        <p class="muted">
+          Imagine you are saving customer orders in Excel. If you write the customer name, address, product names,
+          and prices repeatedly in every row, after some days you will make mistakes.
+        </p>
+
+        <div class="diagram">
+Bad (messy): One big sheet with repeated values
+  OrdersSheet(OrderId, CustomerName, CustomerPhone, CustomerAddress, Product1, Product2, Product3, ...)
+
+Good (normalized): Separate sheets + relationships
+  Customers(CustomerId, Name, Phone, Address)
+  Orders(OrderId, CustomerId, OrderDate)
+  OrderItems(OrderId, ProductId, Qty, UnitPrice)
+  Products(ProductId, Name, Price)
+        </div>
+
+        <div class="tip">
+          <b>Beginner Tip:</b> Normalization is not about “more tables for no reason”. It’s about putting each fact in the <b>correct place</b>.
+        </div>
+      </section>
+
+      <section class="card" id="anomalies">
+        <h2>2) Problems Normalization Fixes (Anomalies)</h2>
+        <p>
+          When your table is not normalized, you face 3 common issues:
+        </p>
+
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>Problem</th>
+              <th>What it means (super simple)</th>
+              <th>Real example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag-bad">Update Anomaly</span></td>
+              <td>You update the same info in many rows → you miss one row → data becomes wrong.</td>
+              <td>Customer phone changed, but you updated only 3 orders out of 10.</td>
+            </tr>
+            <tr>
+              <td><span class="tag-warn">Insert Anomaly</span></td>
+              <td>You cannot add a piece of data because another piece is missing.</td>
+              <td>You want to add a new product, but your table requires an order to exist.</td>
+            </tr>
+            <tr>
+              <td><span class="tag-bad">Delete Anomaly</span></td>
+              <td>Deleting a row deletes important info unintentionally.</td>
+              <td>Deleting the last order of a customer deletes customer details too.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card" id="setup">
+        <h2>3) SQL Setup (Create DB + Sample Data)</h2>
+        <p class="muted">
+          Run these queries in SQL Server (SSMS). This creates a database and a “bad” table so we can learn by fixing it.
+        </p>
+
+        <div class="codebar">
+          <span class="label">SQL Server Setup</span>
+          <button class="copy" data-copy="code-setup">Copy</button>
+        </div>
+        <pre id="code-setup"><code>-- 1) Create a database
+CREATE DATABASE NormalizationDemo;
+GO
+USE NormalizationDemo;
+GO
+
+-- 2) Start clean if re-running
+IF OBJECT_ID('dbo.Order_Bad', 'U') IS NOT NULL DROP TABLE dbo.Order_Bad;
+GO
+
+-- 3) A single BIG table (not normalized) - for learning
+CREATE TABLE dbo.Order_Bad
+(
+    OrderId        INT,
+    OrderDate      DATE,
+    CustomerName   VARCHAR(100),
+    CustomerPhone  VARCHAR(20),
+    CustomerCity   VARCHAR(50),
+    ProductNames   VARCHAR(200),  -- ❌ multiple values in one column
+    TotalAmount    DECIMAL(10,2)
+);
+GO
+
+-- 4) Insert sample data (notice: repeated customer info + multi-products in one column)
+INSERT INTO dbo.Order_Bad VALUES
+(101, '2026-02-01', 'Arjun Kumar', '9876543210', 'Chennai', 'Mouse, Keyboard', 2500.00),
+(102, '2026-02-02', 'Arjun Kumar', '9876543210', 'Chennai', 'Laptop Bag',     1200.00),
+(103, '2026-02-02', 'Meera Iyer',  '9123456780', 'Bengaluru', 'Mouse, Laptop Stand, USB Hub', 3100.00);
+GO
+
+SELECT * FROM dbo.Order_Bad;</code></pre>
+
+        <div class="note">
+          <b>What you should notice:</b><br/>
+          1) Customer details are repeated. <br/>
+          2) <code>ProductNames</code> has multiple products in one cell → this breaks 1NF. <br/>
+          3) Searching and reporting becomes painful.
+        </div>
+      </section>
+
+      <section class="card" id="un-normalized">
+        <h2>4) Un-Normalized Example (Why it’s bad)</h2>
+        <p class="muted">Let’s see the exact problems with this table.</p>
+
+        <div class="grid2">
+          <div>
+            <h3>Problem A: Can't query products properly</h3>
+            <div class="codebar">
+              <span class="label">Bad filtering</span>
+              <button class="copy" data-copy="code-like">Copy</button>
+            </div>
+            <pre id="code-like"><code>-- Want: all orders that contain 'Mouse'
+-- This is not reliable because it depends on text format.
+SELECT * 
+FROM dbo.Order_Bad
+WHERE ProductNames LIKE '%Mouse%';</code></pre>
+            <div class="warn"><b>Why bad?</b> Because "Mouse Pad" will also match. Also spacing/commas can break results.</div>
+          </div>
+          <div>
+            <h3>Problem B: Update anomaly</h3>
+            <div class="codebar">
+              <span class="label">Customer phone update</span>
+              <button class="copy" data-copy="code-update-anom">Copy</button>
+            </div>
+            <pre id="code-update-anom"><code>-- Customer phone changed. You must update multiple rows.
+UPDATE dbo.Order_Bad
+SET CustomerPhone = '9000000000'
+WHERE CustomerName = 'Arjun Kumar';</code></pre>
+            <div class="warn"><b>Why risky?</b> If one row is missed, same customer will show two phone numbers.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="nf1">
+        <h2>5) First Normal Form (1NF)</h2>
+        <p>
+          <span class="pill">Rule</span> Each column should have <b>single (atomic) values</b>. No lists, no commas.
+        </p>
+
+        <div class="note">
+          <b>1NF = One cell = One value</b><br/>
+          Example: Instead of <code>"Mouse, Keyboard"</code> in one cell, store as two rows in an <b>OrderItems</b> table.
+        </div>
+
+        <h3>Convert our bad table into 1NF</h3>
+        <p class="muted">
+          We will create proper tables: <b>Customers</b>, <b>Orders</b>, <b>Products</b>, <b>OrderItems</b>.
+        </p>
+
+        <div class="codebar">
+          <span class="label">1NF Tables (Customers, Orders, Products, OrderItems)</span>
+          <button class="copy" data-copy="code-1nf">Copy</button>
+        </div>
+        <pre id="code-1nf"><code>-- Clean old tables if re-running
+IF OBJECT_ID('dbo.OrderItems', 'U') IS NOT NULL DROP TABLE dbo.OrderItems;
+IF OBJECT_ID('dbo.Orders', 'U') IS NOT NULL DROP TABLE dbo.Orders;
+IF OBJECT_ID('dbo.Products', 'U') IS NOT NULL DROP TABLE dbo.Products;
+IF OBJECT_ID('dbo.Customers', 'U') IS NOT NULL DROP TABLE dbo.Customers;
+GO
+
+CREATE TABLE dbo.Customers
+(
+    CustomerId     INT IDENTITY(1,1) PRIMARY KEY,
+    CustomerName   VARCHAR(100) NOT NULL,
+    CustomerPhone  VARCHAR(20)  NOT NULL,
+    CustomerCity   VARCHAR(50)  NOT NULL
+);
+
+CREATE TABLE dbo.Orders
+(
+    OrderId     INT PRIMARY KEY,
+    OrderDate   DATE NOT NULL,
+    CustomerId  INT NOT NULL,
+    CONSTRAINT FK_Orders_Customers
+      FOREIGN KEY (CustomerId) REFERENCES dbo.Customers(CustomerId)
+);
+
+CREATE TABLE dbo.Products
+(
+    ProductId   INT IDENTITY(1,1) PRIMARY KEY,
+    ProductName VARCHAR(100) NOT NULL UNIQUE,
+    ListPrice   DECIMAL(10,2) NOT NULL
+);
+
+CREATE TABLE dbo.OrderItems
+(
+    OrderId   INT NOT NULL,
+    ProductId INT NOT NULL,
+    Qty       INT NOT NULL,
+    UnitPrice DECIMAL(10,2) NOT NULL,
+
+    CONSTRAINT PK_OrderItems PRIMARY KEY (OrderId, ProductId),
+    CONSTRAINT FK_OrderItems_Orders FOREIGN KEY (OrderId) REFERENCES dbo.Orders(OrderId),
+    CONSTRAINT FK_OrderItems_Products FOREIGN KEY (ProductId) REFERENCES dbo.Products(ProductId)
+);
+GO</code></pre>
+
+        <h3>Insert super-simple sample data</h3>
+        <div class="codebar">
+          <span class="label">Sample Inserts</span>
+          <button class="copy" data-copy="code-inserts">Copy</button>
+        </div>
+        <pre id="code-inserts"><code>-- Customers
+INSERT INTO dbo.Customers(CustomerName, CustomerPhone, CustomerCity)
+VALUES
+('Arjun Kumar', '9876543210', 'Chennai'),
+('Meera Iyer',  '9123456780', 'Bengaluru');
+
+-- Products
+INSERT INTO dbo.Products(ProductName, ListPrice)
+VALUES
+('Mouse', 500.00),
+('Keyboard', 2000.00),
+('Laptop Bag', 1200.00),
+('Laptop Stand', 1600.00),
+('USB Hub', 1000.00);
+
+-- Orders (link to Customers by CustomerId)
+-- (Assume Arjun=1, Meera=2 from inserts above)
+INSERT INTO dbo.Orders(OrderId, OrderDate, CustomerId)
+VALUES
+(101, '2026-02-01', 1),
+(102, '2026-02-02', 1),
+(103, '2026-02-02', 2);
+
+-- OrderItems (ONE product per row ✅)
+-- Order 101: Mouse + Keyboard
+INSERT INTO dbo.OrderItems(OrderId, ProductId, Qty, UnitPrice)
+VALUES
+(101, (SELECT ProductId FROM dbo.Products WHERE ProductName='Mouse'), 1, 500.00),
+(101, (SELECT ProductId FROM dbo.Products WHERE ProductName='Keyboard'), 1, 2000.00);
+
+-- Order 102: Laptop Bag
+INSERT INTO dbo.OrderItems(OrderId, ProductId, Qty, UnitPrice)
+VALUES
+(102, (SELECT ProductId FROM dbo.Products WHERE ProductName='Laptop Bag'), 1, 1200.00);
+
+-- Order 103: Mouse + Laptop Stand + USB Hub
+INSERT INTO dbo.OrderItems(OrderId, ProductId, Qty, UnitPrice)
+VALUES
+(103, (SELECT ProductId FROM dbo.Products WHERE ProductName='Mouse'), 1, 500.00),
+(103, (SELECT ProductId FROM dbo.Products WHERE ProductName='Laptop Stand'), 1, 1600.00),
+(103, (SELECT ProductId FROM dbo.Products WHERE ProductName='USB Hub'), 1, 1000.00);</code></pre>
+
+        <details>
+          <summary>✅ Verify (Join Query) — See full order with items</summary>
+          <div class="codebar">
+            <span class="label">Join to view data</span>
+            <button class="copy" data-copy="code-join-view">Copy</button>
+          </div>
+          <pre id="code-join-view"><code>SELECT
+    o.OrderId,
+    o.OrderDate,
+    c.CustomerName,
+    c.CustomerPhone,
+    c.CustomerCity,
+    p.ProductName,
+    oi.Qty,
+    oi.UnitPrice,
+    (oi.Qty * oi.UnitPrice) AS LineTotal
+FROM dbo.Orders o
+JOIN dbo.Customers c ON c.CustomerId = o.CustomerId
+JOIN dbo.OrderItems oi ON oi.OrderId = o.OrderId
+JOIN dbo.Products p ON p.ProductId = oi.ProductId
+ORDER BY o.OrderId;</code></pre>
+        </details>
+
+        <div class="tip">
+          <b>Now we are in 1NF!</b> Products are no longer stored as comma-separated lists. Each product is one row in <code>OrderItems</code>.
+        </div>
+      </section>
+
+      <section class="card" id="nf2">
+        <h2>6) Second Normal Form (2NF)</h2>
+        <p>
+          <span class="pill">Rule</span> Must be in 1NF + no <b>partial dependency</b> (mainly happens when you use a <b>composite key</b>).
+        </p>
+        <div class="note">
+          <b>Simple meaning:</b> If your table key is (A, B), then every non-key column must depend on <b>both A and B</b>, not only A.
+        </div>
+
+        <h3>Beginner Example (Bad 2NF)</h3>
+        <p class="muted">Suppose someone stores product name inside OrderItems (bad idea):</p>
+
+        <div class="codebar">
+          <span class="label">Bad table showing 2NF issue</span>
+          <button class="copy" data-copy="code-2nf-bad">Copy</button>
+        </div>
+        <pre id="code-2nf-bad"><code>-- ❌ Bad design (for learning)
+-- Key is (OrderId, ProductId), but ProductName depends only on ProductId.
+CREATE TABLE dbo.OrderItems_Bad2NF
+(
+    OrderId     INT NOT NULL,
+    ProductId   INT NOT NULL,
+    ProductName VARCHAR(100) NOT NULL, -- ❌ depends only on ProductId
+    Qty         INT NOT NULL,
+    UnitPrice   DECIMAL(10,2) NOT NULL,
+    CONSTRAINT PK_OrderItems_Bad2NF PRIMARY KEY (OrderId, ProductId)
+);</code></pre>
+
+        <div class="warn">
+          <b>Problem:</b> If ProductName changes (e.g., "USB Hub" becomes "USB Hub 3.0"), you must update many rows.
+          That is an <b>update anomaly</b>.
+        </div>
+
+        <h3>Fix for 2NF (Correct Design)</h3>
+        <p class="muted">
+          Put product details into <code>Products</code>. Keep only ProductId in OrderItems. (We already did this. ✅)
+        </p>
+
+        <table class="tbl">
+          <thead>
+            <tr><th>Table</th><th>Stores</th><th>Depends on</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Products</td><td>ProductName, ListPrice</td><td>ProductId</td></tr>
+            <tr><td>OrderItems</td><td>Qty, UnitPrice</td><td>(OrderId, ProductId)</td></tr>
+          </tbody>
+        </table>
+
+        <div class="tip"><b>Shortcut memory:</b> 2NF usually means “remove repeated item details from line-item table”.</div>
+      </section>
+
+      <section class="card" id="nf3">
+        <h2>7) Third Normal Form (3NF)</h2>
+        <p>
+          <span class="pill">Rule</span> Must be in 2NF + no <b>transitive dependency</b>.
+        </p>
+
+        <div class="note">
+          <b>Simple meaning:</b> A non-key column should not depend on another non-key column.
+          Everything should depend only on the key.
+        </div>
+
+        <h3>Beginner Example (Bad 3NF)</h3>
+        <p class="muted">Let’s say you store City and State together wrongly in Customers:</p>
+
+        <div class="codebar">
+          <span class="label">Bad 3NF example</span>
+          <button class="copy" data-copy="code-3nf-bad">Copy</button>
+        </div>
+        <pre id="code-3nf-bad"><code>-- ❌ Bad: State is determined by City (for many systems)
+-- CustomerId -> City -> State   (transitive dependency)
+CREATE TABLE dbo.Customers_Bad3NF
+(
+    CustomerId    INT IDENTITY PRIMARY KEY,
+    CustomerName  VARCHAR(100) NOT NULL,
+    City          VARCHAR(50) NOT NULL,
+    State         VARCHAR(50) NOT NULL
+);</code></pre>
+
+        <div class="warn">
+          <b>Problem:</b> If you type "Bengaluru" with State as "Tamil Nadu" by mistake,
+          your data becomes incorrect. You might store different states for the same city.
+        </div>
+
+        <h3>Fix for 3NF (Simple & Practical)</h3>
+        <p class="muted">
+          Create a Cities table and reference it (good for big systems). For small systems, you may keep City as text,
+          but for learning, we will normalize it.
+        </p>
+
+        <div class="codebar">
+          <span class="label">3NF Fix: Cities master table</span>
+          <button class="copy" data-copy="code-3nf-fix">Copy</button>
+        </div>
+        <pre id="code-3nf-fix"><code>IF OBJECT_ID('dbo.Cities', 'U') IS NOT NULL DROP TABLE dbo.Cities;
+GO
+
+CREATE TABLE dbo.Cities
+(
+    CityId   INT IDENTITY(1,1) PRIMARY KEY,
+    CityName VARCHAR(50) NOT NULL UNIQUE,
+    State    VARCHAR(50) NOT NULL
+);
+
+-- Add a CityId column to Customers (demo approach)
+ALTER TABLE dbo.Customers
+ADD CityId INT NULL;
+
+-- Insert city master data
+INSERT INTO dbo.Cities(CityName, State)
+VALUES
+('Chennai', 'Tamil Nadu'),
+('Bengaluru', 'Karnataka');
+
+-- Update existing customers with CityId (simple demo)
+UPDATE c
+SET CityId = ci.CityId
+FROM dbo.Customers c
+JOIN dbo.Cities ci ON ci.CityName = c.CustomerCity;
+
+-- Now you can optionally remove CustomerCity text column (optional for demo)
+-- ALTER TABLE dbo.Customers DROP COLUMN CustomerCity;
+
+-- Add FK
+ALTER TABLE dbo.Customers
+ADD CONSTRAINT FK_Customers_Cities
+FOREIGN KEY (CityId) REFERENCES dbo.Cities(CityId);</code></pre>
+
+        <details>
+          <summary>✅ Verify: Show customers with City + State (Join)</summary>
+          <div class="codebar">
+            <span class="label">Verify Join</span>
+            <button class="copy" data-copy="code-3nf-verify">Copy</button>
+          </div>
+          <pre id="code-3nf-verify"><code>SELECT
+  c.CustomerId,
+  c.CustomerName,
+  c.CustomerPhone,
+  ci.CityName,
+  ci.State
+FROM dbo.Customers c
+JOIN dbo.Cities ci ON ci.CityId = c.CityId
+ORDER BY c.CustomerId;</code></pre>
+        </details>
+
+        <div class="tip">
+          <b>Now we are in 3NF:</b> City and State facts live in one place (Cities), so data stays consistent.
+        </div>
+      </section>
+
+      <section class="card" id="bcnf">
+        <h2>8) BCNF (Simple View)</h2>
+        <p class="muted">
+          BCNF is a stronger version of 3NF. For beginners, remember this:
+        </p>
+        <div class="note">
+          <b>BCNF idea:</b> If a column determines another column, the determining column must be a <b>candidate key</b>.
+        </div>
+
+        <h3>Mini Example (Concept Only)</h3>
+        <div class="diagram">
+Table: Enrollment(StudentId, CourseId, Instructor)
+
+If a rule says:
+  CourseId -> Instructor  (each course has exactly one instructor)
+
+Then Instructor should NOT be inside Enrollment,
+because it depends on CourseId, not on (StudentId, CourseId).
+
+Fix:
+  Courses(CourseId, Instructor)
+  Enrollment(StudentId, CourseId)</div>
+
+        <div class="tip">
+          <b>Beginner shortcut:</b> If you see a rule like “X decides Y”, put (X, Y) in a separate table unless X is already a key of that table.
+        </div>
+      </section>
+
+      <section class="card" id="realtime">
+        <h2>9) Real-Time Mini Design (E-Commerce Style)</h2>
+        <p class="muted">
+          Here is a tiny real-world design you can use in projects (Orders, Customers, Products). This is the normalized structure.
+        </p>
+
+        <div class="diagram">
+Customers( CustomerId, Name, Phone, CityId )
+Cities( CityId, CityName, State )
+
+Products( ProductId, ProductName, ListPrice )
+
+Orders( OrderId, OrderDate, CustomerId )
+OrderItems( OrderId, ProductId, Qty, UnitPrice )
+
+Payments( PaymentId, OrderId, Mode, Amount, PaidOn )</div>
+
+        <details>
+          <summary>📌 Bonus: “Common beginner reporting queries”</summary>
+
+          <div class="codebar">
+            <span class="label">1) Total amount per order</span>
+            <button class="copy" data-copy="code-total">Copy</button>
+          </div>
+          <pre id="code-total"><code>SELECT
+  o.OrderId,
+  SUM(oi.Qty * oi.UnitPrice) AS OrderTotal
+FROM dbo.Orders o
+JOIN dbo.OrderItems oi ON oi.OrderId = o.OrderId
+GROUP BY o.OrderId
+ORDER BY o.OrderId;</code></pre>
+
+          <div class="codebar">
+            <span class="label">2) Customer wise total spending</span>
+            <button class="copy" data-copy="code-cust-total">Copy</button>
+          </div>
+          <pre id="code-cust-total"><code>SELECT
+  c.CustomerName,
+  SUM(oi.Qty * oi.UnitPrice) AS TotalSpent
+FROM dbo.Customers c
+JOIN dbo.Orders o ON o.CustomerId = c.CustomerId
+JOIN dbo.OrderItems oi ON oi.OrderId = o.OrderId
+GROUP BY c.CustomerName
+ORDER BY TotalSpent DESC;</code></pre>
+
+          <div class="codebar">
+            <span class="label">3) Top selling products</span>
+            <button class="copy" data-copy="code-top-products">Copy</button>
+          </div>
+          <pre id="code-top-products"><code>SELECT TOP 5
+  p.ProductName,
+  SUM(oi.Qty) AS TotalQty
+FROM dbo.Products p
+JOIN dbo.OrderItems oi ON oi.ProductId = p.ProductId
+GROUP BY p.ProductName
+ORDER BY TotalQty DESC;</code></pre>
+        </details>
+
+        <div class="tip">
+          <b>Real-time learning:</b> Normalization makes reporting easier because each table has one clear purpose.
+        </div>
+      </section>
+
+      <section class="card" id="practice">
+        <h2>10) Practice Exercises (With Hands-On SQL)</h2>
+        <p class="muted">
+          Try these in SSMS. Start from easy and move up.
+        </p>
+
+        <h3>Exercise Set A: Identify the problem</h3>
+        <ol>
+          <li>In <code>Order_Bad</code>, which column breaks 1NF and why?</li>
+          <li>What update anomaly can happen if customer phone is repeated in every order row?</li>
+          <li>Why is searching products using <code>LIKE</code> on comma-separated values unreliable?</li>
+        </ol>
+
+        <h3>Exercise Set B: Create tables (beginner-friendly)</h3>
+        <ol>
+          <li>Create a <code>Students</code> table: StudentId, Name, Phone.</li>
+          <li>Create a <code>Courses</code> table: CourseId, CourseName.</li>
+          <li>Create <code>Enrollments</code> table with composite PK (StudentId, CourseId).</li>
+          <li>Insert at least 3 students, 3 courses, and enrollments.</li>
+        </ol>
+
+        <details>
+          <summary>✅ Sample Solution (Set B)</summary>
+          <div class="codebar">
+            <span class="label">Solution SQL</span>
+            <button class="copy" data-copy="code-ex-sol-b">Copy</button>
+          </div>
+          <pre id="code-ex-sol-b"><code>IF OBJECT_ID('dbo.Enrollments','U') IS NOT NULL DROP TABLE dbo.Enrollments;
+IF OBJECT_ID('dbo.Courses','U') IS NOT NULL DROP TABLE dbo.Courses;
+IF OBJECT_ID('dbo.Students','U') IS NOT NULL DROP TABLE dbo.Students;
+GO
+
+CREATE TABLE dbo.Students(
+  StudentId INT IDENTITY PRIMARY KEY,
+  Name  VARCHAR(80) NOT NULL,
+  Phone VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE dbo.Courses(
+  CourseId INT IDENTITY PRIMARY KEY,
+  CourseName VARCHAR(80) NOT NULL UNIQUE
+);
+
+CREATE TABLE dbo.Enrollments(
+  StudentId INT NOT NULL,
+  CourseId  INT NOT NULL,
+  EnrolledOn DATE NOT NULL DEFAULT GETDATE(),
+  CONSTRAINT PK_Enrollments PRIMARY KEY(StudentId, CourseId),
+  CONSTRAINT FK_Enroll_Student FOREIGN KEY(StudentId) REFERENCES dbo.Students(StudentId),
+  CONSTRAINT FK_Enroll_Course  FOREIGN KEY(CourseId) REFERENCES dbo.Courses(CourseId)
+);
+
+INSERT INTO dbo.Students(Name, Phone) VALUES
+('Ravi', '9001112223'),
+('Ananya', '9001112224'),
+('Karthik', '9001112225');
+
+INSERT INTO dbo.Courses(CourseName) VALUES
+('SQL Basics'),
+('C# Basics'),
+('Azure Basics');
+
+INSERT INTO dbo.Enrollments(StudentId, CourseId) VALUES
+(1,1),(1,2),(2,1),(3,3);
+
+SELECT s.Name, c.CourseName, e.EnrolledOn
+FROM dbo.Enrollments e
+JOIN dbo.Students s ON s.StudentId = e.StudentId
+JOIN dbo.Courses c ON c.CourseId = e.CourseId
+ORDER BY s.Name;</code></pre>
+        </details>
+
+        <h3>Exercise Set C: Normalize a table (real-world)</h3>
+        <p class="muted">
+          You are given a “bad” table: <code>Employee_Bad(EmpId, EmpName, DeptName, DeptHead)</code>.
+          <br/>Tasks:
+        </p>
+        <ol>
+          <li>Explain why this breaks 3NF (hint: DeptName → DeptHead).</li>
+          <li>Create 2 tables: <code>Departments</code> and <code>Employees</code> with FK.</li>
+          <li>Insert sample data and show a join query.</li>
+        </ol>
+
+        <details>
+          <summary>✅ Sample Solution (Set C)</summary>
+          <div class="codebar">
+            <span class="label">Solution SQL</span>
+            <button class="copy" data-copy="code-ex-sol-c">Copy</button>
+          </div>
+          <pre id="code-ex-sol-c"><code>IF OBJECT_ID('dbo.Employees','U') IS NOT NULL DROP TABLE dbo.Employees;
+IF OBJECT_ID('dbo.Departments','U') IS NOT NULL DROP TABLE dbo.Departments;
+GO
+
+CREATE TABLE dbo.Departments(
+  DeptId   INT IDENTITY PRIMARY KEY,
+  DeptName VARCHAR(60) NOT NULL UNIQUE,
+  DeptHead VARCHAR(60) NOT NULL
+);
+
+CREATE TABLE dbo.Employees(
+  EmpId   INT IDENTITY PRIMARY KEY,
+  EmpName VARCHAR(80) NOT NULL,
+  DeptId  INT NOT NULL,
+  CONSTRAINT FK_Emp_Dept FOREIGN KEY(DeptId) REFERENCES dbo.Departments(DeptId)
+);
+
+INSERT INTO dbo.Departments(DeptName, DeptHead) VALUES
+('IT','Suresh'),
+('HR','Meena');
+
+INSERT INTO dbo.Employees(EmpName, DeptId) VALUES
+('Arun', (SELECT DeptId FROM dbo.Departments WHERE DeptName='IT')),
+('Divya', (SELECT DeptId FROM dbo.Departments WHERE DeptName='HR')),
+('Rakesh', (SELECT DeptId FROM dbo.Departments WHERE DeptName='IT'));
+
+SELECT e.EmpId, e.EmpName, d.DeptName, d.DeptHead
+FROM dbo.Employees e
+JOIN dbo.Departments d ON d.DeptId = e.DeptId
+ORDER BY d.DeptName, e.EmpName;</code></pre>
+        </details>
+
+        <div class="tip">
+          <b>Practice Tip:</b> Do not memorize definitions only. Always ask: <b>Which data repeats?</b> and <b>which column depends on which?</b>
+        </div>
+      </section>
+
+      <section class="card" id="quickref">
+        <h2>11) Quick Revision Sheet</h2>
+
+        <table class="tbl">
+          <thead>
+            <tr><th>Normal Form</th><th>Easy Rule</th><th>Common Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>1NF</b></td>
+              <td>One cell = One value (no lists, no repeating groups)</td>
+              <td>Create a child table (e.g., OrderItems) for multiple values</td>
+            </tr>
+            <tr>
+              <td><b>2NF</b></td>
+              <td>No partial dependency on composite key</td>
+              <td>Move “product details” to Products table</td>
+            </tr>
+            <tr>
+              <td><b>3NF</b></td>
+              <td>No non-key → non-key dependency (no transitive dependency)</td>
+              <td>Create master tables (Cities, Departments, etc.)</td>
+            </tr>
+            <tr>
+              <td><b>BCNF</b></td>
+              <td>Every determinant must be a candidate key</td>
+              <td>Split tables when business rules violate keys</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <details>
+          <summary>🧠 Mini Self-Test (2 minutes)</summary>
+          <ol>
+            <li>Which normal form removes comma-separated values in a column?</li>
+            <li>When does 2NF matter most (single key or composite key)?</li>
+            <li>Give one example of transitive dependency.</li>
+          </ol>
+        </details>
+      </section>
+
+      <section class="footer">
+        <b>Next step suggestion:</b> If you want, I can create the same style notes for:
+        <span class="pill">Primary Key vs Foreign Key</span> <span class="pill">Indexes</span> <span class="pill">Joins</span> <span class="pill">Constraints</span>
+        <div class="hr"></div>
+        Built for super beginners — practice the SQL, not just the theory.
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function scrollToTop(){ window.scrollTo({top:0, behavior:'smooth'}); }
+
+    // Copy buttons
+    document.querySelectorAll('[data-copy]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.getAttribute('data-copy');
+        const el = document.getElementById(id);
+        if(!el) return;
+        const text = el.innerText;
+        try{
+          await navigator.clipboard.writeText(text);
+          const old = btn.textContent;
+          btn.textContent = 'Copied ✅';
+          setTimeout(() => btn.textContent = old, 1100);
+        }catch(e){
+          // fallback
+          const ta = document.createElement('textarea');
+          ta.value = text; document.body.appendChild(ta);
+          ta.select(); document.execCommand('copy');
+          document.body.removeChild(ta);
+          const old = btn.textContent;
+          btn.textContent = 'Copied ✅';
+          setTimeout(() => btn.textContent = old, 1100);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

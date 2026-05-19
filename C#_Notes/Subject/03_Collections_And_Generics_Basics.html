@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Creating and Using Generic Classes - ItTechGenie</title>
+
+<style>
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#fff}
+.topbar{
+  background:#04AA6D;color:#fff;padding:14px 20px;
+  font-size:22px;font-weight:bold
+}
+.sidebar{
+  position:fixed;top:52px;left:0;width:270px;height:100%;
+  background:#f1f1f1;overflow:auto;padding:15px
+}
+.sidebar a{
+  display:block;padding:8px;color:#000;text-decoration:none;
+  border-radius:4px;margin-bottom:4px
+}
+.sidebar a:hover{background:#04AA6D;color:#fff}
+.content{
+  margin-left:300px;padding:20px
+}
+.section{margin-bottom:40px}
+.section h2{
+  background:#04AA6D;color:#fff;padding:10px;border-radius:4px
+}
+.example{
+  background:#e7e9eb;padding:15px;border-left:4px solid #04AA6D
+}
+pre{
+  background:#1e1e1e;color:#dcdcdc;padding:15px;overflow:auto
+}
+.note{background:#e7f3fe;border-left:6px solid #2196F3;padding:10px}
+.tip{background:#e8f5e9;border-left:6px solid #4CAF50;padding:10px}
+.warn{background:#fdecea;border-left:6px solid #f44336;padding:10px}
+.navbtns{margin-top:20px}
+.navbtns a{
+  background:#04AA6D;color:#fff;padding:10px 16px;
+  text-decoration:none;border-radius:6px;margin-right:10px
+}
+.tt{
+  border-bottom:1px dotted #000;cursor:help;position:relative
+}
+.tt:hover::after{
+  content:attr(data-tip);
+  position:absolute;left:0;top:24px;
+  background:#333;color:#fff;
+  padding:10px;border-radius:6px;
+  width:260px;font-size:13px;z-index:999
+}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #ccc;padding:8px}
+th{background:#04AA6D;color:#fff}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">Creating and Using Generic Classes</div>
+
+<div class="sidebar">
+  <a href="#intro">Introduction</a>
+  <a href="#why">Why Generics</a>
+  <a href="#syntax">Generic Syntax</a>
+  <a href="#usage">Using Generic Classes</a>
+  <a href="#methods">Generic Methods vs Classes</a>
+  <a href="#constraints">Constraints</a>
+  <a href="#multi">Multiple Type Parameters</a>
+  <a href="#best">Best Practices</a>
+  <a href="#faq">FAQs</a>
+  <a href="#interview">Interview Questions</a>
+  <a href="#mcq">MCQ Quiz</a>
+  <a href="#practice-coding-questions">To Become Best coder Practice this</a>
+</div>
+
+<div class="content">
+
+<!-- INTRO -->
+<div class="section" id="intro">
+<h2>Introduction to Generics</h2>
+<p>
+<span class="tt" data-tip="Generics allow you to define classes, methods, or interfaces with placeholders for data types. These placeholders are replaced with actual types at runtime or compile time.">Generics</span>
+enable type-safe code reuse by allowing developers to write a class once and use it with different data types.
+They improve performance by avoiding boxing/unboxing and increase code readability.
+</p>
+
+<pre>
+Class<T>
+   |
+   +-- T replaced with int, string, etc.
+</pre>
+
+<div class="example">
+<strong>Real-World Use:</strong>  
+Collections like <code>List&lt;int&gt;</code> and <code>List&lt;string&gt;</code>
+</div>
+
+<div class="tip">Beginner Tip: Always use generics instead of object for collections.</div>
+<div class="navbtns">
+<a href="#prev-subtopic">❮ Previous</a>
+<a href="#why">Next ❯</a>
+</div>
+</div>
+
+<!-- WHY -->
+<div class="section" id="why">
+<h2>Why Generic Classes Are Needed</h2>
+<p>
+Before generics, developers used the <span class="tt" data-tip="The object class is the base class for all .NET types, but using it loses type safety.">object</span> type,
+which caused runtime errors and performance overhead.
+Generics solve this by enforcing compile-time type checking.
+</p>
+
+<pre>
+Without Generics → Runtime Errors
+With Generics    → Compile-time Safety
+</pre>
+
+<div class="example">
+<strong>Scenario:</strong> Inventory system handling Product, Order, Customer types
+</div>
+
+<div class="warn">Warning: Avoid using object when generics are available.</div>
+
+<div class="navbtns">
+<a href="#intro">❮ Previous</a>
+<a href="#syntax">Next ❯</a>
+</div>
+</div>
+
+<!-- SYNTAX -->
+<div class="section" id="syntax">
+<h2>Generic Class Syntax</h2>
+
+<pre>
+class Box&lt;T&gt;
+{
+    public T Value;
+}
+</pre>
+
+<div class="example">
+<strong>Explanation:</strong>  
+<code>T</code> is a type parameter replaced at object creation.
+</div>
+
+<div class="tip">Advanced Note: Naming convention uses T, TKey, TValue.</div>
+
+<div class="navbtns">
+<a href="#why">❮ Previous</a>
+<a href="#usage">Next ❯</a>
+</div>
+</div>
+
+<!-- USAGE -->
+<div class="section" id="usage">
+<h2>Using Generic Classes</h2>
+
+<pre>
+Box&lt;int&gt; numberBox = new Box&lt;int&gt;();
+numberBox.Value = 100;
+
+Box&lt;string&gt; textBox = new Box&lt;string&gt;();
+textBox.Value = "Hello";
+</pre>
+
+<div class="example">
+<strong>Real-World Use:</strong>  
+Reusable caching, logging, repository layers
+</div>
+
+<div class="navbtns">
+<a href="#syntax">❮ Previous</a>
+<a href="#methods">Next ❯</a>
+</div>
+</div>
+
+<!-- METHODS -->
+<div class="section" id="methods">
+<h2>Generic Methods vs Generic Classes</h2>
+
+<table>
+<tr><th>Generic Class</th><th>Generic Method</th></tr>
+<tr><td>Type defined at class level</td><td>Type defined at method level</td></tr>
+<tr><td>Used for state</td><td>Used for operations</td></tr>
+</table>
+
+<pre>
+void Print&lt;T&gt;(T value) { }
+</pre>
+
+<div class="navbtns">
+<a href="#usage">❮ Previous</a>
+<a href="#constraints">Next ❯</a>
+</div>
+</div>
+
+<!-- CONSTRAINTS -->
+<div class="section" id="constraints">
+<h2>Constraints in Generic Classes</h2>
+
+<pre>
+class Repository&lt;T&gt; where T : class, new()
+</pre>
+
+<ul>
+<li>class</li>
+<li>struct</li>
+<li>new()</li>
+<li>interface</li>
+</ul>
+
+<div class="tip">Use constraints to restrict invalid types.</div>
+
+<div class="navbtns">
+<a href="#methods">❮ Previous</a>
+<a href="#multi">Next ❯</a>
+</div>
+</div>
+
+<!-- MULTI -->
+<div class="section" id="multi">
+<h2>Multiple Type Parameters</h2>
+
+<pre>
+class Pair&lt;TKey, TValue&gt;
+{
+  public TKey Key;
+  public TValue Value;
+}
+</pre>
+
+<div class="example">
+<strong>Use Case:</strong> Dictionary-like structures
+</div>
+
+<div class="navbtns">
+<a href="#constraints">❮ Previous</a>
+<a href="#best">Next ❯</a>
+</div>
+</div>
+
+<!-- BEST -->
+<div class="section" id="best">
+<h2>Best Practices</h2>
+<ul>
+<li>Prefer generics over object</li>
+<li>Use constraints wisely</li>
+<li>Avoid over-generic design</li>
+</ul>
+
+<div class="navbtns">
+<a href="#multi">❮ Previous</a>
+<a href="#faq">Next ❯</a>
+</div>
+</div>
+
+<!-- FAQ -->
+<div class="section" id="faq">
+<h2>FAQs</h2>
+<p><strong>Q:</strong> Are generics faster?  
+<strong>A:</strong> Yes, they avoid boxing/unboxing.</p>
+
+<div class="navbtns">
+<a href="#best">❮ Previous</a>
+<a href="#interview">Next ❯</a>
+</div>
+</div>
+
+<!-- INTERVIEW -->
+<div class="section" id="interview">
+<h2>Interview Questions</h2>
+<ul>
+<li>What are generics?</li>
+<li>Why use constraints?</li>
+<li>Generic class vs generic method?</li>
+</ul>
+
+<div class="navbtns">
+<a href="#faq">❮ Previous</a>
+<a href="#mcq">Next ❯</a>
+</div>
+</div>
+
+<!-- MCQ -->
+<div class="section" id="mcq">
+<h2>MCQ Quiz</h2>
+<p>1. Generics improve which aspect?  
+a) UI  
+b) Type safety ✔  
+c) Memory leak  
+d) Serialization</p>
+
+<div class="navbtns">
+<a href="#interview">❮ Previous</a>
+<a href="#practice-coding-questions">Next ❯</a>
+</div>
+</div>
+
+<!-- PRACTICE -->
+<div class="section" id="practice-coding-questions">
+<h2>To Become Best coder Practice this</h2>
+
+<p><strong>Easy 1:</strong> Create a generic class to store one value.</p>
+<p><strong>Easy 2:</strong> Generic method to swap values.</p>
+<p><strong>Medium 1:</strong> Generic repository with constraints.</p>
+<p><strong>Medium 2:</strong> Generic cache with expiry.</p>
+<p><strong>Hard 1:</strong> Generic thread-safe queue.</p>
+
+<div class="note">Hint: Focus on type safety and reuse.</div>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+@model IEnumerable<dynamic>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="no-results">
+        No flights available for selected route.
+    </div>
+}
+else
+{
+    <div class="results-wrapper">
+        <table class="results-table">
+            <thead>
+                <tr>
+                    @foreach (var prop in Model.First().GetType().GetProperties())
+                    {
+                        <th>@prop.Name</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        @foreach (var prop in item.GetType().GetProperties())
+                        {
+                            <td>@prop.GetValue(item)</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<div style="text-align:center;">
+    <a asp-action="Index" class="btn btn-primary">Back to Search</a>
+</div>

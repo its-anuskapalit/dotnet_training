@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ItTechGenie - Capgemini M1 (C#) - Generics & Delegates</title>
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#111a2e;
+      --panel2:#0f1930;
+      --text:#e9eefc;
+      --muted:#b7c3e6;
+      --brand:#4ade80;
+      --brand2:#22c55e;
+      --warn:#fbbf24;
+      --danger:#fb7185;
+      --border:rgba(255,255,255,.12);
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --code:#0a0f1c;
+      --chip:#17243f;
+      --link:#93c5fd;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 700px at 15% 10%, rgba(34,197,94,.18), transparent 60%),
+                  radial-gradient(900px 600px at 90% 20%, rgba(59,130,246,.16), transparent 55%),
+                  radial-gradient(900px 600px at 55% 90%, rgba(251,191,36,.12), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.5;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:10;
+      background: rgba(10,16,30,.75);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--border);
+    }
+
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:16px 18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:12px 0;
+    }
+    .logo{
+      width:34px;height:34px;border-radius:10px;
+      background: linear-gradient(135deg, rgba(74,222,128,.95), rgba(59,130,246,.85));
+      box-shadow: var(--shadow);
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .brand h1{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .brand .sub{
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+      margin-top:2px;
+    }
+
+    .hero{
+      margin-top:14px;
+      padding:18px;
+      border-radius:18px;
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+    }
+    .hero h2{margin:0 0 10px 0;font-size:22px}
+    .hero p{margin:8px 0;color:var(--muted)}
+    .pillrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+    .pill{
+      background: rgba(17,26,46,.85);
+      border:1px solid var(--border);
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .pill strong{color:var(--text)}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+      margin-top:16px;
+    }
+
+    .card{
+      border:1px solid var(--border);
+      border-radius:18px;
+      background: rgba(17,26,46,.8);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    }
+
+    /* ✅ Highlight the section on mouse over */
+    .card:hover{
+      transform: translateY(-2px);
+      border-color: rgba(74,222,128,.55);
+      background: rgba(17,26,46,.92);
+    }
+
+    .cardHead{
+      padding:14px 16px;
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      cursor:pointer;
+    }
+    .qno{
+      min-width:34px;height:34px;border-radius:12px;
+      display:grid;place-items:center;
+      background: rgba(59,130,246,.18);
+      border:1px solid rgba(59,130,246,.35);
+      color:#dbeafe;
+      font-weight:700;
+      box-shadow: 0 8px 18px rgba(0,0,0,.25);
+    }
+    .qmeta{flex:1}
+    .qmeta h3{
+      margin:0;
+      font-size:16px;
+    }
+    .qmeta .tags{
+      margin-top:6px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .chip{
+      background: var(--chip);
+      border:1px solid var(--border);
+      padding:4px 8px;
+      border-radius:999px;
+    }
+    .lvl{font-weight:700}
+    .lvl.mod{color:var(--warn)}
+    .lvl.hi{color:var(--danger)}
+    .actions{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      margin-top:2px;
+    }
+    .btn{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding:7px 10px;
+      border-radius:12px;
+      font-size:12px;
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.09);
+      border-color: rgba(147,197,253,.5);
+    }
+    .btn.primary{
+      background: rgba(34,197,94,.14);
+      border-color: rgba(34,197,94,.40);
+    }
+    .btn.primary:hover{
+      border-color: rgba(34,197,94,.65);
+      background: rgba(34,197,94,.18);
+    }
+    .btn.link{
+      border-color: rgba(147,197,253,.35);
+      background: rgba(147,197,253,.10);
+      color: #dbeafe;
+    }
+
+    .cardBody{
+      display:none;
+      padding:0 16px 16px 16px;
+    }
+
+    .desc{
+      color:var(--muted);
+      margin: 0 0 10px 0;
+    }
+
+    .split{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:12px;
+      margin-top:10px;
+    }
+    @media (max-width: 980px){
+      .split{grid-template-columns:1fr}
+    }
+
+    .panel{
+      border:1px solid var(--border);
+      border-radius:16px;
+      background: rgba(15,25,48,.65);
+      overflow:hidden;
+    }
+    .panel h4{
+      margin:0;
+      padding:10px 12px;
+      font-size:13px;
+      letter-spacing:.2px;
+      border-bottom:1px solid var(--border);
+      color:#e5e7eb;
+    }
+    .panel .pad{
+      padding:12px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    pre{
+      margin:0;
+      padding:12px;
+      overflow:auto;
+      background: var(--code);
+      border-radius:0 0 16px 16px;
+      border-top:1px solid rgba(255,255,255,.06);
+    }
+    code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size:12px;
+      color:#e5e7eb;
+    }
+
+    .note{
+      margin-top:10px;
+      font-size:13px;
+      color:var(--muted);
+      padding:12px;
+      border-radius:16px;
+      border:1px dashed rgba(255,255,255,.18);
+      background: rgba(255,255,255,.04);
+    }
+
+    .answers{
+      margin-top:22px;
+      border-top:1px solid var(--border);
+      padding-top:14px;
+    }
+    .answers h2{margin:0 0 10px 0}
+    .answerCard{
+      border:1px solid var(--border);
+      border-radius:18px;
+      background: rgba(17,26,46,.8);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      margin-top:12px;
+    }
+    .answerHead{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:12px 14px;
+      cursor:pointer;
+    }
+    .answerHead:hover{
+      background: rgba(255,255,255,.04);
+    }
+    .answerHead .title{
+      font-weight:700;
+      font-size:14px;
+    }
+    .answerBody{
+      display:none;
+      border-top:1px solid var(--border);
+    }
+
+    .footer{
+      margin:22px 0 30px 0;
+      color:var(--muted);
+      font-size:12px;
+      text-align:center;
+    }
+
+    a{color:var(--link);text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      padding:2px 6px;
+      border:1px solid var(--border);
+      border-radius:8px;
+      background: rgba(255,255,255,.05);
+      color:#e5e7eb;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="topbar">
+    <div class="wrap">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>ItTechGenie - Capgemini M1 (C#) Question Bank</h1>
+          <span class="sub">Subject: Generics & Delegates | Total: 10 Questions (7 Moderate + 3 High)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="hero">
+      <h2>Instructions</h2>
+      <p>
+        • Each question contains a <strong>boilerplate C# program</strong>. Students must fill only the required <strong>TODO function(s)</strong>.
+        <br/>
+        • Clicking a question expands/collapses the problem statement and starter code.<br/>
+• Every answer includes <strong>line-by-line comments</strong> and a short explanation.
+      </p>
+      <div class="pillrow">
+        <div class="pill"><strong>Moderate:</strong> 7</div>
+        <div class="pill"><strong>High:</strong> 3</div>
+        <div class="pill"><strong>Focus:</strong> Constraints, generic methods, variance, Func/Action/Predicate, multicast delegates, events</div>
+      </div>
+    </div>
+
+    <div class="grid" id="questions">
+
+      <!-- ========================== Q1 ========================== -->
+      <div class="card" id="q1">
+        <div class="cardHead" onclick="toggleCard('q1Body')">
+          <div class="qno">1</div>
+          <div class="qmeta">
+            <h3>Generic Swap Utility (Type-safe)</h3>
+            <div class="tags">
+              <span class="chip">Generics</span>
+              <span class="chip lvl mod">Moderate</span>
+              <span class="chip">Generic Method</span>
+            </div>
+            </div>
+          </div>
+        </div>
+</div>
+
+      <!-- ========================== Q3 ========================== -->
+      <div class="card" id="q3">
+        <div class="cardHead" onclick="toggleCard('q3Body')">
+          <div class="qno">3</div>
+          <div class="qmeta">
+            <h3>Generic Constraint: Accept Only Reference Types</h3>
+            <div class="tags">
+              <span class="chip">Generics</span>
+              <span class="chip lvl mod">Moderate</span>
+              <span class="chip">where T : class</span>
+            </div>
+            </div>
+          </div>
+        </div>
+</div>
+
+      <!-- ========================== Q4 ========================== -->
+      <div class="card" id="q4">
+        <div class="cardHead" onclick="toggleCard('q4Body')">
+          <div class="qno">4</div>
+          <div class="qmeta">
+            <h3>Func&lt;T&gt; Delegate: Generic Calculator</h3>
+            <div class="tags">
+              <span class="chip">Delegates</span>
+              <span class="chip lvl mod">Moderate</span>
+              <span class="chip">Func</span>
+            </div>
+            </div>
+          </div>
+        </div>
+</div>
+
+      <!-- ========================== Q5 ========================== -->
+      <div class="card" id="q5">
+        <div class="cardHead" onclick="toggleCard('q5Body')">
+          <div class="qno">5</div>
+          <div class="qmeta">
+            <h3>Predicate&lt;T&gt; Filter with Generic List</h3>
+            <div class="tags">
+              <span class="chip">Delegates</span>
+              <span class="chip lvl mod">Moderate</span>
+              <span class="chip">Predicate</span>
+            </div>
+            </div>
+          </div>
+        </div>
+</div>
+
+      <!-- ========================== Q6 ========================== -->
+      <div class="card" id="q6">
+        <div class="cardHead" onclick="toggleCard('q6Body')">
+          <div class="qno">6</div>
+          <div class="qmeta">
+            <h3>Multicast Delegate: Notification Pipeline</h3>
+            <div class="tags">
+              <span class="chip">Delegates</span>
+              <span class="chip lvl mod">Moderate</span>
+              <span class="chip">Multicast</span>
+            </div>
+            </div>
+          </div>
+        </div>
+</div>
+
+      <!-- ========================== Q7 ========================== -->
+      <div class="card" id="q7">
+        <div class="cardHead" onclick="toggleCard('q7Body')">
+          <div class="qno">7</div>
+          <div class="qmeta">
+            <h3>Generic Constraint: Numeric-like Aggregation (struct)</h3>
+            <div class="tags">
+              <span class="chip">Generics</span>
+              <span class="chip lvl mod">Moderate</span>
+              <span class="chip">where T : struct</span>
+            </div>
+            </div>
+          </div>
+        </div>
+</div>
+
+      <!-- ========================== Q8 (High) ========================== -->
+      <div class="card" id="q8">
+        <div class="cardHead" onclick="toggleCard('q8Body')">
+          <div class="qno">8</div>
+          <div class="qmeta">
+            <h3>Generic Variance: Covariance & Contravariance (Interfaces)</h3>
+            <div class="tags">
+              <span class="chip">Generics</span>
+              <span class="chip lvl hi">High</span>
+              <span class="chip">out / in</span>
+            </div>
+            </div>
+          </div>
+        </div>
+</div>
+
+      <!-- ========================== Q9 (High) ========================== -->
+      <div class="card" id="q9">
+        <div class="cardHead" onclick="toggleCard('q9Body')">
+          <div class="qno">9</div>
+          <div class="qmeta">
+            <h3>Generic Event with Delegate: Stock Alert</h3>
+            <div class="tags">
+              <span class="chip">Delegates</span>
+              <span class="chip lvl hi">High</span>
+              <span class="chip">event</span>
+              <span class="chip">Generic</span>
+            </div>
+            </div>
+          </div>
+        </div>
+</div>
+
+      <!-- ========================== Q10 (High) ========================== -->
+      <div class="card" id="q10">
+        <div class="cardHead" onclick="toggleCard('q10Body')">
+          <div class="qno">10</div>
+          <div class="qmeta">
+            <h3>Delegate-based Retry Utility (Generic + Exception Filter)</h3>
+            <div class="tags">
+              <span class="chip">Delegates</span>
+              <span class="chip lvl hi">High</span>
+              <span class="chip">Func</span>
+              <span class="chip">Retry</span>
+            </div>
+            </div>
+          </div>
+        </div>
+</div>
+
+    </div>
+
+    <div class="footer">
+      © ItTechGenie | Interactive Question Bank | Hover-highlight enabled | Hover-highlight enabled
+    </div>
+  </div>
+
+  <script>
+    function toggleCard(bodyId){
+      const el = document.getElementById(bodyId);
+      if(!el) return;
+      const isOpen = el.style.display === "block";
+      el.style.display = isOpen ? "none" : "block";
+    }
+
+    function toggleAnswer(bodyId){
+      const el = document.getElementById(bodyId);
+      if(!el) return;
+      const isOpen = el.style.display === "block";
+      el.style.display = isOpen ? "none" : "block";
+    }
+  </script>
+</body>
+</html>

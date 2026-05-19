@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>W3Schools .NET GC Tutorial</title>
+<style>
+    body {
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px;
+        background-color: #f1f1f1;
+    }
+    .container {
+        max-width: 1000px;
+        margin: auto;
+        background-color: white;
+        padding: 40px;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    }
+    h1 { color: #2c3e50; font-size: 36px; }
+    h2 { border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-top: 30px; }
+    .intro-box {
+        background-color: #D9EEE1;
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+    .example-img {
+        width: 100%;
+        max-width: 800px;
+        display: block;
+        margin: 20px auto;
+        border: 1px solid #ccc;
+    }
+    .info-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+    .info-table th, .info-table td {
+        text-align: left;
+        padding: 12px;
+        border: 1px solid #ddd;
+    }
+    .info-table tr:nth-child(even) { background-color: #f9f9f9; }
+    .info-table th { background-color: #04AA6D; color: white; }
+    .note {
+        background-color: #ffffcc;
+        border-left: 6px solid #ffeb3b;
+        padding: 15px;
+        margin: 20px 0;
+    }
+    footer { margin-top: 50px; font-size: 0.9em; color: #666; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>C# <span style="color:#04AA6D">Garbage Collection Generations</span></h1>
+    
+    <div class="intro-box">
+        <p>In .NET, the Garbage Collector (GC) manages memory by dividing objects into <strong>Generations</strong>. This is based on the "Generational Hypothesis": newer objects tend to have shorter lifetimes than older objects.</p>
+    </div>
+
+    <img src="https://blog.objektkultur.de/garbage-collection-and-large-objects-in-.net/generations.png" alt="GC Generations Diagram" class="example-img">
+
+    <h2>The Small Object Heap (SOH)</h2>
+    <p>The Small Object Heap is divided into three generations (0, 1, and 2). Small objects (typically under 85,000 bytes) are allocated here.</p>
+    
+    <table class="info-table">
+        <tr>
+            <th>Generation</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><strong>Gen 0</strong></td>
+            <td>This is the youngest generation. New objects are allocated here. Most objects die here during the first collection.</td>
+        </tr>
+        <tr>
+            <td><strong>Gen 1</strong></td>
+            <td>Serves as a buffer between Gen 0 and Gen 2. If an object survives a Gen 0 collection, it is promoted to Gen 1.</td>
+        </tr>
+        <tr>
+            <td><strong>Gen 2</strong></td>
+            <td>Contains long-lived objects. If an object survives Gen 1, it moves here. Collections here are expensive and happen less frequently.</td>
+        </tr>
+    </table>
+
+    <h2>The Large Object Heap (LOH)</h2>
+    <p>The image shows <strong>Gen 3</strong>, which is technically referred to as the <strong>Large Object Heap (LOH)</strong>.</p>
+    <ul>
+        <li>Objects larger than <strong>85,000 bytes</strong> go directly to the LOH.</li>
+        <li>These objects are considered part of Generation 2 for collection purposes.</li>
+        <li>Historically, the LOH was not compacted because moving large objects is CPU-intensive, which can lead to memory fragmentation.</li>
+    </ul>
+
+    <div class="note">
+        <strong>How Promotion Works:</strong> Look at the <strong>Lifetime</strong> arrow in the image. Objects start at Gen 0. If they are still in use when a GC cycle occurs, they "age" and move down to the next generation.
+    </div>
+
+    <h2>Key Concepts from the Diagram</h2>
+    <ul>
+        <li><strong>SOH vs LOH:</strong> The bracket on the right separates standard small objects from large data structures.</li>
+        <li><strong>Compaction:</strong> On the SOH (Gen 0-2), objects are moved closer together to reclaim space. On the LOH, objects usually stay where they are.</li>
+        <li><strong>GC Cycles:</strong> A Gen 2 collection (Full GC) also collects Gen 1 and Gen 0.</li>
+    </ul>
+
+    <hr>
+    <footer>
+        <p>Source: Understanding .NET Memory Management &copy; W3Schools Clone Example</p>
+    </footer>
+</div>
+
+</body>
+</html>

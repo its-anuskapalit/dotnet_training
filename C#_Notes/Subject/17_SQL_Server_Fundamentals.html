@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>ItTechGenie — SQL Server Indexing (AdventureWorks) — W3Schools Style</title>
+  <style>
+    :root{
+      --brand:#04AA6D;
+      --brand-dark:#038f5b;
+      --bg:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --code-bg:#f6f8fa;
+      --border:#e5e7eb;
+      --note:#e7f3ff;
+      --tip:#e8f5e9;
+      --warn:#fff3cd;
+      --danger:#fdecea;
+      --shadow:0 10px 25px rgba(0,0,0,.08);
+      --radius:14px;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", Helvetica, sans-serif;
+      color:var(--text);
+      background:var(--bg);
+      line-height:1.65;
+    }
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      background:var(--brand);
+      color:#fff;
+      padding:10px 16px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      box-shadow:0 2px 10px rgba(0,0,0,.12);
+    }
+    .logo{
+      width:34px;height:34px;border-radius:10px;
+      background:rgba(255,255,255,.16);
+      display:grid;place-items:center;
+      font-weight:900;
+      letter-spacing:.4px;
+    }
+    .topbar h1{ font-size:16px; margin:0; font-weight:800; }
+    .pill{
+      margin-left:auto;
+      background:rgba(255,255,255,.18);
+      border:1px solid rgba(255,255,255,.25);
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .layout{ display:grid; grid-template-columns: 330px 1fr; min-height: calc(100vh - 56px); }
+    aside{
+      border-right:1px solid var(--border);
+      padding:16px;
+      position:sticky; top:56px; height: calc(100vh - 56px);
+      overflow:auto;
+      background:#fbfbfb;
+    }
+    main{ padding:22px 22px 80px; max-width: 1120px; }
+    .search{
+      display:flex; gap:8px; align-items:center;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:#fff;
+      box-shadow:0 1px 0 rgba(0,0,0,.02);
+      margin-bottom:12px;
+    }
+    .search input{ border:none; outline:none; width:100%; font-size:14px; }
+    .toc h3{
+      margin:14px 0 8px;
+      font-size:13px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+    .toc a{
+      display:block;
+      padding:8px 10px;
+      border-radius:10px;
+      color:var(--text);
+      text-decoration:none;
+      font-size:14px;
+    }
+    .toc a:hover{ background:rgba(4,170,109,.10); color:#0b3b2a; }
+    .toc .group{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:8px;
+      background:#fff;
+    }
+    .toc .label{
+      font-weight:800;
+      color:#0b3b2a;
+      padding:6px 8px 2px;
+      font-size:13px;
+    }
+    .hero{
+      background: linear-gradient(135deg, rgba(4,170,109,.14), rgba(59,130,246,.10));
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      padding:18px;
+      box-shadow: var(--shadow);
+    }
+    .hero h2{ margin:0 0 6px; font-size:26px; }
+    .hero p{ margin:0; color:var(--muted); }
+    .meta{ display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    .chip{
+      background:#fff;
+      border:1px solid var(--border);
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+      color:#2a2a2a;
+    }
+    .section{
+      margin-top:18px;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      padding:18px;
+      box-shadow:0 1px 0 rgba(0,0,0,.02);
+    }
+    h2{ margin:0 0 8px; font-size:22px; }
+    h3{ margin:16px 0 8px; font-size:18px; }
+    p{ margin:8px 0; }
+    ul{ margin:8px 0 8px 20px; }
+    ol{ margin:8px 0 8px 20px; }
+    .callout{
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      margin:12px 0;
+      display:flex; gap:10px;
+    }
+    .callout .icon{
+      width:26px;height:26px;border-radius:8px;
+      display:grid;place-items:center;
+      font-weight:900;
+      flex:0 0 auto;
+    }
+    .note{ background: var(--note); }
+    .note .icon{ background:#cfe9ff; color:#0b5cab; }
+    .tip{ background: var(--tip); }
+    .tip .icon{ background:#ccefd1; color:#1b5e20; }
+    .warn{ background: var(--warn); }
+    .warn .icon{ background:#ffe5a8; color:#6a4b00; }
+    .danger{ background: var(--danger); }
+    .danger .icon{ background:#ffd3cf; color:#9b1c1c; }
+
+    code, pre{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    pre{
+      background:var(--code-bg);
+      padding:14px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      overflow:auto;
+      margin:10px 0;
+      white-space:pre;
+    }
+    .kbd{ font-family:inherit; border:1px solid var(--border); padding:2px 6px; border-radius:6px; background:#fff; }
+
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      margin:10px 0;
+      border:1px solid var(--border);
+      border-radius:14px;
+      overflow:hidden;
+    }
+    th, td{
+      padding:10px 12px;
+      border-bottom:1px solid var(--border);
+      font-size:14px;
+      vertical-align:top;
+    }
+    th{ background:#f8fafc; text-align:left; font-weight:900; }
+    tr:last-child td{ border-bottom:none; }
+
+    .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    @media(max-width: 980px){
+      .layout{ grid-template-columns: 1fr; }
+      aside{ position:relative; top:0; height:auto; border-right:none; border-bottom:1px solid var(--border); }
+      .grid2{ grid-template-columns:1fr; }
+    }
+    .diagram{
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:14px;
+      padding:12px;
+      margin:10px 0;
+      overflow:auto;
+    }
+    .diagram-title{
+      font-size:13px;
+      color:var(--muted);
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      margin-bottom:8px;
+    }
+    .tryit{
+      border:1px dashed rgba(4,170,109,.55);
+      background:rgba(4,170,109,.06);
+      padding:14px;
+      border-radius:14px;
+      margin:12px 0;
+    }
+    .tryit .title{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; margin-bottom:10px;
+      font-weight:900;
+    }
+    .btn{
+      appearance:none;
+      border:none;
+      background:var(--brand);
+      color:#fff;
+      padding:9px 12px;
+      border-radius:12px;
+      font-weight:900;
+      cursor:pointer;
+      font-size:13px;
+    }
+    .btn:hover{ background:var(--brand-dark); }
+    .btn.secondary{
+      background:#fff;
+      color:#111;
+      border:1px solid var(--border);
+    }
+    .btn.secondary:hover{ background:#f7f7f7; }
+
+    .acc{
+      border:1px solid var(--border);
+      border-radius:14px;
+      overflow:hidden;
+      margin:10px 0;
+      background:#fff;
+    }
+    .acc button{
+      width:100%;
+      text-align:left;
+      border:none;
+      background:#fff;
+      padding:12px 14px;
+      font-size:14px;
+      font-weight:900;
+      cursor:pointer;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    .acc button:hover{ background:rgba(4,170,109,.06); }
+    .acc .panel{ padding:0 14px 14px; display:none; }
+    .acc .chev{
+      width:30px; height:30px; border-radius:10px;
+      display:grid; place-items:center;
+      border:1px solid var(--border);
+      background:#fff;
+      font-weight:900;
+    }
+
+    .navbottom{
+      margin-top:18px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .navbottom a{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:#fff;
+      text-decoration:none;
+      color:#111;
+      font-weight:900;
+      font-size:14px;
+    }
+    .navbottom a:hover{ background:#f7f7f7; }
+
+    .muted{ color:var(--muted); }
+    .tagline{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:#fff;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .tagline a{ color:var(--brand-dark); font-weight:900; text-decoration:none; }
+    .tagline a:hover{ text-decoration:underline; }
+    .badge{
+      display:inline-block;
+      padding:2px 8px;
+      border-radius:999px;
+      background:rgba(4,170,109,.12);
+      border:1px solid rgba(4,170,109,.25);
+      font-size:12px;
+      font-weight:900;
+      color:#0b3b2a;
+      margin-left:6px;
+      vertical-align:middle;
+    }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="logo">IT</div>
+  <h1>ItTechGenie — SQL Server Indexing (AdventureWorks) — W3Schools Style</h1>
+  <div class="pill">Project: <strong>Databricks &amp; SQL Assessment Banks</strong></div>
+</header>
+
+<div class="layout">
+  <aside>
+    <div class="search">
+      <span class="muted">🔎</span>
+      <input id="tocSearch" type="text" placeholder="Search (index keys, included, scan, seek, IO)..." />
+    </div>
+
+    <div class="toc" id="toc">
+      <h3>Setup</h3>
+      <div class="group">
+        <div class="label">AdventureWorks</div>
+        <a href="#aw-setup">0. Setup AdventureWorks</a>
+        <a href="#how-to-run">How to run these demos (SSMS)</a>
+      </div>
+
+      <h3>Basics</h3>
+      <div class="group">
+        <div class="label">Foundation</div>
+        <a href="#what-is-page">1. What is a Page? (diagram)</a>
+        <a href="#what-is-index">2. What is an Index? (diagram)</a>
+        <a href="#clustered-basics">3. Clustered Index — basics</a>
+        <a href="#nonclustered-basics">4. Nonclustered Index — basics</a>
+      </div>
+
+      <h3>Creating Indexes</h3>
+      <div class="group">
+        <div class="label">Hands-on</div>
+        <a href="#create-ci">5. Create Clustered Index</a>
+        <a href="#create-nci">6. Create Nonclustered Index (single key)</a>
+        <a href="#single-vs-multi">7. Single key vs Composite (multiple keys)</a>
+        <a href="#include-cover">8. INCLUDE (covering index)</a>
+      </div>
+
+      <h3>See Index Keys & Values</h3>
+      <div class="group">
+        <div class="label">Inspect</div>
+        <a href="#see-keys">9. How to see Index Keys and Included Columns</a>
+        <a href="#see-values">10. How to see Index "Values" (real entries)</a>
+      </div>
+
+      <h3>Performance Demo</h3>
+      <div class="group">
+        <div class="label">Before vs After</div>
+        <a href="#perf-overview">11. Performance: Without vs With index</a>
+        <a href="#perf-demo-1">Demo 1: Heap scan → Nonclustered seek</a>
+        <a href="#perf-demo-2">Demo 2: Composite + INCLUDE</a>
+      </div>
+
+      <h3>Extra</h3>
+      <div class="group">
+        <div class="label">Optional</div>
+        <a href="#seek-scan">Seek vs Scan (quick)</a>
+        <a href="#sargable">SARGable WHERE</a>
+        <a href="#cleanup">Cleanup scripts</a>
+      </div>
+    </div>
+
+    <div class="callout tip" style="margin-top:14px;">
+      <div class="icon">✓</div>
+      <div>
+        <strong>Trainer Tip:</strong>
+        <div class="muted">For freshers: Keys = column list. “Values” = actual index entries. We show both.</div>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <section class="hero" id="aw-setup">
+      <h2>SQL Server Indexing — AdventureWorks Examples</h2>
+      <p>Spoon-feeding notes with diagrams + scripts + performance proof — now includes how to <strong>inspect index keys and values</strong>.</p>
+      <div class="meta">
+        <span class="chip">Database: AdventureWorks</span>
+        <span class="chip">Audience: Freshers</span>
+        <span class="chip">New: Inspect Keys & Values</span>
+        <span class="chip">Proof: STATISTICS IO + Plans</span>
+      </div>
+
+      <div class="tagline">
+        <div><strong>To Become Best coder Practice this:</strong> Run the “Inspect” section after creating indexes.</div>
+        <a href="#see-keys">Jump to Inspect ➜</a>
+      </div>
+
+      <div class="callout note" style="margin-top:14px;">
+        <div class="icon">i</div>
+        <div>
+          <strong>AdventureWorks name differs by version:</strong>
+          <div>Examples use <code>AdventureWorks2019</code>. Replace it with your installed DB name (e.g., <code>AdventureWorks2022</code>).</div>
+        </div>
+      </div>
+
+      <div class="tryit">
+        <div class="title">
+          <div>Try It: Find your AdventureWorks database name</div>
+          <button class="btn secondary" onclick="copyCode('aw_db')">Copy SQL</button>
+        </div>
+<pre id="aw_db">SELECT name
+FROM sys.databases
+WHERE name LIKE 'AdventureWorks%';</pre>
+      </div>
+    </section>
+
+    <section class="section" id="how-to-run">
+      <h2>How to run these demos (SSMS)</h2>
+      <ol>
+        <li>Open SSMS → connect to SQL Server.</li>
+        <li>Open a new query window.</li>
+        <li>Enable Actual Execution Plan: <span class="kbd">Ctrl</span> + <span class="kbd">M</span></li>
+        <li>For performance proof, we use:
+          <ul>
+            <li><code>SET STATISTICS IO ON;</code> (logical reads)</li>
+            <li><code>SET STATISTICS TIME ON;</code> (CPU/time)</li>
+          </ul>
+        </li>
+      </ol>
+      <div class="callout warn">
+        <div class="icon">!</div>
+        <div>
+          <strong>Practice environment only:</strong>
+          <div>Some sections create/drop indexes and tables to demonstrate. Do not do this in production.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="what-is-page">
+      <h2>1) What is a Page in SQL Server? <span class="badge">Diagram</span></h2>
+      <p>SQL Server stores data on disk in <strong>8 KB pages</strong>. Tables and indexes both consist of pages.</p>
+      <div class="diagram">
+        <div class="diagram-title">Diagram — Page and Extent</div>
+<pre>Page = 8 KB
++--------------------------------------+
+| Rows (or index entries)              |
+| Free space                           |
++--------------------------------------+
+
+Extent = 8 pages = 64 KB
+[Page1][Page2][Page3][Page4][Page5][Page6][Page7][Page8]</pre>
+      </div>
+      <div class="callout note">
+        <div class="icon">i</div>
+        <div>
+          <strong>Why it matters:</strong>
+          <div>Query performance improves when SQL Server reads fewer pages. Indexes help reduce page reads.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="what-is-index">
+      <h2>2) What is an Index? <span class="badge">Diagram</span></h2>
+      <p>An <strong>index</strong> is a structure that helps SQL Server find rows faster, similar to a book index.</p>
+      <div class="grid2">
+        <div class="diagram">
+          <div class="diagram-title">Without index (scan)</div>
+<pre>Need: LastName='Smith'
+
+SQL Server reads many pages:
+Page1 -> Page2 -> ... -> PageN
+Checks rows one by one</pre>
+        </div>
+        <div class="diagram">
+          <div class="diagram-title">With index (seek)</div>
+<pre>Index on LastName exists
+
+SQL Server navigates:
+Root -> Intermediate -> Leaf
+Jumps directly to matching keys</pre>
+        </div>
+      </div>
+      <div class="callout tip">
+        <div class="icon">✓</div>
+        <div>
+          <strong>Definition:</strong>
+          <div>An index is a B-Tree structure that speeds up reads but costs extra storage and slows writes.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="clustered-basics">
+      <h2>3) Clustered Index — basics</h2>
+      <p>A <strong>clustered index</strong> defines the physical order of rows. The <strong>leaf level IS the data</strong>.</p>
+      <div class="diagram">
+        <div class="diagram-title">Diagram — Clustered index (leaf = data)</div>
+<pre>Root
+  |
+Intermediate
+  |
+Leaf  ==> DATA PAGES (actual rows)</pre>
+      </div>
+      <div class="callout note">
+        <div class="icon">i</div>
+        <div>
+          <strong>Rule:</strong> One table can have only <strong>one</strong> clustered index.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="nonclustered-basics">
+      <h2>4) Nonclustered Index — basics</h2>
+      <p>A <strong>nonclustered index</strong> is separate. Leaf holds <strong>index key + pointer</strong> to the row.</p>
+      <div class="diagram">
+        <div class="diagram-title">Diagram — Nonclustered leaf entries</div>
+<pre>[Key: LastName='Smith'] -> [Pointer to row]
+
+Pointer is:
+- Clustered key (if clustered table)
+- RID (if heap table)</pre>
+      </div>
+    </section>
+
+    <section class="section" id="create-ci">
+      <h2>5) Create Clustered Index (sample)</h2>
+      <p>We create a practice table copy so we can safely create/drop indexes.</p>
+      <div class="tryit">
+        <div class="title">
+          <div>Create practice table + clustered index</div>
+          <button class="btn secondary" onclick="copyCode('create_ci')">Copy SQL</button>
+        </div>
+<pre id="create_ci">USE AdventureWorks2019;
+GO
+
+DROP TABLE IF EXISTS dbo.Product_Practice;
+SELECT TOP (5000)
+  ProductID, Name, ProductNumber, Color, ListPrice, ModifiedDate
+INTO dbo.Product_Practice
+FROM Production.Product
+ORDER BY ProductID;
+
+-- Create Clustered Index
+CREATE CLUSTERED INDEX CX_Product_Practice_ProductID
+ON dbo.Product_Practice(ProductID);
+
+-- Verify indexes
+SELECT i.index_id, i.name, i.type_desc
+FROM sys.indexes i
+WHERE i.object_id = OBJECT_ID('dbo.Product_Practice');</pre>
+      </div>
+    </section>
+
+    <section class="section" id="create-nci">
+      <h2>6) Create Nonclustered Index (single key)</h2>
+      <div class="tryit">
+        <div class="title">
+          <div>Create nonclustered index on ProductNumber</div>
+          <button class="btn secondary" onclick="copyCode('create_nci')">Copy SQL</button>
+        </div>
+<pre id="create_nci">USE AdventureWorks2019;
+GO
+
+CREATE NONCLUSTERED INDEX IX_Product_Practice_ProductNumber
+ON dbo.Product_Practice(ProductNumber);
+
+SELECT i.index_id, i.name, i.type_desc
+FROM sys.indexes i
+WHERE i.object_id = OBJECT_ID('dbo.Product_Practice');</pre>
+      </div>
+    </section>
+
+    <section class="section" id="single-vs-multi">
+      <h2>7) Single key vs Composite (multiple keys)</h2>
+      <p>A composite index has multiple key columns. Column order matters (left-most rule).</p>
+      <div class="diagram">
+        <div class="diagram-title">Diagram — Left-most prefix rule</div>
+<pre>Index on (Color, ListPrice)
+
+Good:
+WHERE Color='Black'
+WHERE Color='Black' AND ListPrice>=1000
+
+Not great:
+WHERE ListPrice>=1000  -- Color missing</pre>
+      </div>
+
+      <div class="tryit">
+        <div class="title">
+          <div>Create composite index: (Color, ListPrice)</div>
+          <button class="btn secondary" onclick="copyCode('create_comp')">Copy SQL</button>
+        </div>
+<pre id="create_comp">USE AdventureWorks2019;
+GO
+
+CREATE NONCLUSTERED INDEX IX_Product_Practice_Color_ListPrice
+ON dbo.Product_Practice(Color, ListPrice);
+
+SELECT ProductID, Name, Color, ListPrice
+FROM dbo.Product_Practice
+WHERE Color = 'Black' AND ListPrice >= 1000
+ORDER BY ListPrice DESC;</pre>
+      </div>
+    </section>
+
+    <section class="section" id="include-cover">
+      <h2>8) INCLUDE (covering index)</h2>
+      <p><code>INCLUDE</code> adds extra columns to the leaf so SQL Server can return them without extra lookups.</p>
+      <div class="tryit">
+        <div class="title">
+          <div>Create covering index: ProductNumber INCLUDE Name, ListPrice</div>
+          <button class="btn secondary" onclick="copyCode('cover1')">Copy SQL</button>
+        </div>
+<pre id="cover1">USE AdventureWorks2019;
+GO
+
+DROP INDEX IF EXISTS IX_Product_Practice_ProductNumber ON dbo.Product_Practice;
+
+CREATE NONCLUSTERED INDEX IX_Product_Practice_ProductNumber_Cover
+ON dbo.Product_Practice(ProductNumber)
+INCLUDE (Name, ListPrice);</pre>
+      </div>
+    </section>
+
+    <!-- NEW: SEE KEYS -->
+    <section class="section" id="see-keys">
+      <h2>9) How to see Index Keys and Included Columns <span class="badge">Must Know</span></h2>
+      <p>Freshers usually ask: “I created an index, how do I see the key columns and INCLUDED columns?”</p>
+
+      <div class="callout note">
+        <div class="icon">i</div>
+        <div>
+          <strong>Meaning:</strong>
+          <ul style="margin:6px 0 0 18px;">
+            <li><strong>Index key columns</strong> = columns that form the sorted order of the index (used for seek).</li>
+            <li><strong>Included columns</strong> = extra columns stored only in leaf level (used to cover a query).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc">
+        <button type="button" onclick="toggleAcc(this)">
+          Option A: In SSMS GUI (click steps) <span class="chev">+</span>
+        </button>
+        <div class="panel">
+          <ol>
+            <li>In SSMS, expand: <strong>Databases → AdventureWorks… → Tables</strong></li>
+            <li>Find your table: <code>dbo.Product_Practice</code></li>
+            <li>Expand: <strong>Indexes</strong></li>
+            <li>Right click an index (example: <code>IX_Product_Practice_ProductNumber_Cover</code>) → <strong>Properties</strong></li>
+            <li>Go to:
+              <ul>
+                <li><strong>General</strong> → columns list (shows key columns and order)</li>
+                <li><strong>Included Columns</strong> → shows included columns</li>
+              </ul>
+            </li>
+          </ol>
+          <div class="callout tip">
+            <div class="icon">✓</div>
+            <div>
+              <strong>Quick visual check:</strong>
+              <div>Keys are shown in the main columns list; Included columns appear in a separate section.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc">
+        <button type="button" onclick="toggleAcc(this)">
+          Option B: Using T-SQL (best for interviews) <span class="chev">+</span>
+        </button>
+        <div class="panel">
+          <p>This query shows: index name, key columns (with order), and included columns.</p>
+<pre>USE AdventureWorks2019;
+GO
+
+DECLARE @TableName SYSNAME = 'dbo.Product_Practice';
+
+;WITH idx AS (
+  SELECT
+    i.object_id, i.index_id, i.name AS index_name, i.type_desc, i.is_unique
+  FROM sys.indexes i
+  WHERE i.object_id = OBJECT_ID(@TableName)
+    AND i.index_id > 0
+)
+SELECT
+  idx.index_name,
+  idx.type_desc,
+  idx.is_unique,
+  CASE WHEN ic.is_included_column = 0 THEN 'KEY' ELSE 'INCLUDE' END AS column_role,
+  ic.key_ordinal,
+  c.name AS column_name,
+  ic.is_included_column
+FROM idx
+JOIN sys.index_columns ic
+  ON ic.object_id = idx.object_id
+ AND ic.index_id = idx.index_id
+JOIN sys.columns c
+  ON c.object_id = ic.object_id
+ AND c.column_id = ic.column_id
+ORDER BY idx.index_name,
+         CASE WHEN ic.is_included_column = 0 THEN 0 ELSE 1 END,
+         ic.key_ordinal,
+         c.name;</pre>
+          <div class="callout note">
+            <div class="icon">i</div>
+            <div>
+              <strong>How to read output:</strong>
+              <div>Rows with column_role=KEY show key columns (in order using key_ordinal). INCLUDE rows show included columns.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc">
+        <button type="button" onclick="toggleAcc(this)">
+          Option C: Using sp_helpindex (quick but limited) <span class="chev">+</span>
+        </button>
+        <div class="panel">
+<pre>USE AdventureWorks2019;
+GO
+EXEC sp_helpindex 'dbo.Product_Practice';</pre>
+          <div class="callout warn">
+            <div class="icon">!</div>
+            <div>
+              <strong>Limitation:</strong>
+              <div><code>sp_helpindex</code> may not clearly separate INCLUDE columns in all cases. Use Option B for full details.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW: SEE VALUES -->
+    <section class="section" id="see-values">
+      <h2>10) How to see Index “Values” (real index entries) <span class="badge">Advanced</span></h2>
+      <p>Strictly speaking, SQL Server does not give a simple “SELECT * FROM index” view, because an index is stored as pages and B-Tree nodes.</p>
+      <p>But for learning, you can see the index entries by running a query that uses the index and selecting the key columns (and included columns).</p>
+
+      <div class="callout tip">
+        <div class="icon">✓</div>
+        <div>
+          <strong>Practical meaning of “Index Values”:</strong>
+          <div>Index values = values of the key columns stored in sorted order in the index (plus included columns at leaf).</div>
+        </div>
+      </div>
+
+      <div class="tryit">
+        <div class="title">
+          <div>Example: See the sorted index key values</div>
+          <button class="btn secondary" onclick="copyCode('values1')">Copy SQL</button>
+        </div>
+<pre id="values1">USE AdventureWorks2019;
+GO
+
+-- If you created: IX_Product_Practice_ProductNumber_Cover
+-- key = ProductNumber, include = Name, ListPrice
+
+-- This shows the "index values" (key values in sorted order)
+SELECT TOP 50
+  ProductNumber,   -- index key column
+  Name,            -- included column (stored at leaf)
+  ListPrice        -- included column
+FROM dbo.Product_Practice
+ORDER BY ProductNumber;  -- aligns with index key order</pre>
+      </div>
+
+      <div class="acc">
+        <button type="button" onclick="toggleAcc(this)">
+          Want to confirm the query uses the index? <span class="chev">+</span>
+        </button>
+        <div class="panel">
+          <ol>
+            <li>Turn on Actual Execution Plan (<span class="kbd">Ctrl</span> + <span class="kbd">M</span>).</li>
+            <li>Run the query above.</li>
+            <li>In the plan, click the operator and see the index name used (seek/scan).</li>
+          </ol>
+<pre>-- Optional: Force index usage ONLY for learning (not a production recommendation)
+SELECT TOP 50 ProductNumber, Name, ListPrice
+FROM dbo.Product_Practice WITH (INDEX(IX_Product_Practice_ProductNumber_Cover))
+ORDER BY ProductNumber;</pre>
+          <div class="callout warn">
+            <div class="icon">!</div>
+            <div>
+              <strong>Warning:</strong>
+              <div>Index hints can make performance worse in real systems. Use them only to learn what is happening.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout note">
+        <div class="icon">i</div>
+        <div>
+          <strong>Deep-dive (optional):</strong>
+          <div>There are diagnostic commands (like DMVs and page inspection) to view internals, but freshers should focus on keys, includes, and plans first.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="perf-overview">
+      <h2>11) Performance: Without index vs With index</h2>
+      <p>Proof = fewer reads + better plan.</p>
+      <table>
+        <thead><tr><th>What to check</th><th>How</th><th>Good</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Logical reads</strong></td><td><code>SET STATISTICS IO ON;</code></td><td>Reads drop</td></tr>
+          <tr><td><strong>Execution plan</strong></td><td><span class="kbd">Ctrl</span> + <span class="kbd">M</span></td><td>Scan → Seek</td></tr>
+          <tr><td><strong>CPU/Time</strong></td><td><code>SET STATISTICS TIME ON;</code></td><td>Lower CPU/time</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section" id="perf-demo-1">
+      <h2>Demo 1 — Heap scan → Nonclustered seek</h2>
+      <div class="tryit">
+        <div class="title">
+          <div>Run full demo script</div>
+          <button class="btn secondary" onclick="copyCode('perf1')">Copy SQL</button>
+        </div>
+<pre id="perf1">USE AdventureWorks2019;
+GO
+
+-- Create HEAP table
+DROP TABLE IF EXISTS dbo.Person_Practice;
+SELECT TOP (20000)
+  BusinessEntityID, FirstName, LastName, ModifiedDate
+INTO dbo.Person_Practice
+FROM Person.Person
+ORDER BY BusinessEntityID;
+
+-- Without index
+SET STATISTICS IO ON;
+SET STATISTICS TIME ON;
+
+SELECT TOP 200 BusinessEntityID, FirstName, LastName
+FROM dbo.Person_Practice
+WHERE LastName = 'Smith'
+ORDER BY FirstName;
+
+-- With index
+CREATE NONCLUSTERED INDEX IX_Person_Practice_LastName
+ON dbo.Person_Practice(LastName);
+
+SELECT TOP 200 BusinessEntityID, FirstName, LastName
+FROM dbo.Person_Practice
+WHERE LastName = 'Smith'
+ORDER BY FirstName;
+
+SET STATISTICS IO OFF;
+SET STATISTICS TIME OFF;</pre>
+      </div>
+    </section>
+
+    <section class="section" id="perf-demo-2">
+      <h2>Demo 2 — Composite + INCLUDE</h2>
+      <div class="tryit">
+        <div class="title">
+          <div>Run composite + INCLUDE demo</div>
+          <button class="btn secondary" onclick="copyCode('perf2')">Copy SQL</button>
+        </div>
+<pre id="perf2">USE AdventureWorks2019;
+GO
+
+DROP TABLE IF EXISTS dbo.SalesOrderHeader_Practice;
+SELECT TOP (200000)
+  SalesOrderID, CustomerID, OrderDate, TotalDue
+INTO dbo.SalesOrderHeader_Practice
+FROM Sales.SalesOrderHeader
+ORDER BY SalesOrderID;
+
+SET STATISTICS IO ON;
+SET STATISTICS TIME ON;
+
+-- Before index
+SELECT TOP 200 SalesOrderID, CustomerID, OrderDate, TotalDue
+FROM dbo.SalesOrderHeader_Practice
+WHERE CustomerID = 11000
+  AND OrderDate >= '2013-01-01' AND OrderDate < '2014-01-01'
+ORDER BY OrderDate;
+
+-- Create composite + covering index
+CREATE NONCLUSTERED INDEX IX_SOH_Practice_Customer_OrderDate_Cover
+ON dbo.SalesOrderHeader_Practice(CustomerID, OrderDate)
+INCLUDE (TotalDue);
+
+-- After index
+SELECT TOP 200 SalesOrderID, CustomerID, OrderDate, TotalDue
+FROM dbo.SalesOrderHeader_Practice
+WHERE CustomerID = 11000
+  AND OrderDate >= '2013-01-01' AND OrderDate < '2014-01-01'
+ORDER BY OrderDate;
+
+SET STATISTICS IO OFF;
+SET STATISTICS TIME OFF;</pre>
+      </div>
+    </section>
+
+    <section class="section" id="seek-scan">
+      <h2>Seek vs Scan (quick)</h2>
+      <div class="grid2">
+        <div class="diagram">
+          <div class="diagram-title">Seek</div>
+<pre>Reads only matching entries/pages.
+Usually faster for selective filters.</pre>
+        </div>
+        <div class="diagram">
+          <div class="diagram-title">Scan</div>
+<pre>Reads many entries/pages.
+Sometimes cheaper if query returns most rows.</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="sargable">
+      <h2>SARGable WHERE</h2>
+      <div class="grid2">
+        <div>
+          <h3>Bad</h3>
+<pre>WHERE YEAR(OrderDate)=2013</pre>
+        </div>
+        <div>
+          <h3>Good</h3>
+<pre>WHERE OrderDate>='2013-01-01'
+  AND OrderDate<'2014-01-01'</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="cleanup">
+      <h2>Cleanup scripts</h2>
+      <div class="tryit">
+        <div class="title">
+          <div>Cleanup practice objects</div>
+          <button class="btn secondary" onclick="copyCode('clean')">Copy SQL</button>
+        </div>
+<pre id="clean">USE AdventureWorks2019;
+GO
+DROP TABLE IF EXISTS dbo.Product_Practice;
+DROP TABLE IF EXISTS dbo.Person_Practice;
+DROP TABLE IF EXISTS dbo.SalesOrderHeader_Practice;</pre>
+      </div>
+
+      <div class="navbottom">
+        <a href="#aw-setup">⬅ Back to Top</a>
+        <a href="#see-keys">Go to Inspect Keys ➜</a>
+      </div>
+
+      <div class="callout note" style="margin-top:14px;">
+        <div class="icon">i</div>
+        <div>
+          <strong>Chapter Completed ✅</strong>
+          <div class="muted">This page now includes: what is index + create scripts + performance demos + how to see keys & values.</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // TOC search
+  const tocSearch = document.getElementById('tocSearch');
+  const toc = document.getElementById('toc');
+  tocSearch.addEventListener('input', () => {
+    const q = tocSearch.value.toLowerCase().trim();
+    const links = toc.querySelectorAll('a');
+    links.forEach(a => {
+      const show = a.textContent.toLowerCase().includes(q);
+      a.style.display = show ? 'block' : 'none';
+    });
+    if(!q){ links.forEach(a => a.style.display = 'block'); }
+  });
+
+  function toggleAcc(btn){
+    const panel = btn.parentElement.querySelector('.panel');
+    const chev = btn.querySelector('.chev');
+    const isOpen = panel.style.display === 'block';
+    panel.style.display = isOpen ? 'none' : 'block';
+    chev.textContent = isOpen ? '+' : '–';
+  }
+
+  function copyCode(id){
+    const el = document.getElementById(id);
+    const text = el.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Copied to clipboard!');
+    }).catch(() => {
+      alert('Copy failed. Select the code and copy manually.');
+    });
+  }
+</script>
+
+</body>
+</html>

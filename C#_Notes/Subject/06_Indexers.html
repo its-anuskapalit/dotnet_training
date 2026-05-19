@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Indexers & Properties in C# – ItTechGenie</title>
+
+<style>
+body{margin:0;font-family:Segoe UI,Arial;background:#fff}
+.topbar{background:#04AA6D;color:#fff;padding:14px 20px;font-size:22px;font-weight:600}
+.sidebar{
+  position:fixed;top:52px;left:0;width:280px;height:100%;
+  background:#f3f3f3;padding:15px;overflow:auto
+}
+.sidebar a{
+  display:block;padding:8px;color:#000;text-decoration:none;
+  border-radius:4px;margin-bottom:4px;font-size:14px
+}
+.sidebar a:hover{background:#04AA6D;color:#fff}
+.content{margin-left:310px;padding:20px}
+.section{margin-bottom:45px}
+.section h2{background:#04AA6D;color:#fff;padding:10px;border-radius:4px}
+.section h3{color:#04AA6D}
+pre{
+  background:#1e1e1e;color:#dcdcdc;padding:15px;
+  overflow:auto;border-radius:6px
+}
+.example{background:#e7e9eb;padding:15px;border-left:4px solid #04AA6D}
+.note{background:#e7f3fe;border-left:6px solid #2196F3;padding:12px}
+.tip{background:#e8f5e9;border-left:6px solid #4CAF50;padding:12px}
+.warn{background:#fdecea;border-left:6px solid #f44336;padding:12px}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #ccc;padding:8px}
+th{background:#04AA6D;color:#fff}
+.navbtns{margin-top:20px}
+.navbtns a{
+  background:#04AA6D;color:#fff;padding:10px 16px;
+  text-decoration:none;border-radius:6px;margin-right:10px
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">Indexers & Properties in C# (Detailed Guide)</div>
+
+<div class="sidebar">
+  <a href="#intro">Introduction</a>
+  <a href="#fields">Fields vs Properties</a>
+  <a href="#property-syntax">Property Syntax</a>
+  <a href="#validation">Validation using Properties</a>
+  <a href="#accessors">Property Accessors</a>
+  <a href="#readonly">Read-only & Write-only</a>
+  <a href="#indexer-intro">What are Indexers?</a>
+  <a href="#indexer-syntax">Indexer Syntax</a>
+  <a href="#realworld">Real-World Indexer Example</a>
+  <a href="#difference">Indexer vs Property</a>
+  <a href="#best">Best Practices</a>
+  <a href="#interview">Interview Questions</a>
+  <a href="#mcq">MCQ Quiz</a>
+  <a href="#practice-coding-questions">To Become Best coder Practice this</a>
+</div>
+
+<div class="content">
+
+<!-- INTRO -->
+<div class="section" id="intro">
+<h2>1. Introduction</h2>
+<p>
+In real-world software, data inside a class should <strong>never be exposed directly</strong>.
+C# provides <strong>Properties</strong> and <strong>Indexers</strong> to safely access and manipulate internal data.
+</p>
+
+<pre>
+User → Property / Indexer → Internal Data
+</pre>
+
+<div class="note">
+Properties and Indexers are fundamental to writing secure, maintainable, and professional C# code.
+</div>
+</div>
+
+<!-- FIELDS VS PROPERTIES -->
+<div class="section" id="fields">
+<h2>2. Fields vs Properties</h2>
+
+<h3>❌ Public Fields (Bad Practice)</h3>
+<pre>
+public int Age;
+</pre>
+
+<h3>✅ Properties (Recommended)</h3>
+<pre>
+private int age;
+public int Age
+{
+    get { return age; }
+    set { age = value; }
+}
+</pre>
+
+<table>
+<tr><th>Public Field</th><th>Property</th></tr>
+<tr><td>No validation</td><td>Supports validation</td></tr>
+<tr><td>No control</td><td>Access control possible</td></tr>
+<tr><td>Bad design</td><td>Industry standard</td></tr>
+</table>
+
+<div class="warn">
+Never expose class data directly using public fields.
+</div>
+</div>
+
+<!-- PROPERTY SYNTAX -->
+<div class="section" id="property-syntax">
+<h2>3. Property Syntax (Step-by-Step)</h2>
+
+<pre>
+class Employee
+{
+    private double salary;
+
+    public double Salary
+    {
+        get
+        {
+            return salary;
+        }
+        set
+        {
+            salary = value;
+        }
+    }
+}
+</pre>
+
+<p>
+• <strong>get</strong> → returns the value  
+• <strong>set</strong> → assigns the value  
+</p>
+
+<div class="tip">
+Think of properties as “smart fields”.
+</div>
+</div>
+
+<!-- VALIDATION -->
+<div class="section" id="validation">
+<h2>4. Validation Using Properties</h2>
+
+<pre>
+public int Age
+{
+    get { return age; }
+    set
+    {
+        if(value < 0)
+            throw new Exception("Age cannot be negative");
+        age = value;
+    }
+}
+</pre>
+
+<div class="example">
+<strong>Real-World Use:</strong>  
+Banking systems validating balance, age, credit limits.
+</div>
+</div>
+
+<!-- ACCESSORS -->
+<div class="section" id="accessors">
+<h2>5. Property Accessors</h2>
+
+<pre>
+public int Id
+{
+    get;
+    private set;
+}
+</pre>
+
+<p>
+• Property can be <strong>read-only</strong>  
+• Setter can be restricted  
+</p>
+
+<div class="note">
+Very common in Entity and DTO classes.
+</div>
+</div>
+
+<!-- READONLY -->
+<div class="section" id="readonly">
+<h2>6. Read-only & Write-only Properties</h2>
+
+<pre>
+public int EmployeeId { get; }
+public string Password { private get; set; }
+</pre>
+
+<div class="example">
+<strong>Real-World:</strong>  
+Employee ID should not change.  
+Passwords should never be read.
+</div>
+</div>
+
+<!-- INDEXER INTRO -->
+<div class="section" id="indexer-intro">
+<h2>7. What are Indexers?</h2>
+
+<p>
+Indexers allow objects to behave like arrays.
+They enable accessing class data using <strong>index syntax</strong>.
+</p>
+
+<pre>
+object[index]
+</pre>
+
+<div class="example">
+ConfigurationManager["AppName"]
+</div>
+</div>
+
+<!-- INDEXER SYNTAX -->
+<div class="section" id="indexer-syntax">
+<h2>8. Indexer Syntax</h2>
+
+<pre>
+class StringCollection
+{
+    private string[] data = new string[5];
+
+    public string this[int index]
+    {
+        get { return data[index]; }
+        set { data[index] = value; }
+    }
+}
+</pre>
+
+<div class="tip">
+Indexer always uses <strong>this</strong> keyword.
+</div>
+</div>
+
+<!-- REALWORLD -->
+<div class="section" id="realworld">
+<h2>9. Real-World Indexer Example</h2>
+
+<pre>
+class Settings
+{
+    private Dictionary<string,string> settings =
+        new Dictionary<string,string>();
+
+    public string this[string key]
+    {
+        get { return settings[key]; }
+        set { settings[key] = value; }
+    }
+}
+</pre>
+
+<div class="example">
+settings["Theme"] = "Dark";
+</div>
+</div>
+
+<!-- DIFFERENCE -->
+<div class="section" id="difference">
+<h2>10. Indexer vs Property</h2>
+
+<table>
+<tr><th>Property</th><th>Indexer</th></tr>
+<tr><td>Named access</td><td>Indexed access</td></tr>
+<tr><td>No parameters</td><td>One or more parameters</td></tr>
+<tr><td>Single value</td><td>Collection-like</td></tr>
+</table>
+</div>
+
+<!-- BEST -->
+<div class="section" id="best">
+<h2>11. Best Practices</h2>
+<ul>
+<li>Always use properties for fields</li>
+<li>Use validation inside setters</li>
+<li>Keep accessors lightweight</li>
+<li>Indexers should be intuitive</li>
+</ul>
+</div>
+
+<!-- INTERVIEW -->
+<div class="section" id="interview">
+<h2>12. Interview Questions</h2>
+<ul>
+<li>Why properties are better than fields?</li>
+<li>Can indexers be overloaded?</li>
+<li>Difference between auto and normal properties?</li>
+<li>Can indexers have multiple parameters?</li>
+</ul>
+</div>
+
+<!-- MCQ -->
+<div class="section" id="mcq">
+<h2>13. MCQ Quiz</h2>
+<p><strong>1.</strong> Which keyword is used for indexers?<br>
+a) index<br>b) this ✅<br>c) base<br>d) get</p>
+</div>
+
+<!-- PRACTICE -->
+<div class="section" id="practice-coding-questions">
+<h2>To Become Best coder Practice this</h2>
+
+<h3>Easy</h3>
+<ul>
+<li>Create a class with validated Age property</li>
+<li>Create read-only EmployeeId</li>
+</ul>
+
+<h3>Medium</h3>
+<ul>
+<li>Create indexer using string key</li>
+<li>Indexer with bounds checking</li>
+</ul>
+
+<h3>Hard</h3>
+<ul>
+<li>Thread-safe indexer cache</li>
+<li>Indexer with lazy loading</li>
+</ul>
+
+<div class="note">
+Hint: Focus on encapsulation and data safety.
+</div>
+</div>
+
+</div>
+</body>
+</html>

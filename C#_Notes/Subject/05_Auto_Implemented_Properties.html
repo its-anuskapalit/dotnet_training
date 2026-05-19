@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Tutorial - Auto-Implemented Properties</title>
+    <style>
+        /* General Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Verdana, sans-serif;
+            font-size: 15px;
+            line-height: 1.5;
+            background-color: #f3f3f3;
+            color: #333;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Top Navigation Bar */
+        .w3-top {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+        .w3-bar {
+            background-color: #04AA6D;
+            color: white;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            height: 60px;
+            box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+        }
+        .w3-bar-item {
+            padding: 8px 16px;
+            float: left;
+            cursor: pointer;
+        }
+        .w3-bar-item.w3-button {
+            border: none;
+            display: inline-block;
+            outline: 0;
+            vertical-align: middle;
+            overflow: hidden;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .w3-button:hover {
+            background-color: #059862;
+        }
+        .w3-logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Sidebar Navigation */
+        .w3-sidebar {
+            position: fixed;
+            top: 60px; /* Below top nav */
+            left: 0;
+            width: 250px;
+            height: calc(100% - 60px);
+            background-color: #f1f1f1;
+            overflow-y: auto;
+            border-right: 1px solid #ccc;
+            padding-top: 15px;
+        }
+        .w3-sidebar a {
+            display: block;
+            padding: 10px 15px;
+            color: #4CAF50;
+            text-decoration: none;
+            border-bottom: 1px solid #ddd;
+        }
+        .w3-sidebar a:hover {
+            background-color: #e1e1e1;
+        }
+        .w3-sidebar a.current {
+            background-color: #04AA6D;
+            color: white;
+        }
+
+        /* Main Content Area */
+        .w3-main {
+            margin-left: 250px;
+            padding: 30px;
+            margin-top: 60px; /* Below top nav */
+        }
+        .w3-container {
+            padding: 0.01em 16px;
+        }
+        .w3-content {
+            max-width: 1000px;
+            margin: auto;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 400;
+            margin: 10px 0;
+        }
+        h1 { font-size: 36px; }
+        h2 { font-size: 30px; }
+
+        /* Section Boxes */
+        .w3-panel {
+            padding: 0.01em 16px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+        }
+
+        /* Notes, Tips, Warnings */
+        .w3-note { border-left: 6px solid #2196F3; background-color: #e3f2fd; }
+        .w3-tip { border-left: 6px solid #4CAF50; background-color: #e8f5e9; }
+        .w3-warning { border-left: 6px solid #f44336; background-color: #ffebee; }
+        .w3-panel h4 { margin-top: 0; margin-bottom: 10px; }
+
+        /* Example Boxes and Code Blocks */
+        .w3-example {
+            background-color: #f1f1f1;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .w3-code notranslate {
+            background-color: #38424B;
+            color: white;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            display: block;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+        .w3-code-colored {
+            color: black;
+            background-color: white;
+            border-left: 4px solid #4CAF50;
+            padding: 10px;
+        }
+        .w3-code .comment { color: #888; }
+        .w3-code .keyword { color: #569CD6; }
+        .w3-code .string { color: #CE9178; }
+        .w3-code .class { color: #4EC9B0; }
+        .w3-code .method { color: #DCDCAA; }
+
+        /* Buttons */
+        .w3-btn {
+            background-color: #04AA6D;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .w3-btn:hover {
+            background-color: #059862;
+        }
+        .w3-btn-group {
+            margin-top: 20px;
+            overflow: auto;
+        }
+        .w3-btn-group button {
+            float: left;
+            margin-right: 10px;
+        }
+        .w3-btn-group button.w3-right {
+            float: right;
+            margin-right: 0;
+            margin-left: 10px;
+        }
+
+        /* Try It Yourself Button */
+        .w3-example .w3-btn {
+            margin-top: 15px;
+            background-color: #fff4a3;
+            color: black;
+            border: 1px solid #ccc;
+        }
+        .w3-example .w3-btn:hover {
+            background-color: #ffeb77;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation -->
+    <div class="w3-top">
+        <div class="w3-bar w3-green">
+            <a href="#" class="w3-bar-item w3-button w3-logo">ItTechGenie</a>
+            <a href="#" class="w3-bar-item w3-button">Home</a>
+            <a href="#" class="w3-bar-item w3-button">Tutorials</a>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="w3-sidebar">
+        <a href="#auto-implemented-properties" class="current">Auto-Implemented Properties</a>
+        <a href="#syntax">Syntax</a>
+        <a href="#when-to-use">When to Use</a>
+        <a href="#example-basic-usage">Example: Basic Usage</a>
+        <a href="#example-read-only">Example: Read-Only Property</a>
+        <a href="#example-private-setter">Example: Private Setter</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="w3-main">
+        <div class="w3-content">
+
+            <!-- Section 1: Auto-Implemented Properties -->
+            <div id="auto-implemented-properties" class="w3-container">
+                <h1>C# Auto-Implemented Properties</h1>
+                <p>Auto-implemented properties provide a concise syntax for property declarations when no additional logic (such as validation or notification) is required in the property accessors.</p>
+                <p>When you define an auto-implemented property, the compiler automatically creates a private, anonymous backing field for the property.</p>
+            </div>
+
+            <div class="w3-btn-group">
+                <!-- No previous page -->
+                <button class="w3-btn w3-right" onclick="location.href='#syntax'">Next &raquo;</button>
+            </div>
+
+            <!-- Section 2: Syntax -->
+            <div id="syntax" class="w3-container">
+                <h2>Syntax</h2>
+                <p>The syntax is straightforward. You simply declare the property with <code>get;</code> and <code>set;</code> keywords without a body for the accessors.</p>
+
+                <div class="w3-example">
+                    <h4>Example</h4>
+                    <p>The general syntax for an auto-implemented property:</p>
+                    <div class="w3-code notranslate">
+                        <span class="keyword">public</span> <span class="class">DataType</span> <span class="class">PropertyName</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+                    </div>
+                    <button class="w3-btn" onclick="alert('Link to Try It Yourself editor')">Try it Yourself &raquo;</button>
+                </div>
+
+                <div class="w3-tip w3-panel">
+                    <h4>Tip:</h4>
+                    <p>This syntax significantly reduces the boilerplate code required for simple properties, making your code cleaner and easier to read.</p>
+                </div>
+            </div>
+
+            <div class="w3-btn-group">
+                <button class="w3-btn" onclick="location.href='#auto-implemented-properties'">&laquo; Previous</button>
+                <button class="w3-btn w3-right" onclick="location.href='#when-to-use'">Next &raquo;</button>
+            </div>
+
+            <!-- Section 3: When to Use -->
+            <div id="when-to-use" class="w3-container">
+                <h2>When to Use</h2>
+                <p>Auto-implemented properties are best used when:</p>
+                <ul>
+                    <li>You need to store data but don't need validation logic in the <code>set</code> accessor.</li>
+                    <li>You don't need any computed values in the <code>get</code> accessor.</li>
+                    <li>You don't need to access the backing field directly from within the class (as it's hidden).</li>
+                </ul>
+
+                <div class="w3-note w3-panel">
+                    <h4>Note:</h4>
+                    <p>If you need to add logic later (e.g., logging when a value changes), you can convert an auto-implemented property to a regular property with a defined backing field and accessors without breaking compatibility for users of the property.</p>
+                </div>
+            </div>
+
+            <div class="w3-btn-group">
+                <button class="w3-btn" onclick="location.href='#syntax'">&laquo; Previous</button>
+                <button class="w3-btn w3-right" onclick="location.href='#example-basic-usage'">Next &raquo;</button>
+            </div>
+
+            <!-- Section 4: Example: Basic Usage -->
+            <div id="example-basic-usage" class="w3-container">
+                <h2>Example: Basic Usage</h2>
+                <p>A simple class using two auto-implemented properties:</p>
+
+                <div class="w3-example">
+                    <h4>Example Code:</h4>
+                    <div class="w3-code notranslate">
+                        <span class="keyword">using</span> <span class="class">System</span>;<br><br>
+                        <span class="keyword">class</span> <span class="class">Person</span><br>
+                        {<br>
+                        &nbsp;&nbsp;&nbsp; <span class="comment">// Auto-implemented properties</span><br>
+                        &nbsp;&nbsp;&nbsp; <span class="keyword">public</span> <span class="keyword">string</span> <span class="class">Name</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }<br>
+                        &nbsp;&nbsp;&nbsp; <span class="keyword">public</span> <span class="keyword">int</span> <span class="class">Age</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }<br>
+                        }<br><br>
+                        <span class="keyword">class</span> <span class="class">Program</span><br>
+                        {<br>
+                        &nbsp;&nbsp;&nbsp; <span class="keyword">static</span> <span class="keyword">void</span> <span class="method">Main</span>()<br>
+                        &nbsp;&nbsp;&nbsp; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="class">Person</span> person1 = <span class="keyword">new</span> <span class="class">Person</span>();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; person1.Name = <span class="string">"Alice"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; person1.Age = 30;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="class">Console</span>.<span class="method">WriteLine</span>(<span class="string">$"Name: {person1.Name}, Age: {person1.Age}"</span>);<br>
+                        &nbsp;&nbsp;&nbsp; }<br>
+                        }
+                    </div>
+                    <button class="w3-btn" onclick="alert('Link to Try It Yourself editor')">Try it Yourself &raquo;</button>
+                </div>
+            </div>
+
+            <div class="w3-btn-group">
+                <button class="w3-btn" onclick="location.href='#when-to-use'">&laquo; Previous</button>
+                <button class="w3-btn w3-right" onclick="location.href='#example-read-only'">Next &raquo;</button>
+            </div>
+
+             <!-- Section 5: Example: Read-Only Property -->
+             <div id="example-read-only" class="w3-container">
+                <h2>Example: Read-Only Property</h2>
+                <p>You can make an auto-implemented property read-only by omitting the <code>set;</code> accessor.</p>
+                <p>The value must be set in the constructor of the class.</p>
+
+                <div class="w3-example">
+                    <h4>Example Code:</h4>
+                    <div class="w3-code notranslate">
+                        <span class="keyword">class</span> <span class="class">ImmutablePoint</span><br>
+                        {<br>
+                        &nbsp;&nbsp;&nbsp; <span class="comment">// Read-only auto-property</span><br>
+                        &nbsp;&nbsp;&nbsp; <span class="keyword">public</span> <span class="keyword">int</span> <span class="class">X</span> { <span class="keyword">get</span>; }<br>
+                        &nbsp;&nbsp;&nbsp; <span class="keyword">public</span> <span class="keyword">int</span> <span class="class">Y</span> { <span class="keyword">get</span>; }<br><br>
+                        &nbsp;&nbsp;&nbsp; <span class="comment">// Constructor to set initial values</span><br>
+                        &nbsp;&nbsp;&nbsp; <span class="keyword">public</span> <span class="method">ImmutablePoint</span>(<span class="keyword">int</span> x, <span class="keyword">int</span> y)<br>
+                        &nbsp;&nbsp;&nbsp; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="class">X</span> = x;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="class">Y</span> = y;<br>
+                        &nbsp;&nbsp;&nbsp; }<br>
+                        }
+                    </div>
+                    <button class="w3-btn" onclick="alert('Link to Try It Yourself editor')">Try it Yourself &raquo;</button>
+                </div>
+            </div>
+
+            <div class="w3-btn-group">
+                <button class="w3-btn" onclick="location.href='#example-basic-usage'">&laquo; Previous</button>
+                <button class="w3-btn w3-right" onclick="location.href='#example-private-setter'">Next &raquo;</button>
+            </div>
+
+            <!-- Section 6: Example: Private Setter -->
+            <div id="example-private-setter" class="w3-container">
+                <h2>Example: Private Setter</h2>
+                <p>You can restrict the accessibility of the <code>set;</code> accessor to within the class itself, while keeping the <code>get;</code> accessor public.</p>
+
+                <div class="w3-example">
+                    <h4>Example Code:</h4>
+                    <div class="w3-code notranslate">
+                        <span class="keyword">using</span> <span class="class">System</span>;<br><br>
+                        <span class="keyword">class</span> <span class="class">GameScore</span><br>
+                        {<br>
+                        &nbsp;&nbsp;&nbsp; <span class="comment">// Public getter, private setter</span><br>
+                        &nbsp;&nbsp;&nbsp; <span class="keyword">public</span> <span class="keyword">int</span> <span class="class">Score</span> { <span class="keyword">get</span>; <span class="keyword">private</span> <span class="keyword">set</span>; }<br><br>
+                        &nbsp;&nbsp;&nbsp; <span class="keyword">public</span> <span class="method">GameScore</span>()<br>
+                        &nbsp;&nbsp;&nbsp; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="class">Score</span> = 0; <span class="comment">// OK: within the class</span><br>
+                        &nbsp;&nbsp;&nbsp; }<br><br>
+                        &nbsp;&nbsp;&nbsp; <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">AddPoints</span>(<span class="keyword">int</span> points)<br>
+                        &nbsp;&nbsp;&nbsp; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="class">Score</span> += points; <span class="comment">// OK: within the class</span><br>
+                        &nbsp;&nbsp;&nbsp; }<br>
+                        }<br><br>
+                         <span class="keyword">class</span> <span class="class">Program</span><br>
+                        {<br>
+                        &nbsp;&nbsp;&nbsp; <span class="keyword">static</span> <span class="keyword">void</span> <span class="method">Main</span>()<br>
+                        &nbsp;&nbsp;&nbsp; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="class">GameScore</span> game = <span class="keyword">new</span> <span class="class">GameScore</span>();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; game.<span class="method">AddPoints</span>(100);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="class">Console</span>.<span class="method">WriteLine</span>(<span class="string">$"Score: {game.Score}"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="comment">// game.Score = 50; // ERROR: Cannot set from outside the class</span><br>
+                        &nbsp;&nbsp;&nbsp; }<br>
+                        }
+                    </div>
+                    <button class="w3-btn" onclick="alert('Link to Try It Yourself editor')">Try it Yourself &raquo;</button>
+                </div>
+            </div>
+
+            <div class="w3-btn-group">
+                <button class="w3-btn" onclick="location.href='#example-read-only'">&laquo; Previous</button>
+                <!-- No next page -->
+            </div>
+
+            <hr>
+            <footer>
+                <p>&copy; 2025 ItTechGenie. All rights reserved.</p>
+            </footer>
+
+        </div>
+    </div>
+
+</body>
+</html>

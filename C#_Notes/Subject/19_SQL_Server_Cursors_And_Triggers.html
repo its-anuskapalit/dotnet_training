@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SQL Server Cursors & Triggers (Beginner → Advanced) | ItTechGenie</title>
+  <style>
+    :root{
+      --bg:#ffffff;
+      --ink:#111827;
+      --muted:#6b7280;
+      --brand:#0ea5e9;
+      --brand2:#22c55e;
+      --card:#f8fafc;
+      --codebg:#0b1020;
+      --codeink:#e5e7eb;
+      --border:#e5e7eb;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,"Noto Sans","Helvetica Neue",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+    header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+    .topbar{max-width:1180px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.2px}
+    .dot{width:10px;height:10px;border-radius:999px;background:var(--brand);display:inline-block}
+    .badge{font-size:12px;padding:2px 8px;border:1px solid var(--border);border-radius:999px;color:var(--muted);background:#fff}
+    .nav a{text-decoration:none;color:var(--muted);margin-left:14px;font-weight:700;font-size:14px}
+    .nav a:hover{color:var(--brand)}
+    .wrap{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:290px 1fr;gap:18px;padding:18px 16px 50px}
+    aside{border:1px solid var(--border);border-radius:14px;padding:14px;background:#fff;position:sticky;top:64px;height:fit-content}
+    aside h3{margin:0 0 10px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+    aside a{display:block;padding:8px 10px;margin:2px 0;border-radius:10px;color:var(--ink);text-decoration:none;font-weight:700;font-size:14px}
+    aside a:hover{background:var(--card)}
+    main{border:1px solid var(--border);border-radius:14px;padding:18px 18px 26px;background:#fff}
+    h1{margin:0 0 8px;font-size:30px}
+    h2{margin:28px 0 10px;font-size:22px}
+    h3{margin:18px 0 8px;font-size:18px}
+    p{margin:8px 0}
+    .lead{color:var(--muted)}
+    .callout{background:var(--card);border:1px dashed var(--border);border-radius:14px;padding:12px 14px;margin:12px 0}
+    .callout strong{color:var(--brand)}
+    .learn{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width: 980px){.wrap{grid-template-columns:1fr}aside{position:relative;top:auto}}
+    .code{background:var(--codebg);color:var(--codeink);border-radius:14px;padding:14px;overflow:auto;border:1px solid rgba(255,255,255,.08);
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:13px}
+    .mini{font-size:13px;color:var(--muted);margin-top:6px}
+    .step{border-left:4px solid var(--brand);padding:10px 12px;margin:12px 0;background:rgba(14,165,233,.06);border-radius:12px}
+    .step b{color:#075985}
+    table{width:100%;border-collapse:collapse;margin:10px 0;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+    th,td{padding:10px;border-bottom:1px solid var(--border);vertical-align:top;font-size:14px}
+    th{background:var(--card);text-align:left;font-weight:900}
+    tr:last-child td{border-bottom:none}
+    .tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--border);background:#fff;color:var(--muted);margin-left:6px;font-weight:800}
+    .warn{color:var(--warn);font-weight:900}
+    .bad{color:var(--bad);font-weight:900}
+    .good{color:var(--brand2);font-weight:900}
+    .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .btn{display:inline-block;padding:10px 12px;border-radius:12px;border:1px solid var(--border);text-decoration:none;color:var(--ink);font-weight:900;background:#fff}
+    .btn.primary{border-color:rgba(14,165,233,.35);background:rgba(14,165,233,.08);color:#0b5e7b}
+    .footer{margin-top:22px;padding-top:14px;border-top:1px solid var(--border);color:var(--muted);font-size:13px}
+    details{border:1px solid var(--border);border-radius:12px;padding:10px 12px;background:#fff;margin:10px 0}
+    details summary{cursor:pointer;font-weight:900}
+  </style>
+</head>
+<body>
+<header>
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span><span>ItTechGenie</span><span class="badge">SQL Server • Spoon-feeding → Advanced</span></div>
+    <nav class="nav">
+      <a href="#setup">Setup</a>
+      <a href="#cursors">Cursors</a>
+      <a href="#triggers">Triggers</a>
+      <a href="#exercises">Exercises</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <aside>
+    <h3>Table of contents</h3>
+    <a href="#what">What you will learn</a>
+    <a href="#setup">1) Setup: Tables + Data</a>
+    <a href="#cursors">2) Cursors</a>
+    <a href="#cursor-beginner">2.1 Cursor (Beginner)</a>
+    <a href="#cursor-intermediate">2.2 Cursor (Intermediate)</a>
+    <a href="#cursor-advanced">2.3 Cursor (Advanced)</a>
+    <a href="#triggers">3) Triggers</a>
+    <a href="#trigger-beginner">3.1 Trigger (Beginner)</a>
+    <a href="#trigger-intermediate">3.2 Trigger (Intermediate)</a>
+    <a href="#trigger-advanced">3.3 Trigger (Advanced)</a>
+    <a href="#exercises">4) Exercises</a>
+    <a href="#cheatsheet">Cheat Sheet</a>
+  </aside>
+
+  <main>
+    <h1>SQL Server Cursors & Triggers</h1>
+    <p class="lead">This page teaches you from <b>zero</b> to <b>advanced</b> with complete scripts, expected outputs, and best practices — like a W3Schools tutorial but with deeper coaching.</p>
+
+    <div class="callout" id="what">
+      <strong>What you will learn</strong>
+      <div class="learn">
+        <div>
+          <ul>
+            <li>Create tables and insert sample data</li>
+            <li>Write cursors safely (DECLARE → OPEN → FETCH → CLOSE → DEALLOCATE)</li>
+            <li>Understand cursor options (FAST_FORWARD, STATIC, KEYSET, etc.)</li>
+            <li>Create triggers and use INSERTED/DELETED correctly</li>
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li>Build audit logs using triggers</li>
+            <li>Prevent invalid data using triggers (THROW)</li>
+            <li>Handle multi-row updates in triggers (important!)</li>
+            <li>Practice with beginner → advanced exercises</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2 id="setup">1) Setup: Create Tables + Insert Records</h2>
+    <p>We will use a small ECommerce-like dataset: <b>Products</b>, and audit/log tables.</p>
+
+    <div class="step"><b>Step 1:</b> Create Products table</div>
+    <div class="code"><pre>IF OBJECT_ID('dbo.Products', 'U') IS NOT NULL
+    DROP TABLE dbo.Products;
+GO
+
+CREATE TABLE dbo.Products
+(
+    ProductId     INT IDENTITY(1,1) PRIMARY KEY,
+    ProductName   VARCHAR(100) NOT NULL,
+    Category      VARCHAR(50)  NOT NULL,
+    Price         DECIMAL(10,2) NOT NULL CHECK (Price &gt; 0),
+    StockQty      INT NOT NULL CHECK (StockQty &gt;= 0),
+    IsActive      BIT NOT NULL DEFAULT 1,
+    CreatedAt     DATETIME2 NOT NULL DEFAULT SYSDATETIME()
+);
+GO</pre></div>
+
+    <div class="step"><b>Step 2:</b> Insert sample product records</div>
+    <div class="code"><pre>INSERT INTO dbo.Products (ProductName, Category, Price, StockQty)
+VALUES
+('Wireless Mouse', 'Electronics', 799.00, 50),
+('Mechanical Keyboard', 'Electronics', 2499.00, 25),
+('Running Shoes', 'Fashion', 1899.00, 40),
+('Water Bottle', 'Fitness', 399.00, 120),
+('Laptop Backpack', 'Accessories', 1499.00, 35),
+('USB-C Cable', 'Electronics', 299.00, 15),
+('Gym Gloves', 'Fitness', 499.00, 28);
+GO
+
+SELECT * FROM dbo.Products ORDER BY ProductId;
+GO</pre></div>
+
+    <details>
+      <summary>What output should you see?</summary>
+      <p class="mini">A result grid with 7 rows. ProductId is auto-generated and CreatedAt is auto-filled.</p>
+    </details>
+
+    <div class="step"><b>Step 3:</b> Create a ReorderLog table (for cursor practice)</div>
+    <div class="code"><pre>IF OBJECT_ID('dbo.ReorderLog', 'U') IS NOT NULL
+    DROP TABLE dbo.ReorderLog;
+GO
+
+CREATE TABLE dbo.ReorderLog
+(
+    LogId      INT IDENTITY(1,1) PRIMARY KEY,
+    ProductId  INT NOT NULL,
+    Message    VARCHAR(200) NOT NULL,
+    CreatedAt  DATETIME2 NOT NULL DEFAULT SYSDATETIME()
+);
+GO</pre></div>
+
+    <!-- ================= CURSORS ================= -->
+    <h2 id="cursors">2) Cursors</h2>
+    <p>A <b>Cursor</b> reads query results <b>row-by-row</b>. Use carefully for performance.</p>
+
+    <h3 id="cursor-beginner">2.1 Cursor (Beginner): Print each row</h3>
+    <p><b>Goal:</b> Read product rows one by one and print them in the <b>Messages</b> tab.</p>
+
+    <div class="step"><b>Cursor Steps:</b> DECLARE → OPEN → FETCH → LOOP → CLOSE → DEALLOCATE</div>
+    <div class="code"><pre>DECLARE @ProductId INT;
+DECLARE @ProductName VARCHAR(100);
+DECLARE @Price DECIMAL(10,2);
+
+-- 1) Declare cursor
+DECLARE curProducts CURSOR FAST_FORWARD
+FOR
+    SELECT ProductId, ProductName, Price
+    FROM dbo.Products
+    ORDER BY ProductId;
+
+-- 2) Open cursor
+OPEN curProducts;
+
+-- 3) Fetch first row
+FETCH NEXT FROM curProducts INTO @ProductId, @ProductName, @Price;
+
+-- 4) Loop until no more rows
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    PRINT 'ProductId=' + CAST(@ProductId AS VARCHAR(10))
+        + ' | Name=' + @ProductName
+        + ' | Price=' + CAST(@Price AS VARCHAR(20));
+
+    -- fetch next row
+    FETCH NEXT FROM curProducts INTO @ProductId, @ProductName, @Price;
+END
+
+-- 5) Close + Deallocate
+CLOSE curProducts;
+DEALLOCATE curProducts;</pre></div>
+
+    <details>
+      <summary>Common beginner mistakes</summary>
+      <ul>
+        <li><span class="bad">Forgetting DEALLOCATE</span> → resource leak in session.</li>
+        <li><span class="bad">Missing FETCH NEXT in loop</span> → infinite loop.</li>
+        <li><span class="warn">Expecting PRINT in Results</span> → PRINT appears in Messages.</li>
+      </ul>
+    </details>
+
+    <h3 id="cursor-intermediate">2.2 Cursor (Intermediate): Insert log rows</h3>
+    <p><b>Goal:</b> For low-stock products, insert messages into dbo.ReorderLog.</p>
+
+    <div class="code"><pre>TRUNCATE TABLE dbo.ReorderLog;
+GO
+
+DECLARE @ProductId INT;
+DECLARE @ProductName VARCHAR(100);
+DECLARE @StockQty INT;
+
+DECLARE curLowStock CURSOR FAST_FORWARD
+FOR
+    SELECT ProductId, ProductName, StockQty
+    FROM dbo.Products
+    WHERE StockQty &lt; 30
+    ORDER BY StockQty ASC;
+
+OPEN curLowStock;
+FETCH NEXT FROM curLowStock INTO @ProductId, @ProductName, @StockQty;
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    INSERT INTO dbo.ReorderLog(ProductId, Message)
+    VALUES
+    (
+        @ProductId,
+        'Reorder needed for ' + @ProductName + ' (Stock=' + CAST(@StockQty AS VARCHAR(10)) + ')'
+    );
+
+    FETCH NEXT FROM curLowStock INTO @ProductId, @ProductName, @StockQty;
+END
+
+CLOSE curLowStock;
+DEALLOCATE curLowStock;
+
+SELECT * FROM dbo.ReorderLog ORDER BY LogId;
+GO</pre></div>
+
+    <h3 id="cursor-advanced">2.3 Cursor (Advanced): Transaction + TRY...CATCH</h3>
+    <p><b>Scenario:</b> Increase price by 5% for Fashion products, log each change, and rollback on error.</p>
+
+    <div class="code"><pre>IF OBJECT_ID('dbo.PriceChangeLog', 'U') IS NOT NULL
+    DROP TABLE dbo.PriceChangeLog;
+GO
+
+CREATE TABLE dbo.PriceChangeLog
+(
+    LogId       INT IDENTITY(1,1) PRIMARY KEY,
+    ProductId   INT NOT NULL,
+    OldPrice    DECIMAL(10,2) NOT NULL,
+    NewPrice    DECIMAL(10,2) NOT NULL,
+    ChangedAt   DATETIME2 NOT NULL DEFAULT SYSDATETIME()
+);
+GO
+
+DECLARE @ProductId INT;
+DECLARE @OldPrice DECIMAL(10,2);
+DECLARE @NewPrice DECIMAL(10,2);
+
+DECLARE curFashion CURSOR FAST_FORWARD
+FOR
+    SELECT ProductId, Price
+    FROM dbo.Products
+    WHERE Category = 'Fashion';
+
+BEGIN TRY
+    BEGIN TRAN;
+
+    OPEN curFashion;
+    FETCH NEXT FROM curFashion INTO @ProductId, @OldPrice;
+
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        SET @NewPrice = ROUND(@OldPrice * 1.05, 2);
+
+        UPDATE dbo.Products
+        SET Price = @NewPrice
+        WHERE ProductId = @ProductId;
+
+        INSERT INTO dbo.PriceChangeLog(ProductId, OldPrice, NewPrice)
+        VALUES (@ProductId, @OldPrice, @NewPrice);
+
+        FETCH NEXT FROM curFashion INTO @ProductId, @OldPrice;
+    END
+
+    CLOSE curFashion;
+    DEALLOCATE curFashion;
+
+    COMMIT TRAN;
+END TRY
+BEGIN CATCH
+    IF CURSOR_STATUS('global','curFashion') &gt;= -1
+    BEGIN
+        CLOSE curFashion;
+        DEALLOCATE curFashion;
+    END
+
+    IF @@TRANCOUNT &gt; 0 ROLLBACK TRAN;
+    THROW;
+END CATCH;
+
+SELECT * FROM dbo.Products WHERE Category='Fashion';
+SELECT * FROM dbo.PriceChangeLog ORDER BY LogId;
+GO</pre></div>
+
+    <div class="callout">
+      <p><span class="good">Real-world best solution:</span> Use set-based UPDATE + OUTPUT instead of cursor.</p>
+      <div class="code"><pre>-- Recommended alternative (no cursor)
+UPDATE dbo.Products
+SET Price = ROUND(Price * 1.05, 2)
+OUTPUT inserted.ProductId, deleted.Price AS OldPrice, inserted.Price AS NewPrice
+INTO dbo.PriceChangeLog(ProductId, OldPrice, NewPrice)
+WHERE Category='Fashion';</pre></div>
+    </div>
+
+    <!-- ================= TRIGGERS ================= -->
+    <h2 id="triggers">3) Triggers</h2>
+    <p>Triggers run automatically on table events. Use INSERTED/DELETED and always handle multi-row updates.</p>
+
+    <h3 id="trigger-beginner">3.1 Trigger (Beginner): Price audit</h3>
+    <div class="code"><pre>IF OBJECT_ID('dbo.ProductPriceAudit', 'U') IS NOT NULL
+    DROP TABLE dbo.ProductPriceAudit;
+GO
+
+CREATE TABLE dbo.ProductPriceAudit
+(
+    AuditId    INT IDENTITY(1,1) PRIMARY KEY,
+    ProductId  INT NOT NULL,
+    OldPrice   DECIMAL(10,2) NULL,
+    NewPrice   DECIMAL(10,2) NULL,
+    ChangedAt  DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    ChangedBy  SYSNAME NULL
+);
+GO
+
+IF OBJECT_ID('dbo.trg_ProductPriceAudit', 'TR') IS NOT NULL
+    DROP TRIGGER dbo.trg_ProductPriceAudit;
+GO
+
+CREATE TRIGGER dbo.trg_ProductPriceAudit
+ON dbo.Products
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO dbo.ProductPriceAudit(ProductId, OldPrice, NewPrice, ChangedBy)
+    SELECT i.ProductId, d.Price, i.Price, SUSER_SNAME()
+    FROM inserted i
+    INNER JOIN deleted d ON i.ProductId = d.ProductId
+    WHERE ISNULL(i.Price, 0) &lt;&gt; ISNULL(d.Price, 0);
+END;
+GO
+
+-- Test (multi-row)
+UPDATE dbo.Products
+SET Price = Price + 100
+WHERE Category = 'Electronics';
+
+SELECT * FROM dbo.ProductPriceAudit ORDER BY AuditId DESC;
+GO</pre></div>
+
+    <h3 id="trigger-intermediate">3.2 Trigger (Intermediate): Stock audit + prevent negative stock</h3>
+    <div class="code"><pre>IF OBJECT_ID('dbo.StockAudit', 'U') IS NOT NULL
+    DROP TABLE dbo.StockAudit;
+GO
+
+CREATE TABLE dbo.StockAudit
+(
+    AuditId    INT IDENTITY(1,1) PRIMARY KEY,
+    ProductId  INT NOT NULL,
+    OldStock   INT NULL,
+    NewStock   INT NULL,
+    ChangedAt  DATETIME2 NOT NULL DEFAULT SYSDATETIME()
+);
+GO
+
+IF OBJECT_ID('dbo.trg_StockAudit_And_Validate', 'TR') IS NOT NULL
+    DROP TRIGGER dbo.trg_StockAudit_And_Validate;
+GO
+
+CREATE TRIGGER dbo.trg_StockAudit_And_Validate
+ON dbo.Products
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Validation
+    IF EXISTS (SELECT 1 FROM inserted WHERE StockQty &lt; 0)
+        THROW 51000, 'StockQty cannot be negative.', 1;
+
+    -- Audit
+    INSERT INTO dbo.StockAudit(ProductId, OldStock, NewStock)
+    SELECT i.ProductId, d.StockQty, i.StockQty
+    FROM inserted i
+    INNER JOIN deleted d ON i.ProductId = d.ProductId
+    WHERE ISNULL(i.StockQty, -1) &lt;&gt; ISNULL(d.StockQty, -1);
+END;
+GO
+
+-- Test pass
+UPDATE dbo.Products SET StockQty = StockQty - 5 WHERE ProductName = 'USB-C Cable';
+SELECT * FROM dbo.StockAudit ORDER BY AuditId DESC;
+
+-- Test fail
+UPDATE dbo.Products SET StockQty = -10 WHERE ProductName = 'USB-C Cable';</pre></div>
+
+    <p class="mini"><b>Expected:</b> The last UPDATE fails and does not change the row.</p>
+
+    <h3 id="trigger-advanced">3.3 Trigger (Advanced): INSTEAD OF INSERT on a View</h3>
+    <div class="code"><pre>IF OBJECT_ID('dbo.vw_ActiveProducts', 'V') IS NOT NULL
+    DROP VIEW dbo.vw_ActiveProducts;
+GO
+
+CREATE VIEW dbo.vw_ActiveProducts
+AS
+SELECT ProductName, Category, Price, StockQty
+FROM dbo.Products
+WHERE IsActive = 1;
+GO
+
+IF OBJECT_ID('dbo.trg_vw_ActiveProducts_Insert', 'TR') IS NOT NULL
+    DROP TRIGGER dbo.trg_vw_ActiveProducts_Insert;
+GO
+
+CREATE TRIGGER dbo.trg_vw_ActiveProducts_Insert
+ON dbo.vw_ActiveProducts
+INSTEAD OF INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO dbo.Products(ProductName, Category, Price, StockQty, IsActive)
+    SELECT ProductName, Category, Price, StockQty, 1
+    FROM inserted;
+END;
+GO
+
+-- Test insert into the view
+INSERT INTO dbo.vw_ActiveProducts(ProductName, Category, Price, StockQty)
+VALUES ('Yoga Mat', 'Fitness', 899.00, 60);
+
+SELECT * FROM dbo.Products WHERE ProductName='Yoga Mat';</pre></div>
+
+    <!-- ================= EXERCISES ================= -->
+    <h2 id="exercises">4) Exercises (Spoon-feeding → Advanced)</h2>
+    <table>
+      <thead><tr><th>Topic</th><th>Level</th><th>Exercise</th><th>Expected Output</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Cursors</td>
+          <td>Beginner</td>
+          <td>Cursor that PRINTs all Fitness product names.</td>
+          <td>Messages tab shows multiple lines with product names.</td>
+        </tr>
+        <tr>
+          <td>Cursors</td>
+          <td>Intermediate</td>
+          <td>Insert low stock (&lt;20) messages into ReorderLog.</td>
+          <td>ReorderLog table contains inserted messages.</td>
+        </tr>
+        <tr>
+          <td>Cursors</td>
+          <td>Advanced</td>
+          <td>Update prices inside TRY...CATCH + transaction and log changes.</td>
+          <td>PriceChangeLog has rows; rollback on error.</td>
+        </tr>
+        <tr>
+          <td>Triggers</td>
+          <td>Beginner</td>
+          <td>Audit price changes into ProductPriceAudit.</td>
+          <td>Audit table shows old/new values for changed rows.</td>
+        </tr>
+        <tr>
+          <td>Triggers</td>
+          <td>Intermediate</td>
+          <td>Prevent negative stock and log stock changes.</td>
+          <td>Negative update fails; StockAudit logs successful changes.</td>
+        </tr>
+        <tr>
+          <td>Triggers</td>
+          <td>Advanced</td>
+          <td>Insert into a view using INSTEAD OF trigger.</td>
+          <td>Inserted row appears in dbo.Products.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 id="cheatsheet">Cheat Sheet</h2>
+    <div class="callout">
+      <p><b>Cursor:</b> DECLARE → OPEN → FETCH → LOOP → CLOSE → DEALLOCATE</p>
+      <p><b>Trigger:</b> Use INSERTED/DELETED and support multi-row updates</p>
+      <p><b>Rule:</b> Prefer set-based SQL in real projects; cursor/trigger are power tools.</p>
+    </div>
+
+    <div class="footer">
+      <p>© ItTechGenie • SQL Server Technical Tutor Notes • Cursors & Triggers</p>
+    </div>
+
+    <div class="btnrow">
+      <a class="btn primary" href="#setup">Start from Setup</a>
+      <a class="btn" href="#cursor-beginner">Cursor Beginner</a>
+      <a class="btn" href="#trigger-beginner">Trigger Beginner</a>
+    </div>
+  </main>
+</div>
+</body>
+</html>

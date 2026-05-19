@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Capgemini M1 Test – Scenario Based Coding Questions</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.08);
+      --text: rgba(255,255,255,0.90);
+      --muted: rgba(255,255,255,0.70);
+      --line: rgba(255,255,255,0.12);
+      --accent: #6ee7ff;
+      --accent2: #a78bfa;
+      --ok: #34d399;
+      --warn: #fbbf24;
+      --danger: #fb7185;
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --radius: 16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--text);
+      background: radial-gradient(1100px 650px at 15% 10%, rgba(110,231,255,0.18), transparent 60%),
+                  radial-gradient(900px 520px at 85% 10%, rgba(167,139,250,0.18), transparent 55%),
+                  radial-gradient(900px 520px at 50% 95%, rgba(52,211,153,0.08), transparent 60%),
+                  var(--bg);
+      line-height: 1.55;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 22px 16px 56px;
+    }
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+    }
+    .sidebar {
+      position: sticky;
+      top: 16px;
+      height: calc(100vh - 32px);
+      overflow: auto;
+      padding: 14px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .brand {
+      display:flex;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 10px 14px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 14px;
+    }
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 8px 20px rgba(110,231,255,0.18);
+      flex: 0 0 auto;
+    }
+    .brand h1 {
+      font-size: 14px;
+      margin: 0;
+      letter-spacing: 0.2px;
+      line-height: 1.25;
+    }
+    .brand .meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .search {
+      position: relative;
+      margin: 10px 6px 12px;
+    }
+    .search input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,0.25);
+      color: var(--text);
+      outline: none;
+    }
+    .search input:focus {
+      border-color: rgba(110,231,255,0.55);
+      box-shadow: 0 0 0 4px rgba(110,231,255,0.12);
+    }
+    .toc-title {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 6px 10px;
+    }
+    .toc ul {
+      list-style: none;
+      padding: 0 6px 10px;
+      margin: 0;
+    }
+    .toc li {
+      margin: 2px 0;
+    }
+    .toc a {
+      display:block;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      color: rgba(255,255,255,0.84);
+    }
+    .toc a:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.08);
+      text-decoration: none;
+    }
+    .toc a.active {
+      background: rgba(110,231,255,0.12);
+      border-color: rgba(110,231,255,0.30);
+      color: #eaffff;
+    }
+    .lvl1 a { font-weight: 700; }
+    .lvl2 a { padding-left: 14px; }
+    .lvl3 a { padding-left: 22px; color: rgba(255,255,255,0.78); }
+    .chips {
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px 6px 2px;
+      border-top: 1px solid var(--line);
+      margin-top: 8px;
+    }
+    .chip {
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.78);
+    }
+    .content {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .hero {
+      padding: 22px 22px 14px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(110,231,255,0.10), rgba(167,139,250,0.08));
+    }
+    .hero h2 {
+      margin: 0 0 6px;
+      font-size: 22px;
+      letter-spacing: 0.2px;
+    }
+    .hero p {
+      margin: 0;
+      color: rgba(255,255,255,0.76);
+      font-size: 14px;
+    }
+    .doc {
+      padding: 22px;
+    }
+    .doc h1 {
+      font-size: 26px;
+      margin-top: 0;
+    }
+    .doc h2 {
+      margin-top: 26px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(255,255,255,0.14);
+      font-size: 20px;
+    }
+    .doc h3 {
+      margin-top: 20px;
+      font-size: 16px;
+      color: rgba(255,255,255,0.92);
+    }
+    .doc p, .doc li {
+      color: rgba(255,255,255,0.84);
+      font-size: 14px;
+    }
+    .doc hr {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.14);
+      margin: 18px 0;
+    }
+    .doc code {
+      font-family: var(--mono);
+      background: rgba(0,0,0,0.25);
+      padding: 2px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.10);
+      font-size: 0.92em;
+    }
+    .code-wrap {
+      position: relative;
+      margin: 12px 0 18px;
+    }
+    pre, .codehilite pre {
+      font-family: var(--mono);
+      font-size: 12.8px;
+      line-height: 1.45;
+      overflow: auto;
+      padding: 14px 14px 14px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.35);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+      margin: 0;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.86);
+      padding: 6px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 12px;
+      backdrop-filter: blur(6px);
+    }
+    .copy-btn:hover {
+      background: rgba(255,255,255,0.10);
+    }
+    blockquote {
+      margin: 14px 0;
+      padding: 12px 14px;
+      border-left: 4px solid rgba(110,231,255,0.45);
+      background: rgba(110,231,255,0.07);
+      border-radius: 12px;
+      color: rgba(255,255,255,0.80);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 18px;
+      overflow: hidden;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      text-align: left;
+      font-size: 13px;
+    }
+    th {
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.85);
+    }
+    tr:hover td {
+      background: rgba(255,255,255,0.03);
+    }
+    .footer {
+      padding: 14px 22px 22px;
+      color: rgba(255,255,255,0.60);
+      font-size: 12px;
+      border-top: 1px solid var(--line);
+    }
+    .kbd {
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.30);
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" aria-label="Table of contents">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Capgemini M1 Test – Scenario Based Coding Questions</h1>
+          <div class="meta">Professional HTML • Generated 2026-02-09 17:40</div>
+        </div>
+      </div>
+
+      <div class="search">
+        <input id="tocSearch" type="search" placeholder="Search sections… (Ctrl/⌘ + K)" autocomplete="off"/>
+      </div>
+
+      <nav class="toc"><div class="toc-title">Contents</div><ul>
+<li class="lvl1"><a href="#capgemini-m1-test-scenario-based-coding-questions-collection">Capgemini M1 Test - Scenario Based Coding Questions Collection</a></li>
+<li class="lvl2"><a href="#category-1-real-world-business-scenarios">**Category 1: Real-world Business Scenarios**</a></li>
+<li class="lvl3"><a href="#scenario-1-banking-system">**Scenario 1: Banking System**</a></li>
+<li class="lvl3"><a href="#scenario-2-e-commerce-shopping-cart">**Scenario 2: E-commerce Shopping Cart**</a></li>
+<li class="lvl3"><a href="#scenario-3-employee-management-system">**Scenario 3: Employee Management System**</a></li>
+<li class="lvl3"><a href="#scenario-4-hotel-booking-system">**Scenario 4: Hotel Booking System**</a></li>
+<li class="lvl2"><a href="#category-2-data-processing-scenarios">**Category 2: Data Processing Scenarios**</a></li>
+<li class="lvl3"><a href="#scenario-5-log-file-analyzer">**Scenario 5: Log File Analyzer**</a></li>
+<li class="lvl3"><a href="#scenario-6-inventory-management-system">**Scenario 6: Inventory Management System**</a></li>
+<li class="lvl2"><a href="#category-3-algorithm-implementation-scenarios">**Category 3: Algorithm Implementation Scenarios**</a></li>
+<li class="lvl3"><a href="#scenario-7-route-planner-for-delivery-service">**Scenario 7: Route Planner for Delivery Service**</a></li>
+<li class="lvl3"><a href="#scenario-8-stock-trading-analysis">**Scenario 8: Stock Trading Analysis**</a></li>
+<li class="lvl2"><a href="#category-4-system-design-scenarios">**Category 4: System Design Scenarios**</a></li>
+<li class="lvl3"><a href="#scenario-9-cache-implementation">**Scenario 9: Cache Implementation**</a></li>
+<li class="lvl3"><a href="#scenario-10-file-system-watcher">**Scenario 10: File System Watcher**</a></li>
+<li class="lvl2"><a href="#evaluation-criteria-for-all-scenarios">**Evaluation Criteria for All Scenarios:**</a></li>
+</ul></nav>
+
+      <div class="chips" aria-label="Quick tips">
+        <span class="chip">Copy code buttons</span>
+        <span class="chip">Scroll highlight</span>
+        <span class="chip">Search TOC</span>
+        <span class="chip">Print-friendly</span>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="hero">
+        <h2>Capgemini M1 – Scenario Practice Pack</h2>
+        <p>Use the sidebar to navigate. Use <span class="kbd">Ctrl</span> + <span class="kbd">F</span> to search within the page.</p>
+      </div>
+
+      <article class="doc" id="docRoot">
+        <h1 id="capgemini-m1-test-scenario-based-coding-questions-collection">Capgemini M1 Test - Scenario Based Coding Questions Collection</h1>
+<div class='spacer'></div>
+<h2 id="category-1-real-world-business-scenarios">**Category 1: Real-world Business Scenarios**</h2>
+<div class='spacer'></div>
+<h3 id="scenario-1-banking-system">**Scenario 1: Banking System**</h3>
+<p>**Problem Statement:** Design a simple banking system with the following features:</p>
+<p>1. Create account with account number, holder name, and initial balance</p>
+<p>2. Deposit money</p>
+<p>3. Withdraw money (with validation - cannot withdraw more than balance)</p>
+<p>4. Transfer money between accounts</p>
+<p>5. Calculate interest (simple interest)</p>
+<p>6. Display account statement (last 5 transactions)</p>
+<div class='spacer'></div>
+<div class="code-wrap"><pre class="code-block" data-lang="csharp"><code>// Interface you need to implement
+public interface IBankAccount {
+    void Deposit(decimal amount);
+    bool Withdraw(decimal amount);
+    bool Transfer(IBankAccount toAccount, decimal amount);
+    decimal CalculateInterest(int years);
+    List&lt;string&gt; GetMiniStatement();
+    decimal GetBalance();
+}
+
+// Example usage:
+BankAccount account1 = new BankAccount(&quot;ACC001&quot;, &quot;John Doe&quot;, 1000);
+BankAccount account2 = new BankAccount(&quot;ACC002&quot;, &quot;Jane Smith&quot;, 500);
+
+account1.Deposit(500);
+account1.Withdraw(200);
+account1.Transfer(account2, 300);
+
+Console.WriteLine($&quot;Account1 Balance: {account1.GetBalance()}&quot;);
+Console.WriteLine($&quot;Account2 Balance: {account2.GetBalance()}&quot;);
+
+// Expected output format for mini-statement:
+// [1] Deposit: +500 | Balance: 1500
+// [2] Withdraw: -200 | Balance: 1300
+// [3] Transfer to ACC002: -300 | Balance: 1000</code></pre><button class="copy-btn" type="button" aria-label="Copy code">Copy</button></div>
+<div class='spacer'></div>
+<hr/>
+<div class='spacer'></div>
+<h3 id="scenario-2-e-commerce-shopping-cart">**Scenario 2: E-commerce Shopping Cart**</h3>
+<p>**Problem Statement:** Implement a shopping cart system for an e-commerce platform with:</p>
+<p>1. Add product to cart with quantity</p>
+<p>2. Remove product from cart</p>
+<p>3. Update product quantity</p>
+<p>4. Apply discount codes</p>
+<p>5. Calculate total with tax (18% GST)</p>
+<p>6. Checkout functionality with inventory validation</p>
+<p>7. Generate invoice</p>
+<div class='spacer'></div>
+<div class="code-wrap"><pre class="code-block" data-lang="csharp"><code>public class Product {
+    public string Id { get; }
+    public string Name { get; }
+    public decimal Price { get; }
+    public int Stock { get; set; }
+}
+
+public class ShoppingCart {
+    public void AddProduct(Product product, int quantity);
+    public void RemoveProduct(string productId);
+    public void UpdateQuantity(string productId, int newQuantity);
+    public bool ApplyDiscount(string discountCode);
+    public decimal CalculateTotal();
+    public bool Checkout();
+    public string GenerateInvoice();
+}
+
+// Business Rules:
+// - Cannot add more than available stock
+// - Discount codes: &quot;SAVE10&quot; gives 10% off, &quot;SAVE20&quot; gives 20% off
+// - Tax is 18% on subtotal (after discount)
+// - Minimum order amount: 100
+// - Checkout fails if any product has insufficient stock</code></pre><button class="copy-btn" type="button" aria-label="Copy code">Copy</button></div>
+<div class='spacer'></div>
+<hr/>
+<div class='spacer'></div>
+<h3 id="scenario-3-employee-management-system">**Scenario 3: Employee Management System**</h3>
+<p>**Problem Statement:** Create an employee management system with:</p>
+<p>1. Different employee types: FullTime, PartTime, Contractor</p>
+<p>2. Calculate salary based on type</p>
+<p>3. Track leaves</p>
+<p>4. Calculate bonuses</p>
+<p>5. Generate payroll report</p>
+<div class='spacer'></div>
+<div class="code-wrap"><pre class="code-block" data-lang="csharp"><code>public abstract class Employee {
+    public string Id { get; }
+    public string Name { get; }
+    public string Department { get; }
+    public abstract decimal CalculateSalary();
+    public abstract decimal CalculateBonus();
+}
+
+public class FullTimeEmployee : Employee {
+    public decimal MonthlySalary { get; set; }
+    public int LeavesTaken { get; set; }
+    
+    public override decimal CalculateSalary() {
+        // Deduct salary for leaves (MonthlySalary/30 per day)
+        // Add overtime if any
+    }
+    
+    public override decimal CalculateBonus() {
+        // 1 month salary as bonus if leaves taken &lt; 5
+        // 0.5 month salary if leaves taken between 5-10
+        // No bonus if leaves taken &gt; 10
+    }
+}
+
+public class PartTimeEmployee : Employee {
+    public decimal HourlyRate { get; set; }
+    public int HoursWorked { get; set; }
+    
+    public override decimal CalculateSalary() {
+        return HourlyRate * HoursWorked;
+    }
+    
+    public override decimal CalculateBonus() {
+        // 10% of total salary if hours worked &gt; 160
+        return 0;
+    }
+}
+
+// Additional requirement:
+// Create a PayrollSystem class that can:
+// 1. Add/Remove employees
+// 2. Calculate total monthly payroll
+// 3. Generate department-wise salary report
+// 4. Find highest paid employee</code></pre><button class="copy-btn" type="button" aria-label="Copy code">Copy</button></div>
+<div class='spacer'></div>
+<hr/>
+<div class='spacer'></div>
+<h3 id="scenario-4-hotel-booking-system">**Scenario 4: Hotel Booking System**</h3>
+<p>**Problem Statement:** Implement a hotel room booking system with:</p>
+<p>1. Room types: Single, Double, Suite</p>
+<p>2. Booking dates validation (no overlapping bookings)</p>
+<p>3. Calculate price based on room type and duration</p>
+<p>4. Apply seasonal rates (peak season: 20% extra)</p>
+<p>5. Cancel booking with refund policy</p>
+<div class='spacer'></div>
+<div class="code-wrap"><pre class="code-block" data-lang="csharp"><code>public class Room {
+    public string RoomNumber { get; }
+    public RoomType Type { get; }
+    public decimal BasePrice { get; }
+    public bool IsAvailable(DateTime from, DateTime to);
+}
+
+public class Booking {
+    public string BookingId { get; }
+    public Room Room { get; }
+    public DateTime CheckInDate { get; }
+    public DateTime CheckOutDate { get; }
+    public decimal TotalPrice { get; }
+    
+    public decimal CalculatePrice(bool isPeakSeason);
+    public decimal CalculateRefund(DateTime cancellationDate);
+}
+
+// Business Rules:
+// - Peak season: June 1 - Aug 31 (20% extra)
+// - Cancellation refund:
+//   - &gt; 7 days before check-in: 100% refund
+//   - 3-7 days before: 50% refund
+//   - &lt; 3 days: No refund
+// - Minimum stay: 1 night
+// - Maximum stay: 30 nights</code></pre><button class="copy-btn" type="button" aria-label="Copy code">Copy</button></div>
+<div class='spacer'></div>
+<hr/>
+<div class='spacer'></div>
+<h2 id="category-2-data-processing-scenarios">**Category 2: Data Processing Scenarios**</h2>
+<div class='spacer'></div>
+<h3 id="scenario-5-log-file-analyzer">**Scenario 5: Log File Analyzer**</h3>
+<p>**Problem Statement:** Parse server log files and generate reports:</p>
+<p>1. Count total requests per endpoint</p>
+<p>2. Find most frequent IP addresses</p>
+<p>3. Identify errors (status code &gt;= 400)</p>
+<p>4. Calculate average response time</p>
+<p>5. Generate hourly traffic report</p>
+<div class='spacer'></div>
+<div class="code-wrap"><pre class="code-block" data-lang="csharp"><code>// Log format: 
+// [Timestamp] [IP] [Method] [Endpoint] [Status] [ResponseTime]
+// Example: &quot;2024-01-15 10:30:45 192.168.1.1 GET /api/users 200 150ms&quot;
+
+public class LogEntry {
+    public DateTime Timestamp { get; }
+    public string IPAddress { get; }
+    public string Method { get; }
+    public string Endpoint { get; }
+    public int StatusCode { get; }
+    public int ResponseTimeMs { get; }
+}
+
+public class LogAnalyzer {
+    public Dictionary&lt;string, int&gt; GetRequestsPerEndpoint(List&lt;LogEntry&gt; logs);
+    public List&lt;string&gt; GetTopIPs(List&lt;LogEntry&gt; logs, int topN);
+    public Dictionary&lt;int, int&gt; GetErrorCounts(List&lt;LogEntry&gt; logs);
+    public Dictionary&lt;int, double&gt; GetHourlyTraffic(List&lt;LogEntry&gt; logs);
+    public Dictionary&lt;string, double&gt; GetAverageResponseTimePerEndpoint(List&lt;LogEntry&gt; logs);
+}
+
+// Additional Requirements:
+// - Filter logs by date range
+// - Find slowest endpoints (response time &gt; 500ms)
+// - Detect potential attacks (same IP making &gt; 100 requests/minute)</code></pre><button class="copy-btn" type="button" aria-label="Copy code">Copy</button></div>
+<div class='spacer'></div>
+<hr/>
+<div class='spacer'></div>
+<h3 id="scenario-6-inventory-management-system">**Scenario 6: Inventory Management System**</h3>
+<p>**Problem Statement:** Create an inventory system for a warehouse:</p>
+<p>1. Add/Remove products</p>
+<p>2. Update stock levels</p>
+<p>3. Track product categories</p>
+<p>4. Generate low stock alerts</p>
+<p>5. Calculate inventory value</p>
+<p>6. Generate sales report</p>
+<div class='spacer'></div>
+<div class="code-wrap"><pre class="code-block" data-lang="csharp"><code>public class InventoryItem {
+    public string SKU { get; }
+    public string Name { get; }
+    public string Category { get; }
+    public decimal Price { get; }
+    public int Quantity { get; private set; }
+    public int ReorderLevel { get; }
+    
+    public void AddStock(int quantity);
+    public bool RemoveStock(int quantity);
+    public bool NeedsReorder();
+}
+
+public class InventorySystem {
+    public void AddProduct(InventoryItem product);
+    public bool SellProduct(string sku, int quantity);
+    public void RestockProduct(string sku, int quantity);
+    public List&lt;InventoryItem&gt; GetLowStockItems();
+    public decimal CalculateTotalInventoryValue();
+    public Dictionary&lt;string, decimal&gt; GetCategoryWiseValue();
+    
+    // Sales tracking
+    public void RecordSale(string sku, int quantity, decimal price);
+    public Dictionary&lt;string, int&gt; GetTopSellingProducts(DateTime from, DateTime to);
+}
+
+// Business Rules:
+// - Cannot sell more than available stock
+// - Low stock alert when quantity &lt; ReorderLevel
+// - Track sales history
+// - Calculate profit margin</code></pre><button class="copy-btn" type="button" aria-label="Copy code">Copy</button></div>
+<div class='spacer'></div>
+<hr/>
+<div class='spacer'></div>
+<h2 id="category-3-algorithm-implementation-scenarios">**Category 3: Algorithm Implementation Scenarios**</h2>
+<div class='spacer'></div>
+<h3 id="scenario-7-route-planner-for-delivery-service">**Scenario 7: Route Planner for Delivery Service**</h3>
+<p>**Problem Statement:** Create a route planner that:</p>
+<p>1. Accepts multiple delivery locations</p>
+<p>2. Calculates shortest path using given distances</p>
+<p>3. Consider delivery time windows</p>
+<p>4. Optimize for fuel efficiency</p>
+<p>5. Generate delivery schedule</p>
+<div class='spacer'></div>
+<div class="code-wrap"><pre class="code-block" data-lang="csharp"><code>public class Location {
+    public string Name { get; }
+    public double Latitude { get; }
+    public double Longitude { get; }
+    public TimeWindow DeliveryWindow { get; }
+}
+
+public class TimeWindow {
+    public DateTime Start { get; }
+    public DateTime End { get; }
+}
+
+public class RoutePlanner {
+    public List&lt;Location&gt; PlanRoute(List&lt;Location&gt; locations, Location warehouse);
+    public double CalculateTotalDistance(List&lt;Location&gt; route);
+    public bool CheckTimeWindows(List&lt;Location&gt; route);
+    public List&lt;Location&gt; OptimizeForFuel(List&lt;Location&gt; locations);
+    
+    // Use Dijkstra&#x27;s or A* algorithm for shortest path
+}
+
+// Constraints:
+// - Must start and end at warehouse
+// - Each location visited exactly once
+// - Respect delivery time windows
+// - Max route duration: 8 hours
+// - Vehicle capacity: 100 packages</code></pre><button class="copy-btn" type="button" aria-label="Copy code">Copy</button></div>
+<div class='spacer'></div>
+<hr/>
+<div class='spacer'></div>
+<h3 id="scenario-8-stock-trading-analysis">**Scenario 8: Stock Trading Analysis**</h3>
+<p>**Problem Statement:** Implement stock trading analysis tools:</p>
+<p>1. Calculate maximum profit from buying/selling stocks</p>
+<p>2. Find best time to buy and sell</p>
+<p>3. Calculate moving averages</p>
+<p>4. Identify trends</p>
+<p>5. Generate trading signals</p>
+<div class='spacer'></div>
+<div class="code-wrap"><pre class="code-block" data-lang="csharp"><code>public class StockData {
+    public DateTime Date { get; }
+    public decimal Open { get; }
+    public decimal High { get; }
+    public decimal Low { get; }
+    public decimal Close { get; }
+    public long Volume { get; }
+}
+
+public class StockAnalyzer {
+    // Buy once, sell once
+    public (decimal maxProfit, DateTime buyDate, DateTime sellDate) 
+        CalculateMaxProfit(List&lt;StockData&gt; data);
+    
+    // Multiple buys and sells allowed
+    public decimal CalculateMaxProfitMultipleTransactions(List&lt;StockData&gt; data);
+    
+    // Calculate Simple Moving Average
+    public Dictionary&lt;DateTime, decimal&gt; CalculateSMA(List&lt;StockData&gt; data, int period);
+    
+    // Generate trading signals (Buy/Sell/Hold)
+    public List&lt;string&gt; GenerateSignals(List&lt;StockData&gt; data);
+    
+    // Find highest volume days
+    public List&lt;DateTime&gt; GetHighVolumeDays(List&lt;StockData&gt; data, int threshold);
+}
+
+// Trading Rules:
+// - Buy signal when price crosses above 50-day SMA
+// - Sell signal when price crosses below 50-day SMA
+// - Cannot sell before buying
+// - Transaction fee: $10 per trade</code></pre><button class="copy-btn" type="button" aria-label="Copy code">Copy</button></div>
+<div class='spacer'></div>
+<hr/>
+<div class='spacer'></div>
+<h2 id="category-4-system-design-scenarios">**Category 4: System Design Scenarios**</h2>
+<div class='spacer'></div>
+<h3 id="scenario-9-cache-implementation">**Scenario 9: Cache Implementation**</h3>
+<p>**Problem Statement:** Implement a Least Recently Used (LRU) cache with:</p>
+<p>1. Fixed capacity</p>
+<p>2. Get and Put operations in O(1) time</p>
+<p>3. Remove least recently used item when capacity exceeded</p>
+<p>4. Thread-safe operations</p>
+<div class='spacer'></div>
+<div class="code-wrap"><pre class="code-block" data-lang="csharp"><code>public interface ICache&lt;TKey, TValue&gt; {
+    TValue Get(TKey key);
+    void Put(TKey key, TValue value);
+    void Remove(TKey key);
+    void Clear();
+    int Count { get; }
+}
+
+public class LRUCache&lt;TKey, TValue&gt; : ICache&lt;TKey, TValue&gt; {
+    private readonly int capacity;
+    
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+    }
+    
+    public TValue Get(TKey key) {
+        // Return value if key exists, otherwise throw KeyNotFoundException
+        // Update usage order
+    }
+    
+    public void Put(TKey key, TValue value) {
+        // Add or update key-value pair
+        // If capacity exceeded, remove least recently used item
+    }
+}
+
+// Requirements:
+// - Capacity: 1000 items
+// - Thread-safe for concurrent access
+// - Implement using Dictionary and LinkedList for O(1) operations
+// - Add expiration time for cache items (optional enhancement)</code></pre><button class="copy-btn" type="button" aria-label="Copy code">Copy</button></div>
+<div class='spacer'></div>
+<hr/>
+<div class='spacer'></div>
+<h3 id="scenario-10-file-system-watcher">**Scenario 10: File System Watcher**</h3>
+<p>**Problem Statement:** Create a file monitoring system that:</p>
+<p>1. Watches directory for changes</p>
+<p>2. Logs file creation, modification, deletion</p>
+<p>3. Filters by file type</p>
+<p>4. Maintains file version history</p>
+<p>5. Sends notifications</p>
+<div class='spacer'></div>
+<div class="code-wrap"><pre class="code-block" data-lang="csharp"><code>public class FileChange {
+    public string FilePath { get; }
+    public ChangeType Type { get; }
+    public DateTime Timestamp { get; }
+    public string OldContent { get; } // For modifications
+    public string NewContent { get; }
+}
+
+public enum ChangeType { Created, Modified, Deleted, Renamed }
+
+public class FileMonitor {
+    public void WatchDirectory(string path, List&lt;string&gt; extensions);
+    public void StopWatching();
+    public List&lt;FileChange&gt; GetRecentChanges(int minutes);
+    public void BackupFile(string filePath);
+    public void RestoreVersion(string filePath, DateTime versionTime);
+    
+    // Event to notify changes
+    public event EventHandler&lt;FileChange&gt; OnFileChanged;
+}
+
+// Features:
+// - Monitor .txt, .csv, .json files only
+// - Keep last 5 versions of each file
+// - Ignore changes smaller than 1KB
+// - Log all activities to database
+// - Send email alert for critical file changes</code></pre><button class="copy-btn" type="button" aria-label="Copy code">Copy</button></div>
+<div class='spacer'></div>
+<hr/>
+<div class='spacer'></div>
+<h2 id="evaluation-criteria-for-all-scenarios">**Evaluation Criteria for All Scenarios:**</h2>
+<div class='spacer'></div>
+<p>1. **Code Quality** (40%)</p>
+<p>   - Proper naming conventions</p>
+<p>   - Clean, readable code</p>
+<p>   - Proper error handling</p>
+<p>   - Code organization</p>
+<div class='spacer'></div>
+<p>2. **Business Logic** (30%)</p>
+<p>   - Correct implementation of requirements</p>
+<p>   - Handling edge cases</p>
+<p>   - Business rule compliance</p>
+<div class='spacer'></div>
+<p>3. **Performance** (20%)</p>
+<p>   - Time complexity considerations</p>
+<p>   - Memory efficiency</p>
+<p>   - Algorithm optimization</p>
+<div class='spacer'></div>
+<p>4. **Testing** (10%)</p>
+<p>   - Basic test cases covered</p>
+<p>   - Edge case handling</p>
+<div class='spacer'></div>
+<p>**Tips for Candidates:**</p>
+<p>- Read requirements carefully</p>
+<p>- Ask clarifying questions if needed</p>
+<p>- Start with simple solution, then optimize</p>
+<p>- Add comments for complex logic</p>
+<p>- Test with sample inputs</p>
+<p>- Handle null/edge cases explicitly</p>
+      </article>
+
+      <div class="footer">
+        Tip: Use the browser print dialog and choose “Save as PDF” if you need a PDF copy.
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // TOC search filter
+    const tocSearch = document.getElementById('tocSearch');
+    const tocLinks = Array.from(document.querySelectorAll('.toc a'));
+    function filterTOC(q) {
+      const query = q.trim().toLowerCase();
+      tocLinks.forEach(a => {
+        const text = (a.textContent || '').toLowerCase();
+        a.parentElement.style.display = text.includes(query) ? '' : 'none';
+      });
+    }
+    tocSearch?.addEventListener('input', e => filterTOC(e.target.value));
+
+    // Ctrl/⌘ + K focuses TOC search
+    document.addEventListener('keydown', (e) => {
+      const isMac = navigator.platform.toUpperCase().includes('MAC');
+      if ((isMac ? e.metaKey : e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        tocSearch?.focus();
+      }
+    });
+
+    // Copy buttons
+    document.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.copy-btn');
+      if (!btn) return;
+      const wrap = btn.closest('.code-wrap');
+      if (!wrap) return;
+      const codeEl = wrap.querySelector('pre code') || wrap.querySelector('pre');
+      const text = codeEl ? codeEl.innerText : '';
+      try {
+        await navigator.clipboard.writeText(text);
+        const old = btn.textContent;
+        btn.textContent = 'Copied ✓';
+        setTimeout(() => btn.textContent = old, 900);
+      } catch {
+        btn.textContent = 'Copy failed';
+        setTimeout(() => btn.textContent = 'Copy', 900);
+      }
+    });
+
+    // Active section highlight while scrolling
+    const headings = Array.from(document.querySelectorAll('.doc h1[id], .doc h2[id], .doc h3[id]'));
+    const linkById = new Map(tocLinks.map(a => [a.getAttribute('href')?.slice(1), a]));
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(a => a.classList.remove('active'));
+          const id = entry.target.getAttribute('id');
+          const link = linkById.get(id);
+          if (link) {
+            link.classList.add('active');
+          }
+        }
+      });
+    }, { rootMargin: "-20% 0px -72% 0px", threshold: 0.01 });
+    headings.forEach(h => obs.observe(h));
+
+    // Smooth scroll
+    document.documentElement.style.scrollBehavior = 'smooth';
+  </script>
+</body>
+</html>
