@@ -1,7 +1,8 @@
-# .NET Training Repository 🚀
+# .NET Learning & Project Repository 🚀
 
-This repository documents my **structured learning journey in C# and .NET**, focusing on building **strong OOP foundations, memory management understanding, exception handling**, and **real-world console application development**.  
-All programs are written in an **engineering-oriented approach**, avoiding rote theory and emphasizing how concepts are used in actual systems.
+This repository documents my **structured learning journey in C#, .NET, and backend architecture**, focusing on building strong foundations in **Object-Oriented Programming, application architecture, API development, and microservices**.
+
+The goal is to move from **core C# fundamentals → enterprise .NET backend development**, while implementing concepts through **practical projects and system design exercises**.
 
 ---
 
@@ -10,66 +11,138 @@ All programs are written in an **engineering-oriented approach**, avoiding rote 
 ### 🔹 C# Fundamentals
 - Variables & Data Types  
 - Console Input / Output  
-- If-Else & Switch Statements  
-- Loops: `for`, `while`, `do-while`, `foreach`  
+- Conditional Statements (`if`, `switch`)  
+- Loops (`for`, `while`, `do-while`, `foreach`)  
 - Methods & Parameter Passing  
 - Value Types vs Reference Types  
-- Nullable Types, `var` & `dynamic`  
+- Nullable Types  
+- `var` and `dynamic` keywords  
 - Boxing & Unboxing  
 
 ---
 
-### 🔹 Object Oriented Programming (OOP)
+## 🔹 Object-Oriented Programming (OOP)
 - Classes & Objects  
 - Constructors & Constructor Chaining  
 - Encapsulation  
-- Inheritance & Polymorphism  
-- Abstract Classes & Interfaces  
+- Inheritance  
+- Polymorphism  
+- Abstract Classes  
+- Interfaces  
+- Method Overloading  
+- Method Overriding  
 - Indexers  
-- Method Overloading & Method Overriding  
 
 ---
 
-### 🔹 Exception Handling
-- `try` – `catch` – `finally`  
-- Custom Exception Messages  
-- Input Validation Techniques  
+## 🔹 Exception Handling
+- `try`, `catch`, `finally`  
+- Custom exception messages  
+- Defensive programming  
+- Input validation techniques  
 
 ---
 
-### 🔹 Memory & Performance Concepts
-- Stack vs Heap Memory Allocation  
+## 🔹 Memory & Performance Concepts
+- Stack vs Heap memory allocation  
 - Garbage Collection in .NET  
-- Memory Allocation Testing  
+- Memory allocation experiments  
+- Performance considerations in C# applications  
 
 ---
 
-### 🔹 Mini Projects & Case Studies
+## 🔹 ASP.NET Core Concepts
+- ASP.NET Core architecture  
+- Middleware pipeline  
+- Dependency Injection in .NET  
+- Configuration handling  
+- Logging in ASP.NET Core  
+
+---
+
+## 🔹 ASP.NET Core MVC
+- MVC architecture  
+- Controllers  
+- Views & Razor Pages  
+- Model binding  
+- Routing in MVC  
+- Fluent API concepts in Entity Framework  
+
+---
+
+## 🔹 Entity Framework Core
+- ORM fundamentals  
+- Code First Approach  
+- Migrations  
+- Database context  
+- Model configuration using Fluent API  
+
+---
+
+## 🔹 ASP.NET Web API
+- Creating REST APIs using ASP.NET Core  
+- Controllers & Routing  
+- HTTP methods (`GET`, `POST`, `PUT`, `DELETE`)  
+- API testing using Postman  
+- API response handling  
+
+---
+
+## 🔹 Microservices Architecture
+- Microservices fundamentals  
+- Service separation & architecture design  
+- API Gateway concept  
+- Inter-service communication  
+
+---
+
+## 🔹 API Gateway (Ocelot)
+- API Gateway configuration  
+- Request routing  
+- Service aggregation  
+- Gateway architecture in microservices  
+
+---
+
+## 🔹 Logging & Monitoring
+- Logging in .NET applications  
+- Writing logs to files  
+- Structured logging practices  
+
+---
+
+## 🔹 Mini Projects & Case Studies
 - Clinic Billing System  
 - Examination Scheduling System  
 - Profit Calculator  
 - Robot Hazard Analyzer  
-- Interview-Based Logical Programs  
+- Interview-based logical programs  
+- API Gateway implementation  
+- Microservices architecture practice  
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Component | Details |
-|----------|---------|
+| Component | Technology |
+|----------|------------|
 | Language | C# |
-| Framework | .NET |
+| Framework | .NET / ASP.NET Core |
+| ORM | Entity Framework Core |
+| API Gateway | Ocelot |
 | IDE | Visual Studio / VS Code |
 | Platform | Windows |
-| Application Type | Console Applications |
+| Application Types | Console Apps, Web API, MVC |
 
 ---
 
 ## 🎯 Purpose of This Repository
-- Build **strong C# & .NET fundamentals**  
-- Learn **real-world OOP implementation patterns**  
-- Practice **interview-oriented coding problems**  
-- Maintain a **clean, revision-friendly learning log**
+
+- Build **strong C# and .NET fundamentals**
+- Understand **enterprise backend architecture**
+- Practice **real-world backend development**
+- Learn **microservices system design**
+- Maintain a **clean and structured learning log**
 
 ---
 
@@ -77,3 +150,7 @@ All programs are written in an **engineering-oriented approach**, avoiding rote 
 
 ```bash
 git clone https://github.com/its-anuskapalit/dotnet_training.git
+
+cd dotnet_training
+
+dotnet run
